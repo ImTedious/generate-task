@@ -1,4 +1,4 @@
-package com.generatetask;
+package com.logmaster;
 
 import lombok.Getter;
 import net.runelite.client.game.SpriteOverride;

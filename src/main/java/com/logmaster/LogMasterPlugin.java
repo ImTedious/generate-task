@@ -1,6 +1,6 @@
-package com.generatetask;
+package com.logmaster;
 
-import com.generatetask.ui.*;
+import com.logmaster.ui.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
@@ -36,9 +36,9 @@ import static net.runelite.http.api.RuneLiteAPI.GSON;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Generate Task"
+	name = "Collection Log Master"
 )
-public class GenerateTaskPlugin extends Plugin implements MouseWheelListener
+public class LogMasterPlugin extends Plugin implements MouseWheelListener
 {
 	public static final String DEF_FILE_SPRITES = "SpriteDef.json";
 	public static final String DEF_FILE_TASKS = "tasks.json";
@@ -65,7 +65,7 @@ public class GenerateTaskPlugin extends Plugin implements MouseWheelListener
 	private ClientThread clientThread;
 
 	@Inject
-	private GenerateTaskConfig config;
+	private LogMasterConfig config;
 
 	@Inject
 	private Gson gson;
@@ -394,8 +394,8 @@ public class GenerateTaskPlugin extends Plugin implements MouseWheelListener
 	}
 
 	@Provides
-	GenerateTaskConfig provideConfig(ConfigManager configManager)
+	LogMasterConfig provideConfig(ConfigManager configManager)
 	{
-		return configManager.getConfig(GenerateTaskConfig.class);
+		return configManager.getConfig(LogMasterConfig.class);
 	}
 }

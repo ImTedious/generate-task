@@ -1,4 +1,4 @@
-package com.generatetask.ui;
+package com.logmaster.ui;
 
 /**
  * A listener interface for receiving UI component events

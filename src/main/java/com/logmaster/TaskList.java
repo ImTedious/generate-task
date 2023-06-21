@@ -1,9 +1,9 @@
-package com.generatetask;
+package com.logmaster;
 
-import com.generatetask.ui.UIButton;
-import com.generatetask.ui.UIGraphic;
-import com.generatetask.ui.UILabel;
-import com.generatetask.ui.UIPage;
+import com.logmaster.ui.UIButton;
+import com.logmaster.ui.UIGraphic;
+import com.logmaster.ui.UILabel;
+import com.logmaster.ui.UIPage;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.widgets.ItemQuantityMode;
 import net.runelite.api.widgets.Widget;
@@ -13,10 +13,9 @@ import net.runelite.client.callback.ClientThread;
 import java.awt.*;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import static com.generatetask.GenerateTaskPlugin.getCenterX;
+import static com.logmaster.LogMasterPlugin.getCenterX;
 
 @Slf4j
 public class TaskList extends UIPage {
@@ -37,7 +36,7 @@ public class TaskList extends UIPage {
 
     private Widget window;
     private List<Task> tasks;
-    private GenerateTaskPlugin plugin;
+    private LogMasterPlugin plugin;
     private ClientThread clientThread;
 
     private Rectangle bounds = new Rectangle();
@@ -48,7 +47,7 @@ public class TaskList extends UIPage {
 
     private int topTaskIndex = 0;
 
-    public TaskList(Widget window, List<Task> tasks, GenerateTaskPlugin plugin, ClientThread clientThread) {
+    public TaskList(Widget window, List<Task> tasks, LogMasterPlugin plugin, ClientThread clientThread) {
         this.window = window;
         this.tasks = tasks;
         this.plugin = plugin;
@@ -108,13 +107,13 @@ public class TaskList extends UIPage {
             taskBg.addAction("Mark", () -> plugin.completeTask(task.getId()));
 
             if(plugin.getSaveData().getCompletedTasks().get(task.getId()) != null) {
-                taskBg.setSprite(GenerateTaskPlugin.TASK_COMPLETE_BACKGROUND_SPRITE_ID);
+                taskBg.setSprite(LogMasterPlugin.TASK_COMPLETE_BACKGROUND_SPRITE_ID);
             }
             else if(plugin.getSaveData().currentTask != null && plugin.getSaveData().currentTask.getId() == task.getId()) {
-                taskBg.setSprite(GenerateTaskPlugin.TASK_CURRENT_BACKGROUND_SPRITE_ID);
+                taskBg.setSprite(LogMasterPlugin.TASK_CURRENT_BACKGROUND_SPRITE_ID);
             }
             else {
-                taskBg.setSprite(GenerateTaskPlugin.TASK_LIST_BACKGROUND_SPRITE_ID);
+                taskBg.setSprite(LogMasterPlugin.TASK_LIST_BACKGROUND_SPRITE_ID);
             }
 
             UILabel taskLabel;

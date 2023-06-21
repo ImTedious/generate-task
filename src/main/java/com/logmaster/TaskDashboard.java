@@ -1,9 +1,9 @@
-package com.generatetask;
+package com.logmaster;
 
-import com.generatetask.ui.UIButton;
-import com.generatetask.ui.UIGraphic;
-import com.generatetask.ui.UILabel;
-import com.generatetask.ui.UIPage;
+import com.logmaster.ui.UIButton;
+import com.logmaster.ui.UIGraphic;
+import com.logmaster.ui.UILabel;
+import com.logmaster.ui.UIPage;
 import lombok.Getter;
 import net.runelite.api.FontID;
 import net.runelite.api.widgets.ItemQuantityMode;
@@ -12,7 +12,7 @@ import net.runelite.api.widgets.WidgetType;
 
 import java.awt.*;
 
-import static com.generatetask.GenerateTaskPlugin.*;
+import static com.logmaster.LogMasterPlugin.*;
 
 public class TaskDashboard extends UIPage {
     private final int DEFAULT_BUTTON_WIDTH = 140;
@@ -29,7 +29,7 @@ public class TaskDashboard extends UIPage {
 
     @Getter
     private Widget window;
-    private GenerateTaskPlugin plugin;
+    private LogMasterPlugin plugin;
 
     private UILabel title;
     private UILabel taskLabel;
@@ -41,7 +41,7 @@ public class TaskDashboard extends UIPage {
     private UIButton completeTaskBtn;
     private UIButton generateTaskBtn;
 
-    public TaskDashboard(GenerateTaskPlugin plugin, Widget window) {
+    public TaskDashboard(LogMasterPlugin plugin, Widget window) {
         this.window = window;
         this.plugin = plugin;
 

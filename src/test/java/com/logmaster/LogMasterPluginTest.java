@@ -1,13 +1,13 @@
-package com.generatetask;
+package com.logmaster;
 
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
-public class GenerateTaskPluginTest
+public class LogMasterPluginTest
 {
 	public static void main(String[] args) throws Exception
 	{
-		ExternalPluginManager.loadBuiltin(GenerateTaskPlugin.class);
+		ExternalPluginManager.loadBuiltin(LogMasterPlugin.class);
 		RuneLite.main(args);
 	}
 }

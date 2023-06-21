@@ -1,4 +1,4 @@
-package com.generatetask.ui;
+package com.logmaster.ui;
 
 import net.runelite.api.widgets.Widget;
 
