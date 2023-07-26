@@ -198,6 +198,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			taskDashboardTab.setSize(95, 21);
 			taskDashboardTab.setPosition(10, 36);
 			taskDashboardTab.addAction("Switch", this::activateTaskDashboard);
+			taskDashboardTab.setVisibility(false);
 
 			Widget taskListTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
 			taskListTab = new UIButton(taskListTabWidget);
@@ -205,6 +206,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			taskListTab.setSize(95, 21);
 			taskListTab.setPosition(110, 36);
 			taskListTab.addAction("Switch", this::activateTaskList);
+			taskListTab.setVisibility(false);
 
 			Widget dividerWidget = window.createChild(-1, WidgetType.GRAPHIC);
 			UIGraphic divider = new UIGraphic(dividerWidget);
@@ -226,6 +228,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if(e.getGroupId() == WidgetInfo.COLLECTION_LOG.getGroupId()) {
 			this.taskDashboard.setVisibility(false);
 			this.taskList.setVisibility(false);
+			this.taskDashboardTab.setVisibility(false);
+			this.taskListTab.setVisibility(false);
 			this.taskDashboardCheckbox.setEnabled(false);
 		}
 	}
@@ -288,6 +292,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		else {
 			this.taskDashboard.setVisibility(false);
 			this.taskList.setVisibility(false);
+
+			this.taskDashboardTab.setVisibility(false);
+			this.taskListTab.setVisibility(false);
 		}
 
 		// *Boop*
@@ -380,6 +387,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		this.taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
 		this.taskDashboard.setVisibility(true);
 		this.taskList.setVisibility(false);
+
+		this.taskDashboardTab.setVisibility(true);
+		this.taskListTab.setVisibility(true);
 	}
 
 	public void playFailSound() {
