@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetClosed;
 import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
@@ -197,14 +198,16 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
 			taskDashboardTab.setSize(95, 21);
 			taskDashboardTab.setPosition(10, 36);
-			taskDashboardTab.addAction("Switch", this::activateTaskDashboard);
+			taskDashboardTab.addAction("View <col=ff9040>Dashboard</col>", this::activateTaskDashboard);
+			taskDashboardTab.setVisibility(false);
 
 			Widget taskListTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
 			taskListTab = new UIButton(taskListTabWidget);
 			taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
 			taskListTab.setSize(95, 21);
 			taskListTab.setPosition(110, 36);
-			taskListTab.addAction("Switch", this::activateTaskList);
+			taskListTab.addAction("View <col=ff9040>Task List</col>", this::activateTaskList);
+			taskListTab.setVisibility(false);
 
 			Widget dividerWidget = window.createChild(-1, WidgetType.GRAPHIC);
 			UIGraphic divider = new UIGraphic(dividerWidget);
@@ -226,8 +229,17 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if(e.getGroupId() == WidgetInfo.COLLECTION_LOG.getGroupId()) {
 			this.taskDashboard.setVisibility(false);
 			this.taskList.setVisibility(false);
+			this.taskDashboardTab.setVisibility(false);
+			this.taskListTab.setVisibility(false);
 			this.taskDashboardCheckbox.setEnabled(false);
 		}
+	}
+
+	@Subscribe
+	public void onGameTick(GameTick event)
+	{
+		if(this.taskList != null)
+			taskList.updateBounds();
 	}
 
 	@Override
@@ -288,6 +300,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		else {
 			this.taskDashboard.setVisibility(false);
 			this.taskList.setVisibility(false);
+
+			this.taskDashboardTab.setVisibility(false);
+			this.taskListTab.setVisibility(false);
 		}
 
 		// *Boop*
@@ -380,6 +395,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		this.taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
 		this.taskDashboard.setVisibility(true);
 		this.taskList.setVisibility(false);
+
+		this.taskDashboardTab.setVisibility(true);
+		this.taskListTab.setVisibility(true);
 	}
 
 	public void playFailSound() {
