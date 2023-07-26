@@ -55,9 +55,7 @@ public class TaskList extends UIPage {
 
         refreshTasks(0);
 
-        bounds.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-        bounds.x = OFFSET_X+5;
-        bounds.y = OFFSET_Y+5;
+        updateBounds();
 
         Widget upWidget = window.createChild(-1, WidgetType.GRAPHIC);
         UIButton upArrow = new UIButton(upWidget);
@@ -174,5 +172,19 @@ public class TaskList extends UIPage {
         event.consume();
 
         clientThread.invoke(() -> refreshTasks(event.getWheelRotation()));
+    }
+
+    public void updateBounds()
+    {
+        if (!this.isVisible())
+            return;
+
+        Widget collectionLogWidget = window.getParent();
+        Widget collectionLogWrapper = collectionLogWidget.getParent();
+        int relativeX = collectionLogWrapper.getRelativeX();
+        int relativeY = collectionLogWrapper.getRelativeY();
+
+        bounds.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+        bounds.setLocation(OFFSET_X+5+relativeX, OFFSET_Y+5+relativeY);
     }
 }

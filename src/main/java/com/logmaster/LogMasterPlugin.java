@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetClosed;
 import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
@@ -232,6 +233,13 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			this.taskListTab.setVisibility(false);
 			this.taskDashboardCheckbox.setEnabled(false);
 		}
+	}
+
+	@Subscribe
+	public void onGameTick(GameTick event)
+	{
+		if(this.taskList != null)
+			taskList.updateBounds();
 	}
 
 	@Override
