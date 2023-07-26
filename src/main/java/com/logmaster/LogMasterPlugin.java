@@ -197,7 +197,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
 			taskDashboardTab.setSize(95, 21);
 			taskDashboardTab.setPosition(10, 36);
-			taskDashboardTab.addAction("Switch", this::activateTaskDashboard);
+			taskDashboardTab.addAction("View <col=ff9040>Dashboard</col>", this::activateTaskDashboard);
 			taskDashboardTab.setVisibility(false);
 
 			Widget taskListTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
@@ -205,7 +205,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
 			taskListTab.setSize(95, 21);
 			taskListTab.setPosition(110, 36);
-			taskListTab.addAction("Switch", this::activateTaskList);
+			taskListTab.addAction("View <col=ff9040>Task List</col>", this::activateTaskList);
 			taskListTab.setVisibility(false);
 
 			Widget dividerWidget = window.createChild(-1, WidgetType.GRAPHIC);
