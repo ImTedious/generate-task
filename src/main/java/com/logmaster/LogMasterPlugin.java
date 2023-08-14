@@ -1,14 +1,18 @@
 package com.logmaster;
 
-import com.logmaster.ui.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
-import javax.inject.Inject;
-
+import com.logmaster.ui.UIButton;
+import com.logmaster.ui.UICheckBox;
+import com.logmaster.ui.UIComponent;
+import com.logmaster.ui.UIGraphic;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.*;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.SoundEffectID;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetClosed;
@@ -22,12 +26,17 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.MouseManager;
+import net.runelite.client.input.MouseWheelListener;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.input.MouseWheelListener;
 
+import javax.inject.Inject;
 import java.awt.event.MouseWheelEvent;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -238,7 +247,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-		if(this.taskList != null)
+		if (this.taskList != null)
 			taskList.updateBounds();
 	}
 
@@ -269,7 +278,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	}
 
 	private void createTaskDashboard(Widget window) {
-		this.taskDashboard = new TaskDashboard(this, window);
+		this.taskDashboard = new TaskDashboard(this, config, window);
 		this.taskDashboard.setVisibility(false);
 
 		if(saveData != null) setTaskCompletionPercent();
@@ -284,7 +293,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if(this.taskDashboard == null) return;
 
 		if(saveData.currentTask != null) {
-			this.taskDashboard.setTask(this.saveData.currentTask.getDescription(), this.saveData.currentTask.getItemID());
+			this.taskDashboard.setTask(this.saveData.currentTask.getDescription(), this.saveData.currentTask.getItemID(), null);
 			this.taskDashboard.disableGenerateTask();
 		}
 		else {
@@ -323,13 +332,13 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			playFailSound();
 
 			return;
-		};
+		}
 
 		int index = (int) Math.floor(Math.random()*uniqueTasks.size());
 
 
 		this.saveData.currentTask = uniqueTasks.get(index);
-		this.taskDashboard.setTask(this.saveData.currentTask.getDescription(), this.saveData.currentTask.getItemID());
+		this.taskDashboard.setTask(this.saveData.currentTask.getDescription(), this.saveData.currentTask.getItemID(), config.rollPastCompleted() ? Arrays.asList(this.tasks) : uniqueTasks);
 		log.debug("Task generated: "+this.saveData.currentTask.getDescription());
 
 		this.taskDashboard.disableGenerateTask();
@@ -361,7 +370,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 
 	private void nullCurrentTask() {
 		this.saveData.currentTask = null;
-		this.taskDashboard.setTask("No task.", -1);
+		this.taskDashboard.setTask("No task.", -1, null);
 		this.taskDashboard.enableGenerateTask();
 	}
 

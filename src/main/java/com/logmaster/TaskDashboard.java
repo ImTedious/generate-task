@@ -10,7 +10,8 @@ import net.runelite.api.widgets.ItemQuantityMode;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetType;
 
-import java.awt.*;
+import javax.swing.Timer;
+import java.awt.Color;
 
 import static com.logmaster.LogMasterPlugin.*;
 
@@ -31,6 +32,8 @@ public class TaskDashboard extends UIPage {
     private Widget window;
     private LogMasterPlugin plugin;
 
+    private LogMasterConfig config;
+
     private UILabel title;
     private UILabel taskLabel;
     private UILabel percentCompletion;
@@ -41,9 +44,10 @@ public class TaskDashboard extends UIPage {
     private UIButton completeTaskBtn;
     private UIButton generateTaskBtn;
 
-    public TaskDashboard(LogMasterPlugin plugin, Widget window) {
+    public TaskDashboard(LogMasterPlugin plugin, LogMasterConfig config, Widget window) {
         this.window = window;
         this.plugin = plugin;
+        this.config = config;
 
         createTaskDetails();
 
@@ -109,10 +113,31 @@ public class TaskDashboard extends UIPage {
         this.taskImage.getWidget().setBorderType(1);
     }
 
-    public void setTask(String desc, int taskItemID) {
-        this.taskLabel.setText(desc);
-        this.taskImage.setItem(taskItemID);
+    public void setTask(String desc, int taskItemID, java.util.List<Task> cyclingTasks) {
+        if (cyclingTasks != null) {
+            for (int i = 0; i < 250; i++) {
+                Task displayTask = cyclingTasks.get((int) Math.floor(Math.random() * cyclingTasks.size()));
+                // Seems the most natural timing
+                double decay = 500.0 / ((double) config.rollTime());
+                int delay = (int) (config.rollTime() * Math.exp(-decay * i));
+                Timer fakeTaskTimer = new Timer(delay, ae -> {
+                    this.taskLabel.setText(displayTask.getDescription());
+                    this.taskImage.setItem(displayTask.getItemID());
+                });
+                fakeTaskTimer.setRepeats(false);
+                fakeTaskTimer.setCoalesce(true);
+                fakeTaskTimer.start();
+            }
+        }
+        Timer realTaskTimer = new Timer(cyclingTasks == null ? 0 : config.rollTime(), ae -> {
+            this.taskLabel.setText(desc);
+            this.taskImage.setItem(taskItemID);
+        });
+        realTaskTimer.setRepeats(false);
+        realTaskTimer.setCoalesce(true);
+        realTaskTimer.start();
     }
+
 
     public void setCompletion(int percent) {
         this.percentCompletion.setText("<col="+getCompletionColor(percent)+">"+percent+"%</col> Completed");
