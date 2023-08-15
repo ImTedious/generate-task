@@ -300,13 +300,23 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 				currentTabX += 48;
 			}
 
-			Widget masterTaskList = window.createChild(-1, WidgetType.GRAPHIC);
-			masterTaskListTab = new UIButton(masterTaskList);
-			masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
-			masterTaskListTab.setSize(43, 21);
-			masterTaskListTab.setPosition(currentTabX, 36);
-			masterTaskListTab.addAction("View <col=ff9040>Master Task List</col>", this::activateMasterTaskList);
-			masterTaskListTab.setVisibility(false);
+			if (TaskTier.MASTER == config.hideBelow()) {
+				Widget masterTaskList = window.createChild(-1, WidgetType.GRAPHIC);
+				masterTaskListTab = new UIButton(masterTaskList);
+				masterTaskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
+				masterTaskListTab.setSize(95, 21);
+				masterTaskListTab.setPosition(currentTabX, 36);
+				masterTaskListTab.addAction("View <col=ff9040>Master Task List</col>", this::activateMasterTaskList);
+				masterTaskListTab.setVisibility(false);
+			} else {
+				Widget masterTaskList = window.createChild(-1, WidgetType.GRAPHIC);
+				masterTaskListTab = new UIButton(masterTaskList);
+				masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
+				masterTaskListTab.setSize(43, 21);
+				masterTaskListTab.setPosition(currentTabX, 36);
+				masterTaskListTab.addAction("View <col=ff9040>Master Task List</col>", this::activateMasterTaskList);
+				masterTaskListTab.setVisibility(false);
+			}
 
 			Widget dividerWidget = window.createChild(-1, WidgetType.GRAPHIC);
 			UIGraphic divider = new UIGraphic(dividerWidget);
@@ -516,7 +526,11 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			this.eliteTaskListTab.setSprites(TASKLIST_ELITE_TAB_SPRITE_ID, TASKLIST_ELITE_TAB_HOVER_SPRITE_ID);
 		}
 		if (this.masterTaskListTab != null) {
-			this.masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
+			if (this.config.hideBelow() == TaskTier.MASTER) {
+				this.masterTaskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
+			} else {
+				this.masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
+			}
 		}
 	}
 
@@ -612,7 +626,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 
 	private void activateMasterTaskList() {
 		setDefaultSprites();
-		this.masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
+		this.masterTaskListTab.setSprites(config.hideBelow() == TaskTier.MASTER ? TASKLIST_TAB_HOVER_SPRITE_ID : TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
 		this.taskDashboard.setVisibility(false);
 		if (this.saveData.getSelectedTier() != TaskTier.MASTER) {
 			this.taskList.goToTop();
