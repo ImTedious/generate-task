@@ -37,6 +37,7 @@ public class UILabel extends UIComponent
 	 */
 	public void setText(String text)
 	{
+
 		this.getWidget().setText(text);
 	}
 

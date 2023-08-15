@@ -3,6 +3,11 @@ package com.logmaster;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
+import com.logmaster.domain.SaveData;
+import com.logmaster.domain.Task;
+import com.logmaster.domain.TaskPointer;
+import com.logmaster.domain.TaskTier;
+import com.logmaster.domain.TieredTaskList;
 import com.logmaster.ui.UIButton;
 import com.logmaster.ui.UICheckBox;
 import com.logmaster.ui.UIComponent;
@@ -24,6 +29,7 @@ import net.runelite.client.RuneLite;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.input.MouseWheelListener;
@@ -38,7 +44,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -67,6 +76,16 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private static final int TASKLIST_TAB_SPRITE_ID = -20009;
 	private static final int TASKLIST_TAB_HOVER_SPRITE_ID = -20010;
 	private static final int DIVIDER_SPRITE_ID = -20011;
+	private static final int TASKLIST_EASY_TAB_SPRITE_ID = -20017;
+	private static final int TASKLIST_EASY_TAB_HOVER_SPRITE_ID = -20018;
+	private static final int TASKLIST_MEDIUM_TAB_SPRITE_ID = -20019;
+	private static final int TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID = -20020;
+	private static final int TASKLIST_HARD_TAB_SPRITE_ID = -20021;
+	private static final int TASKLIST_HARD_TAB_HOVER_SPRITE_ID = -20022;
+	private static final int TASKLIST_ELITE_TAB_SPRITE_ID = -20023;
+	private static final int TASKLIST_ELITE_TAB_HOVER_SPRITE_ID = -20024;
+	private static final int TASKLIST_MASTER_TAB_SPRITE_ID = -20025;
+	private static final int TASKLIST_MASTER_TAB_HOVER_SPRITE_ID = -20026;
 
 	@Inject
 	private Client client;
@@ -87,7 +106,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private MouseManager mouseManager;
 
 	private SpriteDefinition[] spriteDefinitions;
-	private Task[] tasks;
+	private TieredTaskList tasks;
 
 	@Getter
 	private SaveData saveData;
@@ -96,7 +115,11 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private TaskList taskList;
 	private UICheckBox taskDashboardCheckbox;
 
-	private UIButton taskListTab;
+	private UIButton easyTaskListTab;
+	private UIButton mediumTaskListTab;
+	private UIButton hardTaskListTab;
+	private UIButton eliteTaskListTab;
+	private UIButton masterTaskListTab;
 	private UIButton taskDashboardTab;
 
 	private int activeTab = 0;
@@ -107,7 +130,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	protected void startUp() throws Exception
 	{
 		this.spriteDefinitions = loadDefinitionResource(SpriteDefinition[].class, DEF_FILE_SPRITES, gson);
-		this.tasks = loadDefinitionResource(Task[].class, DEF_FILE_TASKS, gson);
+		this.tasks = loadDefinitionResource(TieredTaskList.class, DEF_FILE_TASKS, gson);
 		this.spriteManager.addSpriteOverrides(spriteDefinitions);
 		mouseManager.registerMouseWheelListener(this);
 	}
@@ -142,6 +165,12 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	 */
 	private void setupPlayerFile() {
 		saveData = new SaveData();
+
+		for (TaskTier loopTier : TaskTier.values()) {
+			if (!saveData.getProgress().containsKey(loopTier)) {
+				saveData.getProgress().put(loopTier, new HashSet<>());
+			}
+		}
 		File playerFolder = new File(RuneLite.RUNELITE_DIR, DATA_FOLDER_NAME);
 		if (!playerFolder.exists()) {
 			playerFolder.mkdirs();
@@ -162,6 +191,21 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		try {
 			String json = new Scanner(playerFile).useDelimiter("\\Z").next();
 			saveData = GSON.fromJson(json, new TypeToken<SaveData>() {}.getType());
+			for (TaskTier loopTier : TaskTier.values()) {
+				if (!saveData.getProgress().containsKey(loopTier)) {
+					saveData.getProgress().put(loopTier, new HashSet<>());
+				}
+			}
+			// Can get rid of this eventually
+			if (!this.saveData.getCompletedTasks().isEmpty()) {
+				this.saveData.getProgress().get(TaskTier.MASTER).addAll(this.saveData.getCompletedTasks().keySet());
+			}
+			if (saveData.currentTask != null) {
+				TaskPointer taskPointer = new TaskPointer();
+				taskPointer.setTask(saveData.currentTask);
+				taskPointer.setTaskTier(TaskTier.MASTER);
+				saveData.setActiveTaskPointer(taskPointer);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -210,13 +254,59 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			taskDashboardTab.addAction("View <col=ff9040>Dashboard</col>", this::activateTaskDashboard);
 			taskDashboardTab.setVisibility(false);
 
-			Widget taskListTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
-			taskListTab = new UIButton(taskListTabWidget);
-			taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
-			taskListTab.setSize(95, 21);
-			taskListTab.setPosition(110, 36);
-			taskListTab.addAction("View <col=ff9040>Task List</col>", this::activateTaskList);
-			taskListTab.setVisibility(false);
+			int currentTabX = 110;
+
+			if (!Arrays.asList(TaskTier.MEDIUM, TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
+				Widget easyTaskListTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
+				easyTaskListTab = new UIButton(easyTaskListTabWidget);
+				easyTaskListTab.setSprites(TASKLIST_EASY_TAB_SPRITE_ID, TASKLIST_EASY_TAB_HOVER_SPRITE_ID);
+				easyTaskListTab.setSize(43, 21);
+				easyTaskListTab.setPosition(currentTabX, 36);
+				easyTaskListTab.addAction("View <col=ff9040>Easy Task List</col>", this::activateEasyTaskList);
+				easyTaskListTab.setVisibility(false);
+				currentTabX += 48;
+			}
+
+			if (!Arrays.asList(TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
+				Widget mediumTaskList = window.createChild(-1, WidgetType.GRAPHIC);
+				mediumTaskListTab = new UIButton(mediumTaskList);
+				mediumTaskListTab.setSprites(TASKLIST_MEDIUM_TAB_SPRITE_ID, TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID);
+				mediumTaskListTab.setSize(43, 21);
+				mediumTaskListTab.setPosition(currentTabX, 36);
+				mediumTaskListTab.addAction("View <col=ff9040>Medium Task List</col>", this::activateMediumTaskList);
+				mediumTaskListTab.setVisibility(false);
+				currentTabX += 48;
+			}
+
+			if (!Arrays.asList(TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
+				Widget hardTaskList = window.createChild(-1, WidgetType.GRAPHIC);
+				hardTaskListTab = new UIButton(hardTaskList);
+				hardTaskListTab.setSprites(TASKLIST_HARD_TAB_SPRITE_ID, TASKLIST_HARD_TAB_HOVER_SPRITE_ID);
+				hardTaskListTab.setSize(43, 21);
+				hardTaskListTab.setPosition(currentTabX, 36);
+				hardTaskListTab.addAction("View <col=ff9040>Hard Task List</col>", this::activateHardTaskList);
+				hardTaskListTab.setVisibility(false);
+				currentTabX += 48;
+			}
+
+			if (TaskTier.MASTER != config.hideBelow()) {
+				Widget eliteTaskList = window.createChild(-1, WidgetType.GRAPHIC);
+				eliteTaskListTab = new UIButton(eliteTaskList);
+				eliteTaskListTab.setSprites(TASKLIST_ELITE_TAB_SPRITE_ID, TASKLIST_ELITE_TAB_HOVER_SPRITE_ID);
+				eliteTaskListTab.setSize(43, 21);
+				eliteTaskListTab.setPosition(currentTabX, 36);
+				eliteTaskListTab.addAction("View <col=ff9040>Elite Task List</col>", this::activateEliteTaskList);
+				eliteTaskListTab.setVisibility(false);
+				currentTabX += 48;
+			}
+
+			Widget masterTaskList = window.createChild(-1, WidgetType.GRAPHIC);
+			masterTaskListTab = new UIButton(masterTaskList);
+			masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
+			masterTaskListTab.setSize(43, 21);
+			masterTaskListTab.setPosition(currentTabX, 36);
+			masterTaskListTab.addAction("View <col=ff9040>Master Task List</col>", this::activateMasterTaskList);
+			masterTaskListTab.setVisibility(false);
 
 			Widget dividerWidget = window.createChild(-1, WidgetType.GRAPHIC);
 			UIGraphic divider = new UIGraphic(dividerWidget);
@@ -226,7 +316,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 
 			createTaskDashboard(window);
 			createTaskList(window);
-			createGenerateButton();
+			createTaskCheckbox();
 
 			this.taskDashboardCheckbox.setEnabled(false);
 			this.taskDashboard.setVisibility(false);
@@ -238,8 +328,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if(e.getGroupId() == WidgetInfo.COLLECTION_LOG.getGroupId()) {
 			this.taskDashboard.setVisibility(false);
 			this.taskList.setVisibility(false);
-			this.taskDashboardTab.setVisibility(false);
-			this.taskListTab.setVisibility(false);
+			hideTabs();
 			this.taskDashboardCheckbox.setEnabled(false);
 		}
 	}
@@ -261,7 +350,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		return event;
 	}
 
-	private void createGenerateButton() {
+	private void createTaskCheckbox() {
 		Widget window = client.getWidget(40697857);
 		// Create the graphic widget for the checkbox
 		Widget toggleWidget = window.createChild(-1, WidgetType.GRAPHIC);
@@ -280,38 +369,33 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private void createTaskDashboard(Widget window) {
 		this.taskDashboard = new TaskDashboard(this, config, window);
 		this.taskDashboard.setVisibility(false);
-
-		if(saveData != null) setTaskCompletionPercent();
 	}
 
 	private void createTaskList(Widget window) {
-		this.taskList = new TaskList(window, Arrays.asList(this.tasks), this, clientThread);
+		this.taskList = new TaskList(window, this.tasks, this, clientThread);
 		this.taskList.setVisibility(false);
 	}
 
 	private void toggleTaskDashboard(UIComponent src) {
 		if(this.taskDashboard == null) return;
 
-		if(saveData.currentTask != null) {
-			this.taskDashboard.setTask(this.saveData.currentTask.getDescription(), this.saveData.currentTask.getItemID(), null);
+		if(saveData.getActiveTaskPointer() != null) {
+			this.taskDashboard.setTask(this.saveData.getActiveTaskPointer().getTask().getDescription(), this.saveData.getActiveTaskPointer().getTask().getItemID(), null);
 			this.taskDashboard.disableGenerateTask();
-		}
-		else {
+		} else {
 			nullCurrentTask();
 		}
 
 		client.getWidget(COLLECTION_LOG_CONTENT_WIDGET_ID).setHidden(this.taskDashboardCheckbox.isEnabled());
 		client.getWidget(40697936).setHidden(this.taskDashboardCheckbox.isEnabled());
 
-		if(this.taskDashboardCheckbox.isEnabled()) {
+		if (this.taskDashboardCheckbox.isEnabled()) {
 			activateTaskDashboard();
-		}
-		else {
+		} else {
 			this.taskDashboard.setVisibility(false);
 			this.taskList.setVisibility(false);
 
-			this.taskDashboardTab.setVisibility(false);
-			this.taskListTab.setVisibility(false);
+			hideTabs();
 		}
 
 		// *Boop*
@@ -325,7 +409,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		}
 
 		this.client.playSoundEffect(SoundEffectID.UI_BOOP);
-		List<Task> uniqueTasks = filterCompleteTasks(Arrays.asList(this.tasks));
+		List<Task> uniqueTasks = findAvailableTasks();
 
 		if(uniqueTasks.size() <= 0) {
 			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "No more tasks left. Looks like you win?", "");
@@ -337,39 +421,44 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		int index = (int) Math.floor(Math.random()*uniqueTasks.size());
 
 
-		this.saveData.currentTask = uniqueTasks.get(index);
-		this.taskDashboard.setTask(this.saveData.currentTask.getDescription(), this.saveData.currentTask.getItemID(), config.rollPastCompleted() ? Arrays.asList(this.tasks) : uniqueTasks);
-		log.debug("Task generated: "+this.saveData.currentTask.getDescription());
+		TaskPointer newTaskPointer = new TaskPointer();
+		newTaskPointer.setTask(uniqueTasks.get(index));
+		newTaskPointer.setTaskTier(getCurrentTier());
+		this.saveData.setActiveTaskPointer(newTaskPointer);
+		this.taskDashboard.setTask(this.saveData.getActiveTaskPointer().getTask().getDescription(), this.saveData.getActiveTaskPointer().getTask().getItemID(), config.rollPastCompleted() ? this.tasks.getForTier(getCurrentTier()) : uniqueTasks);
+		log.debug("Task generated: "+this.saveData.getActiveTaskPointer().getTask().getDescription());
 
-		this.taskDashboard.disableGenerateTask();
+		this.taskDashboard.disableGenerateTask(false);
 		taskList.refreshTasks(0);
 
+		this.taskDashboard.updatePercentages();
 		savePlayerData();
 	}
 
 	public void completeTask() {
-		completeTask(saveData.currentTask.getId());
+		completeTask(saveData.getActiveTaskPointer().getTask().getId(), saveData.getActiveTaskPointer().getTaskTier());
 	}
 
-	public void completeTask(int taskID) {
+	public void completeTask(int taskID, TaskTier tier) {
 		this.client.playSoundEffect(SoundEffectID.UI_BOOP);
 
-		if(saveData.getCompletedTasks().get(taskID) != null) {
-			saveData.getCompletedTasks().remove(taskID);
+		if (saveData.getProgress().get(tier).contains(taskID)) {
+			saveData.getProgress().get(tier).remove(taskID);
+		} else {
+			addCompletedTask(taskID, tier);
+			if (saveData.getActiveTaskPointer() != null && taskID == saveData.getActiveTaskPointer().getTask().getId()) {
+				nullCurrentTask();
+			}
 		}
-		else {
-			addCompletedTask(taskID);
-			if(saveData.currentTask != null && taskID == saveData.currentTask.getId()) nullCurrentTask();
-		}
+		this.taskDashboard.updatePercentages();
 
-		setTaskCompletionPercent();
 		taskList.refreshTasks(0);
 
 		savePlayerData();
 	}
 
 	private void nullCurrentTask() {
-		this.saveData.currentTask = null;
+		this.saveData.setActiveTaskPointer(null);
 		this.taskDashboard.setTask("No task.", -1, null);
 		this.taskDashboard.enableGenerateTask();
 	}
@@ -382,42 +471,175 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		return (window.getHeight() / 2) - (height / 2);
 	}
 
-	public void addCompletedTask(int taskID) {
-		if(this.saveData.getCompletedTasks().get(taskID) != null) return;
-
-		this.saveData.getCompletedTasks().put(taskID, 0);
+	public void addCompletedTask(int taskID, TaskTier tier) {
+		this.saveData.getProgress().get(tier).add(taskID);
 	}
 
-	public List<Task> filterCompleteTasks(List<Task> taskList) {
-		return taskList.stream().filter(t -> this.saveData.getCompletedTasks().get(t.getId()) == null).collect(Collectors.toList());
+	public TaskTier getCurrentTier() {
+		if (this.saveData.getProgress().get(TaskTier.EASY).size() < this.tasks.getEasy().size() &&
+				!Arrays.asList(TaskTier.MEDIUM, TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
+			return TaskTier.EASY;
+		} else if (this.saveData.getProgress().get(TaskTier.MEDIUM).size() < this.tasks.getMedium().size() &&
+				!Arrays.asList(TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
+			return TaskTier.MEDIUM;
+		} else if (this.saveData.getProgress().get(TaskTier.HARD).size() < this.tasks.getHard().size() &&
+				!Arrays.asList(TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
+			return TaskTier.HARD;
+		} else if (this.saveData.getProgress().get(TaskTier.ELITE).size() < this.tasks.getElite().size() &&
+				TaskTier.MASTER != config.hideBelow()) {
+			return TaskTier.ELITE;
+		} else {
+			return TaskTier.MASTER;
+		}
 	}
 
-	private void activateTaskList() {
-		this.taskListTab.setSprites(TASKLIST_TAB_HOVER_SPRITE_ID);
+	public TaskTier getSelectedTier() {
+		return this.saveData.getSelectedTier();
+	}
+
+	public List<Task> findAvailableTasks() {
+		return this.tasks.getForTier(getCurrentTier()).stream().filter(t -> !this.saveData.getProgress().get(getCurrentTier()).contains(t.getId())).collect(Collectors.toList());
+	}
+
+	private void setDefaultSprites() {
 		this.taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
+		if (this.easyTaskListTab != null) {
+			this.easyTaskListTab.setSprites(TASKLIST_EASY_TAB_SPRITE_ID, TASKLIST_EASY_TAB_HOVER_SPRITE_ID);
+		}
+		if (this.mediumTaskListTab != null) {
+			this.mediumTaskListTab.setSprites(TASKLIST_MEDIUM_TAB_SPRITE_ID, TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID);
+		}
+		if (this.hardTaskListTab != null) {
+			this.hardTaskListTab.setSprites(TASKLIST_HARD_TAB_SPRITE_ID, TASKLIST_HARD_TAB_HOVER_SPRITE_ID);
+		}
+		if (this.eliteTaskListTab != null) {
+			this.eliteTaskListTab.setSprites(TASKLIST_ELITE_TAB_SPRITE_ID, TASKLIST_ELITE_TAB_HOVER_SPRITE_ID);
+		}
+		if (this.masterTaskListTab != null) {
+			this.masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
+		}
+	}
+
+	private void hideTabs() {
+		if (this.taskDashboardTab != null) {
+			this.taskDashboardTab.setVisibility(false);
+		}
+		if (this.easyTaskListTab != null) {
+			this.easyTaskListTab.setVisibility(false);
+		}
+		if (this.mediumTaskListTab != null) {
+			this.mediumTaskListTab.setVisibility(false);
+		}
+		if (this.hardTaskListTab != null) {
+			this.hardTaskListTab.setVisibility(false);
+		}
+		if (this.eliteTaskListTab != null) {
+			this.eliteTaskListTab.setVisibility(false);
+		}
+		if (this.masterTaskListTab != null) {
+			this.masterTaskListTab.setVisibility(false);
+		}
+	}
+
+	private void showTabs() {
+		if (this.taskDashboardTab != null) {
+			this.taskDashboardTab.setVisibility(true);
+		}
+		if (this.easyTaskListTab != null) {
+			this.easyTaskListTab.setVisibility(true);
+		}
+		if (this.mediumTaskListTab != null) {
+			this.mediumTaskListTab.setVisibility(true);
+		}
+		if (this.hardTaskListTab != null) {
+			this.hardTaskListTab.setVisibility(true);
+		}
+		if (this.eliteTaskListTab != null) {
+			this.eliteTaskListTab.setVisibility(true);
+		}
+		if (this.masterTaskListTab != null) {
+			this.masterTaskListTab.setVisibility(true);
+		}
+	}
+
+	private void activateEasyTaskList() {
+		setDefaultSprites();
+		this.easyTaskListTab.setSprites(TASKLIST_EASY_TAB_HOVER_SPRITE_ID);
 		this.taskDashboard.setVisibility(false);
+		if (this.saveData.getSelectedTier() != TaskTier.EASY) {
+			this.taskList.goToTop();
+			this.saveData.setSelectedTier(TaskTier.EASY);
+		}
+		this.taskList.refreshTasks(0);
+		this.taskList.setVisibility(true);
+	}
+
+	private void activateMediumTaskList() {
+		setDefaultSprites();
+		this.mediumTaskListTab.setSprites(TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID);
+		this.taskDashboard.setVisibility(false);
+		if (this.saveData.getSelectedTier() != TaskTier.MEDIUM) {
+			this.taskList.goToTop();
+			this.saveData.setSelectedTier(TaskTier.MEDIUM);
+		}
+		this.taskList.refreshTasks(0);
+		this.taskList.setVisibility(true);
+	}
+
+	private void activateHardTaskList() {
+		setDefaultSprites();
+		this.hardTaskListTab.setSprites(TASKLIST_HARD_TAB_HOVER_SPRITE_ID);
+		this.taskDashboard.setVisibility(false);
+		if (this.saveData.getSelectedTier() != TaskTier.HARD) {
+			this.taskList.goToTop();
+			this.saveData.setSelectedTier(TaskTier.HARD);
+		}
+		this.taskList.refreshTasks(0);
+		this.taskList.setVisibility(true);
+	}
+
+	private void activateEliteTaskList() {
+		setDefaultSprites();
+		this.eliteTaskListTab.setSprites(TASKLIST_ELITE_TAB_HOVER_SPRITE_ID);
+		this.taskDashboard.setVisibility(false);
+		if (this.saveData.getSelectedTier() != TaskTier.ELITE) {
+			this.taskList.goToTop();
+			this.saveData.setSelectedTier(TaskTier.ELITE);
+		}
+		this.taskList.refreshTasks(0);
+		this.taskList.setVisibility(true);
+	}
+
+	private void activateMasterTaskList() {
+		setDefaultSprites();
+		this.masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
+		this.taskDashboard.setVisibility(false);
+		if (this.saveData.getSelectedTier() != TaskTier.MASTER) {
+			this.taskList.goToTop();
+			this.saveData.setSelectedTier(TaskTier.MASTER);
+		}
+		this.taskList.refreshTasks(0);
 		this.taskList.setVisibility(true);
 	}
 
 	private void activateTaskDashboard() {
+		setDefaultSprites();
 		this.taskDashboardTab.setSprites(DASHBOARD_TAB_HOVER_SPRITE_ID);
-		this.taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
-		this.taskDashboard.setVisibility(true);
+		showTabs();
 		this.taskList.setVisibility(false);
-
-		this.taskDashboardTab.setVisibility(true);
-		this.taskListTab.setVisibility(true);
+		this.taskDashboard.setVisibility(true);
 	}
 
 	public void playFailSound() {
 		client.playSoundEffect(2277);
 	}
 
-	public void setTaskCompletionPercent() {
-		if(taskDashboard == null) return;
-
-		int percent = (int) Math.round(((double) saveData.getCompletedTasks().keySet().size() / (double) this.tasks.length) * 100);
-		taskDashboard.setCompletion(percent);
+	public Map<TaskTier, Integer> completionPercentages() {
+		Map<TaskTier, Integer> completionPercentages = new HashMap<>();
+		for (TaskTier tier : TaskTier.values()) {
+			completionPercentages.put(tier, (int) Math.round(((double) saveData.getProgress().get(tier).size() / (double) this.tasks.getForTier(tier).size()) * 100));
+		}
+		return completionPercentages;
 	}
 
 	@Provides

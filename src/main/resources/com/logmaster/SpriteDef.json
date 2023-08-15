@@ -66,5 +66,45 @@
    {
       "spriteId":-20016,
       "fileName":"task-long-current.png"
+   },
+   {
+      "spriteId":-20017,
+      "fileName":"tab-easy-tasklist.png"
+   },
+   {
+      "spriteId":-20018,
+      "fileName":"tab-easy-tasklist-hover.png"
+   },
+   {
+      "spriteId":-20019,
+      "fileName":"tab-medium-tasklist.png"
+   },
+   {
+      "spriteId":-20020,
+      "fileName":"tab-medium-tasklist-hover.png"
+   },
+   {
+      "spriteId":-20021,
+      "fileName":"tab-hard-tasklist.png"
+   },
+   {
+      "spriteId":-20022,
+      "fileName":"tab-hard-tasklist-hover.png"
+   },
+   {
+      "spriteId":-20023,
+      "fileName":"tab-elite-tasklist.png"
+   },
+   {
+      "spriteId":-20024,
+      "fileName":"tab-elite-tasklist-hover.png"
+   },
+   {
+      "spriteId":-20025,
+      "fileName":"tab-master-tasklist.png"
+   },
+   {
+      "spriteId":-20026,
+      "fileName":"tab-master-tasklist-hover.png"
    }
 ]

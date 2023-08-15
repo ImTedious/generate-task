@@ -1,5 +1,6 @@
 package com.logmaster;
 
+import com.logmaster.domain.Task;
 import com.logmaster.ui.UIButton;
 import com.logmaster.ui.UIGraphic;
 import com.logmaster.ui.UILabel;
@@ -63,7 +64,7 @@ public class TaskDashboard extends UIPage {
         this.percentCompletion.setFont(FontID.BOLD_12);
         this.percentCompletion.setSize(COLLECTION_LOG_WINDOW_WIDTH, 25);
         this.percentCompletion.setPosition(getCenterX(window, COLLECTION_LOG_WINDOW_WIDTH), COLLECTION_LOG_WINDOW_HEIGHT - 55);
-        this.percentCompletion.setText("<col=ff000>0%</col> Completed");
+        updatePercentages();
 
         Widget completeTaskWidget = window.createChild(-1, WidgetType.GRAPHIC);
         this.completeTaskBtn = new UIButton(completeTaskWidget);
@@ -119,7 +120,7 @@ public class TaskDashboard extends UIPage {
                 Task displayTask = cyclingTasks.get((int) Math.floor(Math.random() * cyclingTasks.size()));
                 // Seems the most natural timing
                 double decay = 500.0 / ((double) config.rollTime());
-                int delay = (int) (config.rollTime() * Math.exp(-decay * i));
+                int delay = (int) ((config.rollTime() - 50) * Math.exp(-decay * i));
                 Timer fakeTaskTimer = new Timer(delay, ae -> {
                     this.taskLabel.setText(displayTask.getDescription());
                     this.taskImage.setItem(displayTask.getItemID());
@@ -128,19 +129,26 @@ public class TaskDashboard extends UIPage {
                 fakeTaskTimer.setCoalesce(true);
                 fakeTaskTimer.start();
             }
-        }
-        Timer realTaskTimer = new Timer(cyclingTasks == null ? 0 : config.rollTime(), ae -> {
+            Timer realTaskTimer = new Timer(config.rollTime(), ae -> {
+                this.taskLabel.setText(desc);
+                this.taskImage.setItem(taskItemID);
+                this.enableCompleteTask();
+            });
+            realTaskTimer.setRepeats(false);
+            realTaskTimer.setCoalesce(true);
+            realTaskTimer.start();
+        } else {
             this.taskLabel.setText(desc);
             this.taskImage.setItem(taskItemID);
-        });
-        realTaskTimer.setRepeats(false);
-        realTaskTimer.setCoalesce(true);
-        realTaskTimer.start();
+            this.enableCompleteTask();
+        }
     }
 
-
-    public void setCompletion(int percent) {
-        this.percentCompletion.setText("<col="+getCompletionColor(percent)+">"+percent+"%</col> Completed");
+    public void updatePercentages() {
+        Integer percentage = this.plugin.completionPercentages().get(this.plugin.getCurrentTier());
+        if (percentage != null) {
+            this.percentCompletion.setText("<col=" + getCompletionColor(percentage) + ">" + percentage + "%</col> " + this.plugin.getCurrentTier().displayName + " Completed");
+        }
     }
 
     private String getCompletionColor(double percent) {
@@ -164,12 +172,18 @@ public class TaskDashboard extends UIPage {
     }
 
     public void disableGenerateTask() {
+        disableGenerateTask(true);
+    }
+
+    public void disableGenerateTask(boolean enableComplete) {
         this.generateTaskBtn.setSprites(GENERATE_TASK_DISABLED_SPRITE_ID);
         this.generateTaskBtn.clearActions();
 
         this.generateTaskBtn.addAction("Disabled", plugin::playFailSound);
 
-        this.enableCompleteTask();
+        if (enableComplete) {
+            this.enableCompleteTask();
+        }
     }
 
     public void enableGenerateTask() {
