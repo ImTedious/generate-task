@@ -69,42 +69,42 @@
    },
    {
       "spriteId":-20017,
-      "fileName":"tab-easy-tasklist.png"
+      "fileName":"easy-tab.png"
    },
    {
       "spriteId":-20018,
-      "fileName":"tab-easy-tasklist-hover.png"
+      "fileName":"easy-tab-hover.png"
    },
    {
       "spriteId":-20019,
-      "fileName":"tab-medium-tasklist.png"
+      "fileName":"medium-tab.png"
    },
    {
       "spriteId":-20020,
-      "fileName":"tab-medium-tasklist-hover.png"
+      "fileName":"medium-tab-hover.png"
    },
    {
       "spriteId":-20021,
-      "fileName":"tab-hard-tasklist.png"
+      "fileName":"hard-tab.png"
    },
    {
       "spriteId":-20022,
-      "fileName":"tab-hard-tasklist-hover.png"
+      "fileName":"hard-tab-hover.png"
    },
    {
       "spriteId":-20023,
-      "fileName":"tab-elite-tasklist.png"
+      "fileName":"elite-tab.png"
    },
    {
       "spriteId":-20024,
-      "fileName":"tab-elite-tasklist-hover.png"
+      "fileName":"elite-tab-hover.png"
    },
    {
       "spriteId":-20025,
-      "fileName":"tab-master-tasklist.png"
+      "fileName":"master-tab.png"
    },
    {
       "spriteId":-20026,
-      "fileName":"tab-master-tasklist-hover.png"
+      "fileName":"master-tab-hover.png"
    }
 ]
