@@ -66,5 +66,45 @@
    {
       "spriteId":-20016,
       "fileName":"task-long-current.png"
+   },
+   {
+      "spriteId":-20017,
+      "fileName":"easy-tab.png"
+   },
+   {
+      "spriteId":-20018,
+      "fileName":"easy-tab-hover.png"
+   },
+   {
+      "spriteId":-20019,
+      "fileName":"medium-tab.png"
+   },
+   {
+      "spriteId":-20020,
+      "fileName":"medium-tab-hover.png"
+   },
+   {
+      "spriteId":-20021,
+      "fileName":"hard-tab.png"
+   },
+   {
+      "spriteId":-20022,
+      "fileName":"hard-tab-hover.png"
+   },
+   {
+      "spriteId":-20023,
+      "fileName":"elite-tab.png"
+   },
+   {
+      "spriteId":-20024,
+      "fileName":"elite-tab-hover.png"
+   },
+   {
+      "spriteId":-20025,
+      "fileName":"master-tab.png"
+   },
+   {
+      "spriteId":-20026,
+      "fileName":"master-tab-hover.png"
    }
 ]

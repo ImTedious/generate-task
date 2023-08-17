@@ -1,5 +1,8 @@
 package com.logmaster;
 
+import com.logmaster.domain.Task;
+import com.logmaster.domain.TaskTier;
+import com.logmaster.domain.TieredTaskList;
 import com.logmaster.ui.UIButton;
 import com.logmaster.ui.UIGraphic;
 import com.logmaster.ui.UILabel;
@@ -35,7 +38,7 @@ public class TaskList extends UIPage {
     private final int ARROW_Y_OFFSET = 40;
 
     private Widget window;
-    private List<Task> tasks;
+    private TieredTaskList tasks;
     private LogMasterPlugin plugin;
     private ClientThread clientThread;
 
@@ -47,7 +50,7 @@ public class TaskList extends UIPage {
 
     private int topTaskIndex = 0;
 
-    public TaskList(Widget window, List<Task> tasks, LogMasterPlugin plugin, ClientThread clientThread) {
+    public TaskList(Widget window, TieredTaskList tasks, LogMasterPlugin plugin, ClientThread clientThread) {
         this.window = window;
         this.tasks = tasks;
         this.plugin = plugin;
@@ -76,7 +79,7 @@ public class TaskList extends UIPage {
     }
 
     public void refreshTasks(int dir) {
-        if(topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > tasks.size()) {
+        if(plugin.getSelectedTier() == null || topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > tasks.getForTier(plugin.getSelectedTier()).size()) {
             return;
         }
 
@@ -102,25 +105,22 @@ public class TaskList extends UIPage {
             taskBg.setSize(TASK_WIDTH, TASK_HEIGHT);
             taskBg.setPosition(POS_X, POS_Y);
             taskBg.getWidget().setPos(POS_X, POS_Y);
-            taskBg.addAction("Mark", () -> plugin.completeTask(task.getId()));
+            taskBg.addAction("Mark", () -> plugin.completeTask(task.getId(), plugin.getSelectedTier()));
 
-            if(plugin.getSaveData().getCompletedTasks().get(task.getId()) != null) {
+            if (plugin.getSaveData().getProgress().get(plugin.getSelectedTier()).contains(task.getId())) {
                 taskBg.setSprite(LogMasterPlugin.TASK_COMPLETE_BACKGROUND_SPRITE_ID);
-            }
-            else if(plugin.getSaveData().currentTask != null && plugin.getSaveData().currentTask.getId() == task.getId()) {
+            } else if (plugin.getSaveData().getActiveTaskPointer() != null && plugin.getSaveData().getActiveTaskPointer().getTaskTier() == plugin.getSelectedTier() && plugin.getSaveData().getActiveTaskPointer().getTask().getId() == task.getId()) {
                 taskBg.setSprite(LogMasterPlugin.TASK_CURRENT_BACKGROUND_SPRITE_ID);
-            }
-            else {
+            } else {
                 taskBg.setSprite(LogMasterPlugin.TASK_LIST_BACKGROUND_SPRITE_ID);
             }
 
             UILabel taskLabel;
-            if(taskLabels.size() <= i) {
+            if (taskLabels.size() <= i) {
                 taskLabel = new UILabel(window.createChild(-1, WidgetType.TEXT));
                 this.add(taskLabel);
                 taskLabels.add(taskLabel);
-            }
-            else {
+            } else {
                 taskLabel = taskLabels.get(i);
             }
 
@@ -152,11 +152,15 @@ public class TaskList extends UIPage {
         }
     }
 
+    public void goToTop() {
+        topTaskIndex = 0;
+    }
+
     private List<Task> getTasksToShow(int topTaskIndex) {
         List<Task> tasksToShow = new ArrayList<>();
         for(int i=0;i<TASKS_PER_PAGE;i++) {
-            if(topTaskIndex + i > tasks.size()) break;
-            tasksToShow.add(tasks.get(topTaskIndex+i));
+            if(topTaskIndex + i > tasks.getForTier(plugin.getSelectedTier()).size()) break;
+            tasksToShow.add(tasks.getForTier(plugin.getSelectedTier()).get(topTaskIndex+i));
         }
 
         return tasksToShow;

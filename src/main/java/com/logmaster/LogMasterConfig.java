@@ -1,9 +1,11 @@
 package com.logmaster;
 
+import com.logmaster.domain.TaskTier;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Range;
+import net.runelite.client.plugins.camera.ControlFunction;
 
 @ConfigGroup("log-master")
 public interface LogMasterConfig extends Config
@@ -33,5 +35,16 @@ public interface LogMasterConfig extends Config
     default boolean rollPastCompleted()
     {
         return false;
+    }
+
+    @ConfigItem(
+            keyName = "hideBelow",
+            name = "Hide Tasks Below",
+            description = "Disabled the showing up/assigning of tasks at or below the specified tier",
+            position = 3
+    )
+    default TaskTier hideBelow()
+    {
+        return TaskTier.NONE;
     }
 }
