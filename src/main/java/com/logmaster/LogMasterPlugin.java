@@ -260,44 +260,44 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 				Widget easyTaskListTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
 				easyTaskListTab = new UIButton(easyTaskListTabWidget);
 				easyTaskListTab.setSprites(TASKLIST_EASY_TAB_SPRITE_ID, TASKLIST_EASY_TAB_HOVER_SPRITE_ID);
-				easyTaskListTab.setSize(43, 21);
+				easyTaskListTab.setSize(60, 21);
 				easyTaskListTab.setPosition(currentTabX, 36);
 				easyTaskListTab.addAction("View <col=ff9040>Easy Task List</col>", this::activateEasyTaskList);
 				easyTaskListTab.setVisibility(false);
-				currentTabX += 48;
+				currentTabX += 65;
 			}
 
 			if (!Arrays.asList(TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
 				Widget mediumTaskList = window.createChild(-1, WidgetType.GRAPHIC);
 				mediumTaskListTab = new UIButton(mediumTaskList);
 				mediumTaskListTab.setSprites(TASKLIST_MEDIUM_TAB_SPRITE_ID, TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID);
-				mediumTaskListTab.setSize(43, 21);
+				mediumTaskListTab.setSize(60, 21);
 				mediumTaskListTab.setPosition(currentTabX, 36);
 				mediumTaskListTab.addAction("View <col=ff9040>Medium Task List</col>", this::activateMediumTaskList);
 				mediumTaskListTab.setVisibility(false);
-				currentTabX += 48;
+				currentTabX += 65;
 			}
 
 			if (!Arrays.asList(TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
 				Widget hardTaskList = window.createChild(-1, WidgetType.GRAPHIC);
 				hardTaskListTab = new UIButton(hardTaskList);
 				hardTaskListTab.setSprites(TASKLIST_HARD_TAB_SPRITE_ID, TASKLIST_HARD_TAB_HOVER_SPRITE_ID);
-				hardTaskListTab.setSize(43, 21);
+				hardTaskListTab.setSize(60, 21);
 				hardTaskListTab.setPosition(currentTabX, 36);
 				hardTaskListTab.addAction("View <col=ff9040>Hard Task List</col>", this::activateHardTaskList);
 				hardTaskListTab.setVisibility(false);
-				currentTabX += 48;
+				currentTabX += 65;
 			}
 
 			if (TaskTier.MASTER != config.hideBelow()) {
 				Widget eliteTaskList = window.createChild(-1, WidgetType.GRAPHIC);
 				eliteTaskListTab = new UIButton(eliteTaskList);
 				eliteTaskListTab.setSprites(TASKLIST_ELITE_TAB_SPRITE_ID, TASKLIST_ELITE_TAB_HOVER_SPRITE_ID);
-				eliteTaskListTab.setSize(43, 21);
+				eliteTaskListTab.setSize(60, 21);
 				eliteTaskListTab.setPosition(currentTabX, 36);
 				eliteTaskListTab.addAction("View <col=ff9040>Elite Task List</col>", this::activateEliteTaskList);
 				eliteTaskListTab.setVisibility(false);
-				currentTabX += 48;
+				currentTabX += 65;
 			}
 
 			if (TaskTier.MASTER == config.hideBelow()) {
@@ -312,7 +312,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 				Widget masterTaskList = window.createChild(-1, WidgetType.GRAPHIC);
 				masterTaskListTab = new UIButton(masterTaskList);
 				masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
-				masterTaskListTab.setSize(43, 21);
+				masterTaskListTab.setSize(60, 21);
 				masterTaskListTab.setPosition(currentTabX, 36);
 				masterTaskListTab.addAction("View <col=ff9040>Master Task List</col>", this::activateMasterTaskList);
 				masterTaskListTab.setVisibility(false);
