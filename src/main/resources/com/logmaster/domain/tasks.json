@@ -3957,6 +3957,56 @@
       "id": 129,
       "itemID": 25956,
       "description": "50 CA points"
+    },
+    {
+      "id": 130,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 131,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 132,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 133,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 134,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 135,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 136,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 137,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 138,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 139,
+      "itemID": 28338,
+      "description":"1 DT2 Boss unique"
     }
   ]
 }
