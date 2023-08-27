@@ -1,6 +1,7 @@
 package com.logmaster;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
 import com.logmaster.domain.SaveData;
@@ -13,6 +14,7 @@ import com.logmaster.ui.UICheckBox;
 import com.logmaster.ui.UIComponent;
 import com.logmaster.ui.UIGraphic;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
@@ -35,6 +37,9 @@ import net.runelite.client.input.MouseManager;
 import net.runelite.client.input.MouseWheelListener;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 import javax.inject.Inject;
 import java.awt.event.MouseWheelEvent;
@@ -60,7 +65,7 @@ import static net.runelite.http.api.RuneLiteAPI.GSON;
 public class LogMasterPlugin extends Plugin implements MouseWheelListener
 {
 	public static final String DEF_FILE_SPRITES = "SpriteDef.json";
-	public static final String DEF_FILE_TASKS = "tasks.json";
+	public static final String DEF_FILE_TASKS = "default-tasks.json";
 	public static final int TASK_BACKGROUND_SPRITE_ID = -20006;
 	public static final int TASK_LIST_BACKGROUND_SPRITE_ID = -20012;
 	public static final int TASK_COMPLETE_BACKGROUND_SPRITE_ID = -20013;
@@ -97,6 +102,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private LogMasterConfig config;
 
 	@Inject
+	TaskListClient taskListClient;
+
+	@Inject
 	private Gson gson;
 
 	@Inject
@@ -110,6 +118,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 
 	@Getter
 	private SaveData saveData;
+
 
 	private TaskDashboard taskDashboard;
 	private TaskList taskList;
@@ -130,9 +139,44 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	protected void startUp() throws Exception
 	{
 		this.spriteDefinitions = loadDefinitionResource(SpriteDefinition[].class, DEF_FILE_SPRITES, gson);
+		// Load the default task list so we definitely have something working
 		this.tasks = loadDefinitionResource(TieredTaskList.class, DEF_FILE_TASKS, gson);
+		if (config.loadRemoteTaskList()) {
+			loadRemoteTaskList();
+		}
 		this.spriteManager.addSpriteOverrides(spriteDefinitions);
 		mouseManager.registerMouseWheelListener(this);
+	}
+
+	protected void loadRemoteTaskList() {
+		// Load the remote task list
+		try {
+			taskListClient.getTaskList(new Callback() {
+				@Override
+				public void onFailure(@NonNull Call call, @NonNull IOException e) {
+					log.error("Unable to load remote task list, will defer to the default task list", e);
+				}
+
+				@Override
+				public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+					JsonObject tasksJson = taskListClient.processResponse(response);
+					response.close();
+					if (tasksJson == null) {
+						log.error("Loaded null remote task list, will defer to the default task list");
+						return;
+					}
+
+					TieredTaskList tieredTaskList = gson.fromJson(tasksJson, TieredTaskList.class);
+					clientThread.invoke(() -> replaceTaskList(tieredTaskList));
+				}
+			});
+		} catch (IOException e) {
+			log.error("Unable to load remote task list, will defer to the default task list");
+		}
+	}
+
+	protected void replaceTaskList(TieredTaskList taskList) {
+		this.tasks = taskList;
 	}
 
 	@Override

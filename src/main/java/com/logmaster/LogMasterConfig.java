@@ -47,4 +47,15 @@ public interface LogMasterConfig extends Config
     {
         return TaskTier.NONE;
     }
+
+    @ConfigItem(
+            keyName = "loadRemoteTaskList",
+            name = "Load remote task list",
+            description = "Load the latest version of the tasklist, this will be updated more frequently than the default list bundled with the plugin",
+            position = 4
+    )
+    default boolean loadRemoteTaskList()
+    {
+        return true;
+    }
 }
