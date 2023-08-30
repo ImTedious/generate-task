@@ -21,8 +21,8 @@ import java.io.IOException;
 @Singleton
 public class TaskListClient {
 
-    private static final String TASK_LIST_BUCKET_URL = "collection-log-task-storage.s3.eu-west-2.amazonaws.com";
-    private static final String TASK_LIST_KEY = "tasks.json";
+    private static final String TASK_LIST_URL = "raw.githubusercontent.com";
+    private static final String TASK_LIST_PATH = "Alex-Banna/generate-task-tasks/main/tasks.json";
 
     @Inject
     private OkHttpClient okHttpClient;
@@ -30,8 +30,8 @@ public class TaskListClient {
     public void getTaskList(Callback callback) throws IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
-                .host(TASK_LIST_BUCKET_URL)
-                .addPathSegment(TASK_LIST_KEY)
+                .host(TASK_LIST_URL)
+                .addPathSegments(TASK_LIST_PATH)
                 .build();
 
         getRequest(url, callback);
