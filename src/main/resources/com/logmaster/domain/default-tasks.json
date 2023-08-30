@@ -1,6 +1,11 @@
 {
   "easy": [
     {
+      "id": 0,
+      "itemID": 4740,
+      "description": "Get bolt racks from Barrows"
+    },
+    {
       "id": 1,
       "itemID": 7416,
       "description": "Get a Mole claw + skin"
