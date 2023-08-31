@@ -1,4 +1,4 @@
-package com.logmaster;
+package com.logmaster.domain;
 
 import lombok.Getter;
 
