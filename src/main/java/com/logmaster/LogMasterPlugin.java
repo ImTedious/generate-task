@@ -248,6 +248,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 				taskPointer.setTask(saveData.currentTask);
 				taskPointer.setTaskTier(TaskTier.MASTER);
 				saveData.setActiveTaskPointer(taskPointer);
+				saveData.currentTask = null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -286,8 +287,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			if(saveData == null) {
 				setupPlayerFile();
 			}
-		}
-		else if(gameStateChanged.getGameState().equals(GameState.LOGIN_SCREEN)) {
+		} else if(gameStateChanged.getGameState().equals(GameState.LOGIN_SCREEN)) {
 			if(saveData != null) {
 				savePlayerData();
 			}
