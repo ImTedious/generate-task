@@ -119,8 +119,8 @@ public class TaskDashboard extends UIPage {
             for (int i = 0; i < 250; i++) {
                 Task displayTask = cyclingTasks.get((int) Math.floor(Math.random() * cyclingTasks.size()));
                 // Seems the most natural timing
-                double decay = 500.0 / ((double) config.rollTime());
-                int delay = (int) ((config.rollTime() - 50) * Math.exp(-decay * i));
+                double decay = 450.0 / ((double) config.rollTime());
+                int delay = (int) ((config.rollTime() * 0.925) * Math.exp(-decay * i));
                 Timer fakeTaskTimer = new Timer(delay, ae -> {
                     this.taskLabel.setText(displayTask.getDescription());
                     this.taskImage.setItem(displayTask.getItemID());
