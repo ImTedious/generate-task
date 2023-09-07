@@ -4,13 +4,14 @@ import com.logmaster.domain.Task;
 import com.logmaster.domain.TaskTier;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+@ToString
 public class SaveData {
     // We have to leave this here in case someone was running the old version of the plugin
     @Getter

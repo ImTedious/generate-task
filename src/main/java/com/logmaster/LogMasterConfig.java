@@ -45,7 +45,7 @@ public interface LogMasterConfig extends Config
     )
     default TaskTier hideBelow()
     {
-        return TaskTier.NONE;
+        return TaskTier.EASY;
     }
 
     @ConfigItem(

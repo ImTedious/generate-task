@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,16 +82,18 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private static final int TASKLIST_TAB_SPRITE_ID = -20009;
 	private static final int TASKLIST_TAB_HOVER_SPRITE_ID = -20010;
 	private static final int DIVIDER_SPRITE_ID = -20011;
-	private static final int TASKLIST_EASY_TAB_SPRITE_ID = -20017;
-	private static final int TASKLIST_EASY_TAB_HOVER_SPRITE_ID = -20018;
-	private static final int TASKLIST_MEDIUM_TAB_SPRITE_ID = -20019;
-	private static final int TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID = -20020;
-	private static final int TASKLIST_HARD_TAB_SPRITE_ID = -20021;
-	private static final int TASKLIST_HARD_TAB_HOVER_SPRITE_ID = -20022;
-	private static final int TASKLIST_ELITE_TAB_SPRITE_ID = -20023;
-	private static final int TASKLIST_ELITE_TAB_HOVER_SPRITE_ID = -20024;
-	private static final int TASKLIST_MASTER_TAB_SPRITE_ID = -20025;
-	private static final int TASKLIST_MASTER_TAB_HOVER_SPRITE_ID = -20026;
+
+	public static final int TASKLIST_EASY_TAB_SPRITE_ID = -20017;
+	public static final int TASKLIST_EASY_TAB_HOVER_SPRITE_ID = -20018;
+	public static final int TASKLIST_MEDIUM_TAB_SPRITE_ID = -20019;
+	public static final int TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID = -20020;
+	public static final int TASKLIST_HARD_TAB_SPRITE_ID = -20021;
+	public static final int TASKLIST_HARD_TAB_HOVER_SPRITE_ID = -20022;
+	public static final int TASKLIST_ELITE_TAB_SPRITE_ID = -20023;
+	public static final int TASKLIST_ELITE_TAB_HOVER_SPRITE_ID = -20024;
+	public static final int TASKLIST_MASTER_TAB_SPRITE_ID = -20025;
+	public static final int TASKLIST_MASTER_TAB_HOVER_SPRITE_ID = -20026;
+
 
 	@Inject
 	private Client client;
@@ -124,11 +127,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private TaskList taskList;
 	private UICheckBox taskDashboardCheckbox;
 
-	private UIButton easyTaskListTab;
-	private UIButton mediumTaskListTab;
-	private UIButton hardTaskListTab;
-	private UIButton eliteTaskListTab;
-	private UIButton masterTaskListTab;
+	private List<UIButton> tabs;
 	private UIButton taskDashboardTab;
 
 	private int activeTab = 0;
@@ -249,6 +248,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 				taskPointer.setTask(saveData.currentTask);
 				taskPointer.setTaskTier(TaskTier.MASTER);
 				saveData.setActiveTaskPointer(taskPointer);
+				saveData.currentTask = null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -266,6 +266,18 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			e.printStackTrace();
 		}
 	}
+	@Subscribe
+	public void onConfigChanged(ConfigChanged event) {
+		if (!event.getGroup().equals("log-master")) {
+			return;
+		}
+		hideTabs();
+		updateTabs();
+		if (this.taskDashboardCheckbox.isEnabled()) {
+			showTabs();
+			this.taskDashboard.updatePercentages();
+		}
+	}
 
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
@@ -275,8 +287,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			if(saveData == null) {
 				setupPlayerFile();
 			}
-		}
-		else if(gameStateChanged.getGameState().equals(GameState.LOGIN_SCREEN)) {
+		} else if(gameStateChanged.getGameState().equals(GameState.LOGIN_SCREEN)) {
 			if(saveData != null) {
 				savePlayerData();
 			}
@@ -298,69 +309,21 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			taskDashboardTab.addAction("View <col=ff9040>Dashboard</col>", this::activateTaskDashboard);
 			taskDashboardTab.setVisibility(false);
 
+			tabs = new ArrayList<>();
+
 			int currentTabX = 110;
 
-			if (!Arrays.asList(TaskTier.MEDIUM, TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
-				Widget easyTaskListTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
-				easyTaskListTab = new UIButton(easyTaskListTabWidget);
-				easyTaskListTab.setSprites(TASKLIST_EASY_TAB_SPRITE_ID, TASKLIST_EASY_TAB_HOVER_SPRITE_ID);
-				easyTaskListTab.setSize(66, 21);
-				easyTaskListTab.setPosition(currentTabX, 36);
-				easyTaskListTab.addAction("View <col=ff9040>Easy Task List</col>", this::activateEasyTaskList);
-				easyTaskListTab.setVisibility(false);
+			for (int i = 0; i < 5; i++) {
+				Widget tabWiget = window.createChild(-1, WidgetType.GRAPHIC);
+				UIButton tab = new UIButton(tabWiget);
+				tab.setSize(66, 21);
+				tab.setPosition(currentTabX, 36);
+				tab.setVisibility(false);
 				currentTabX += 71;
+				tabs.add(tab);
 			}
 
-			if (!Arrays.asList(TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
-				Widget mediumTaskList = window.createChild(-1, WidgetType.GRAPHIC);
-				mediumTaskListTab = new UIButton(mediumTaskList);
-				mediumTaskListTab.setSprites(TASKLIST_MEDIUM_TAB_SPRITE_ID, TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID);
-				mediumTaskListTab.setSize(66, 21);
-				mediumTaskListTab.setPosition(currentTabX, 36);
-				mediumTaskListTab.addAction("View <col=ff9040>Medium Task List</col>", this::activateMediumTaskList);
-				mediumTaskListTab.setVisibility(false);
-				currentTabX += 71;
-			}
-
-			if (!Arrays.asList(TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
-				Widget hardTaskList = window.createChild(-1, WidgetType.GRAPHIC);
-				hardTaskListTab = new UIButton(hardTaskList);
-				hardTaskListTab.setSprites(TASKLIST_HARD_TAB_SPRITE_ID, TASKLIST_HARD_TAB_HOVER_SPRITE_ID);
-				hardTaskListTab.setSize(66, 21);
-				hardTaskListTab.setPosition(currentTabX, 36);
-				hardTaskListTab.addAction("View <col=ff9040>Hard Task List</col>", this::activateHardTaskList);
-				hardTaskListTab.setVisibility(false);
-				currentTabX += 71;
-			}
-
-			if (TaskTier.MASTER != config.hideBelow()) {
-				Widget eliteTaskList = window.createChild(-1, WidgetType.GRAPHIC);
-				eliteTaskListTab = new UIButton(eliteTaskList);
-				eliteTaskListTab.setSprites(TASKLIST_ELITE_TAB_SPRITE_ID, TASKLIST_ELITE_TAB_HOVER_SPRITE_ID);
-				eliteTaskListTab.setSize(66, 21);
-				eliteTaskListTab.setPosition(currentTabX, 36);
-				eliteTaskListTab.addAction("View <col=ff9040>Elite Task List</col>", this::activateEliteTaskList);
-				eliteTaskListTab.setVisibility(false);
-				currentTabX += 71;
-			}
-
-			if (TaskTier.MASTER == config.hideBelow()) {
-				Widget masterTaskList = window.createChild(-1, WidgetType.GRAPHIC);
-				masterTaskListTab = new UIButton(masterTaskList);
-				masterTaskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
-				masterTaskListTab.setSize(95, 21);
-				masterTaskListTab.setPosition(currentTabX, 36);
-				masterTaskListTab.addAction("View <col=ff9040>Master Task List</col>", this::activateMasterTaskList);
-				masterTaskListTab.setVisibility(false);
-			} else {
-				Widget masterTaskList = window.createChild(-1, WidgetType.GRAPHIC);
-				masterTaskListTab = new UIButton(masterTaskList);
-				masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
-				masterTaskListTab.setSize(66, 21);
-				masterTaskListTab.setPosition(currentTabX, 36);
-				masterTaskListTab.addAction("View <col=ff9040>Master Task List</col>", this::activateMasterTaskList);
-				masterTaskListTab.setVisibility(false);
-			}
+			updateTabs();
 
 			Widget dividerWidget = window.createChild(-1, WidgetType.GRAPHIC);
 			UIGraphic divider = new UIGraphic(dividerWidget);
@@ -374,6 +337,29 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 
 			this.taskDashboardCheckbox.setEnabled(false);
 			this.taskDashboard.setVisibility(false);
+		}
+	}
+
+	private void updateTabs() {
+		int tabIndex = 0;
+		for (TaskTier tier : TaskTier.values()) {
+			if (tabIndex > 0 || tier == config.hideBelow()) {
+				tabs.get(tabIndex).setSprites(tier.tabSpriteId, tier.tabSpriteHoverId);
+				int finalTabIndex = tabIndex;
+				tabs.get(tabIndex).clearActions();
+				tabs.get(tabIndex).addAction(String.format("View <col=ff9040>%s Task List</col>", tier.displayName), () -> {
+					updateTabs();
+					tabs.get(finalTabIndex).setSprites(tier.tabSpriteHoverId);
+					this.taskDashboard.setVisibility(false);
+					if (this.saveData.getSelectedTier() != tier) {
+						this.taskList.goToTop();
+						this.saveData.setSelectedTier(tier);
+					}
+					this.taskList.refreshTasks(0);
+					this.taskList.setVisibility(true);
+				});
+				tabIndex++;
+			}
 		}
 	}
 
@@ -555,47 +541,12 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		return this.tasks.getForTier(getCurrentTier()).stream().filter(t -> !this.saveData.getProgress().get(getCurrentTier()).contains(t.getId())).collect(Collectors.toList());
 	}
 
-	private void setDefaultSprites() {
-		this.taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
-		if (this.easyTaskListTab != null) {
-			this.easyTaskListTab.setSprites(TASKLIST_EASY_TAB_SPRITE_ID, TASKLIST_EASY_TAB_HOVER_SPRITE_ID);
-		}
-		if (this.mediumTaskListTab != null) {
-			this.mediumTaskListTab.setSprites(TASKLIST_MEDIUM_TAB_SPRITE_ID, TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID);
-		}
-		if (this.hardTaskListTab != null) {
-			this.hardTaskListTab.setSprites(TASKLIST_HARD_TAB_SPRITE_ID, TASKLIST_HARD_TAB_HOVER_SPRITE_ID);
-		}
-		if (this.eliteTaskListTab != null) {
-			this.eliteTaskListTab.setSprites(TASKLIST_ELITE_TAB_SPRITE_ID, TASKLIST_ELITE_TAB_HOVER_SPRITE_ID);
-		}
-		if (this.masterTaskListTab != null) {
-			if (this.config.hideBelow() == TaskTier.MASTER) {
-				this.masterTaskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
-			} else {
-				this.masterTaskListTab.setSprites(TASKLIST_MASTER_TAB_SPRITE_ID, TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
-			}
-		}
-	}
-
 	private void hideTabs() {
 		if (this.taskDashboardTab != null) {
 			this.taskDashboardTab.setVisibility(false);
 		}
-		if (this.easyTaskListTab != null) {
-			this.easyTaskListTab.setVisibility(false);
-		}
-		if (this.mediumTaskListTab != null) {
-			this.mediumTaskListTab.setVisibility(false);
-		}
-		if (this.hardTaskListTab != null) {
-			this.hardTaskListTab.setVisibility(false);
-		}
-		if (this.eliteTaskListTab != null) {
-			this.eliteTaskListTab.setVisibility(false);
-		}
-		if (this.masterTaskListTab != null) {
-			this.masterTaskListTab.setVisibility(false);
+		if (this.tabs != null) {
+			this.tabs.forEach(t -> t.setVisibility(false));
 		}
 	}
 
@@ -603,85 +554,17 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if (this.taskDashboardTab != null) {
 			this.taskDashboardTab.setVisibility(true);
 		}
-		if (this.easyTaskListTab != null) {
-			this.easyTaskListTab.setVisibility(true);
+		int tabIndex = 0;
+		for (TaskTier tier : TaskTier.values()) {
+			if (tabIndex > 0 || tier == config.hideBelow()) {
+				this.tabs.get(tabIndex).setVisibility(true);
+				tabIndex++;
+			}
 		}
-		if (this.mediumTaskListTab != null) {
-			this.mediumTaskListTab.setVisibility(true);
-		}
-		if (this.hardTaskListTab != null) {
-			this.hardTaskListTab.setVisibility(true);
-		}
-		if (this.eliteTaskListTab != null) {
-			this.eliteTaskListTab.setVisibility(true);
-		}
-		if (this.masterTaskListTab != null) {
-			this.masterTaskListTab.setVisibility(true);
-		}
-	}
-
-	private void activateEasyTaskList() {
-		setDefaultSprites();
-		this.easyTaskListTab.setSprites(TASKLIST_EASY_TAB_HOVER_SPRITE_ID);
-		this.taskDashboard.setVisibility(false);
-		if (this.saveData.getSelectedTier() != TaskTier.EASY) {
-			this.taskList.goToTop();
-			this.saveData.setSelectedTier(TaskTier.EASY);
-		}
-		this.taskList.refreshTasks(0);
-		this.taskList.setVisibility(true);
-	}
-
-	private void activateMediumTaskList() {
-		setDefaultSprites();
-		this.mediumTaskListTab.setSprites(TASKLIST_MEDIUM_TAB_HOVER_SPRITE_ID);
-		this.taskDashboard.setVisibility(false);
-		if (this.saveData.getSelectedTier() != TaskTier.MEDIUM) {
-			this.taskList.goToTop();
-			this.saveData.setSelectedTier(TaskTier.MEDIUM);
-		}
-		this.taskList.refreshTasks(0);
-		this.taskList.setVisibility(true);
-	}
-
-	private void activateHardTaskList() {
-		setDefaultSprites();
-		this.hardTaskListTab.setSprites(TASKLIST_HARD_TAB_HOVER_SPRITE_ID);
-		this.taskDashboard.setVisibility(false);
-		if (this.saveData.getSelectedTier() != TaskTier.HARD) {
-			this.taskList.goToTop();
-			this.saveData.setSelectedTier(TaskTier.HARD);
-		}
-		this.taskList.refreshTasks(0);
-		this.taskList.setVisibility(true);
-	}
-
-	private void activateEliteTaskList() {
-		setDefaultSprites();
-		this.eliteTaskListTab.setSprites(TASKLIST_ELITE_TAB_HOVER_SPRITE_ID);
-		this.taskDashboard.setVisibility(false);
-		if (this.saveData.getSelectedTier() != TaskTier.ELITE) {
-			this.taskList.goToTop();
-			this.saveData.setSelectedTier(TaskTier.ELITE);
-		}
-		this.taskList.refreshTasks(0);
-		this.taskList.setVisibility(true);
-	}
-
-	private void activateMasterTaskList() {
-		setDefaultSprites();
-		this.masterTaskListTab.setSprites(config.hideBelow() == TaskTier.MASTER ? TASKLIST_TAB_HOVER_SPRITE_ID : TASKLIST_MASTER_TAB_HOVER_SPRITE_ID);
-		this.taskDashboard.setVisibility(false);
-		if (this.saveData.getSelectedTier() != TaskTier.MASTER) {
-			this.taskList.goToTop();
-			this.saveData.setSelectedTier(TaskTier.MASTER);
-		}
-		this.taskList.refreshTasks(0);
-		this.taskList.setVisibility(true);
 	}
 
 	private void activateTaskDashboard() {
-		setDefaultSprites();
+		updateTabs();
 		this.taskDashboardTab.setSprites(DASHBOARD_TAB_HOVER_SPRITE_ID);
 		showTabs();
 		this.taskList.setVisibility(false);
