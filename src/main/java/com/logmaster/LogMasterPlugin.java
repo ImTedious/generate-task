@@ -128,6 +128,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private UICheckBox taskDashboardCheckbox;
 
 	private List<UIButton> tabs;
+	private UIButton taskListTab;
 	private UIButton taskDashboardTab;
 
 	private int activeTab = 0;
@@ -273,8 +274,14 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		}
 		hideTabs();
 		updateTabs();
+		if (this.config.hideBelow() == TaskTier.MASTER && this.saveData.getSelectedTier() == TaskTier.MASTER && !this.taskDashboard.isVisible()) {
+			this.taskListTab.setSprites(TASKLIST_TAB_HOVER_SPRITE_ID);
+		}
 		if (this.taskDashboardCheckbox.isEnabled()) {
 			showTabs();
+			if (this.saveData.getSelectedTier() != null && Arrays.asList(TaskTier.values()).indexOf(this.saveData.getSelectedTier()) < Arrays.asList(TaskTier.values()).indexOf(this.config.hideBelow())) {
+				activateTaskDashboard();
+			}
 			this.taskDashboard.updatePercentages();
 		}
 	}
@@ -323,7 +330,24 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 				tabs.add(tab);
 			}
 
-			updateTabs();
+			Widget tabWiget = window.createChild(-1, WidgetType.GRAPHIC);
+			taskListTab = new UIButton(tabWiget);
+			taskListTab.setSize(95, 21);
+			taskListTab.setPosition(110, 36);
+			taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
+			taskListTab.setVisibility(false);
+			taskListTab.addAction("View <col=ff9040>Task List</col>", () -> {
+				taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
+				if (this.saveData.getSelectedTier() != TaskTier.MASTER) {
+					this.taskList.goToTop();
+					this.saveData.setSelectedTier(TaskTier.MASTER);
+				}
+				updateTabs();
+				taskListTab.setSprites(TASKLIST_TAB_HOVER_SPRITE_ID);
+				this.taskDashboard.setVisibility(false);
+				this.taskList.refreshTasks(0);
+				this.taskList.setVisibility(true);
+			});
 
 			Widget dividerWidget = window.createChild(-1, WidgetType.GRAPHIC);
 			UIGraphic divider = new UIGraphic(dividerWidget);
@@ -334,6 +358,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			createTaskDashboard(window);
 			createTaskList(window);
 			createTaskCheckbox();
+			updateTabs();
 
 			this.taskDashboardCheckbox.setEnabled(false);
 			this.taskDashboard.setVisibility(false);
@@ -344,17 +369,23 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		int tabIndex = 0;
 		for (TaskTier tier : TaskTier.values()) {
 			if (tabIndex > 0 || tier == config.hideBelow()) {
-				tabs.get(tabIndex).setSprites(tier.tabSpriteId, tier.tabSpriteHoverId);
+				if (this.saveData.getSelectedTier() == tier && !this.taskDashboard.isVisible()) {
+					tabs.get(tabIndex).setSprites(tier.tabSpriteHoverId);
+				} else {
+					tabs.get(tabIndex).setSprites(tier.tabSpriteId, tier.tabSpriteHoverId);
+				}
 				int finalTabIndex = tabIndex;
 				tabs.get(tabIndex).clearActions();
+				tabs.get(tabIndex).setSize(66, 21);
 				tabs.get(tabIndex).addAction(String.format("View <col=ff9040>%s Task List</col>", tier.displayName), () -> {
-					updateTabs();
-					tabs.get(finalTabIndex).setSprites(tier.tabSpriteHoverId);
-					this.taskDashboard.setVisibility(false);
+					taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
 					if (this.saveData.getSelectedTier() != tier) {
 						this.taskList.goToTop();
 						this.saveData.setSelectedTier(tier);
 					}
+					updateTabs();
+					tabs.get(finalTabIndex).setSprites(tier.tabSpriteHoverId);
+					this.taskDashboard.setVisibility(false);
 					this.taskList.refreshTasks(0);
 					this.taskList.setVisibility(true);
 				});
@@ -548,27 +579,35 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if (this.tabs != null) {
 			this.tabs.forEach(t -> t.setVisibility(false));
 		}
+		if (this.taskListTab != null) {
+			this.taskListTab.setVisibility(false);
+		}
 	}
 
 	private void showTabs() {
 		if (this.taskDashboardTab != null) {
 			this.taskDashboardTab.setVisibility(true);
 		}
-		int tabIndex = 0;
-		for (TaskTier tier : TaskTier.values()) {
-			if (tabIndex > 0 || tier == config.hideBelow()) {
-				this.tabs.get(tabIndex).setVisibility(true);
-				tabIndex++;
+		if (this.config.hideBelow() == TaskTier.MASTER) {
+			this.taskListTab.setVisibility(true);
+		} else {
+			int tabIndex = 0;
+			for (TaskTier tier : TaskTier.values()) {
+				if (tabIndex > 0 || tier == config.hideBelow()) {
+					this.tabs.get(tabIndex).setVisibility(true);
+					tabIndex++;
+				}
 			}
 		}
 	}
 
 	private void activateTaskDashboard() {
-		updateTabs();
 		this.taskDashboardTab.setSprites(DASHBOARD_TAB_HOVER_SPRITE_ID);
-		showTabs();
 		this.taskList.setVisibility(false);
 		this.taskDashboard.setVisibility(true);
+		this.taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
+		updateTabs();
+		showTabs();
 	}
 
 	public void playFailSound() {
