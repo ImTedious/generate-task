@@ -79,7 +79,11 @@ public class TaskList extends UIPage {
     }
 
     public void refreshTasks(int dir) {
-        if(plugin.getSelectedTier() == null || topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > tasks.getForTier(plugin.getSelectedTier()).size()) {
+        TaskTier relevantTier = plugin.getSelectedTier();
+        if (relevantTier == null) {
+            relevantTier = TaskTier.MASTER;
+        }
+        if (topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > tasks.getForTier(relevantTier).size()) {
             return;
         }
 
@@ -88,7 +92,7 @@ public class TaskList extends UIPage {
         final int POS_X = getCenterX(window, TASK_WIDTH);
 
         int i = 0;
-        for(Task task : getTasksToShow(topTaskIndex)) {
+        for(Task task : getTasksToShow(relevantTier, topTaskIndex)) {
             final int POS_Y = OFFSET_Y+(i*TASK_HEIGHT);
 
             UIGraphic taskBg;
@@ -105,11 +109,12 @@ public class TaskList extends UIPage {
             taskBg.setSize(TASK_WIDTH, TASK_HEIGHT);
             taskBg.setPosition(POS_X, POS_Y);
             taskBg.getWidget().setPos(POS_X, POS_Y);
-            taskBg.addAction("Mark", () -> plugin.completeTask(task.getId(), plugin.getSelectedTier()));
+            TaskTier finalRelevantTier = relevantTier;
+            taskBg.addAction("Mark", () -> plugin.completeTask(task.getId(), finalRelevantTier));
 
-            if (plugin.getSaveData().getProgress().get(plugin.getSelectedTier()).contains(task.getId())) {
+            if (plugin.getSaveData().getProgress().get(relevantTier).contains(task.getId())) {
                 taskBg.setSprite(LogMasterPlugin.TASK_COMPLETE_BACKGROUND_SPRITE_ID);
-            } else if (plugin.getSaveData().getActiveTaskPointer() != null && plugin.getSaveData().getActiveTaskPointer().getTaskTier() == plugin.getSelectedTier() && plugin.getSaveData().getActiveTaskPointer().getTask().getId() == task.getId()) {
+            } else if (plugin.getSaveData().getActiveTaskPointer() != null && plugin.getSaveData().getActiveTaskPointer().getTaskTier() == relevantTier && plugin.getSaveData().getActiveTaskPointer().getTask().getId() == task.getId()) {
                 taskBg.setSprite(LogMasterPlugin.TASK_CURRENT_BACKGROUND_SPRITE_ID);
             } else {
                 taskBg.setSprite(LogMasterPlugin.TASK_LIST_BACKGROUND_SPRITE_ID);
@@ -156,11 +161,11 @@ public class TaskList extends UIPage {
         topTaskIndex = 0;
     }
 
-    private List<Task> getTasksToShow(int topTaskIndex) {
+    private List<Task> getTasksToShow(TaskTier relevantTier, int topTaskIndex) {
         List<Task> tasksToShow = new ArrayList<>();
         for(int i=0;i<TASKS_PER_PAGE;i++) {
-            if(topTaskIndex + i > tasks.getForTier(plugin.getSelectedTier()).size()) break;
-            tasksToShow.add(tasks.getForTier(plugin.getSelectedTier()).get(topTaskIndex+i));
+            if(topTaskIndex + i > tasks.getForTier(relevantTier).size()) break;
+            tasksToShow.add(tasks.getForTier(relevantTier).get(topTaskIndex+i));
         }
 
         return tasksToShow;
