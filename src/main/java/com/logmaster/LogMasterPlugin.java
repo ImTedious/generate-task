@@ -149,6 +149,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	}
 
 	protected void loadRemoteTaskList() {
+		log.info("Loading remote task list");
 		// Load the remote task list
 		try {
 			taskListClient.getTaskList(new Callback() {

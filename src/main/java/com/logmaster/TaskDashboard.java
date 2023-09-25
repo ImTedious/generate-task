@@ -145,9 +145,11 @@ public class TaskDashboard extends UIPage {
     }
 
     public void updatePercentages() {
-        Integer percentage = this.plugin.completionPercentages().get(this.plugin.getCurrentTier());
-        if (percentage != null) {
-            this.percentCompletion.setText("<col=" + getCompletionColor(percentage) + ">" + percentage + "%</col> " + this.plugin.getCurrentTier().displayName + " Completed");
+        if (this.plugin != null && this.plugin.completionPercentages() != null && this.plugin.getCurrentTier() != null) {
+            Integer percentage = this.plugin.completionPercentages().get(this.plugin.getCurrentTier());
+            if (percentage != null) {
+                this.percentCompletion.setText("<col=" + getCompletionColor(percentage) + ">" + percentage + "%</col> " + this.plugin.getCurrentTier().displayName + " Completed");
+            }
         }
     }
 
