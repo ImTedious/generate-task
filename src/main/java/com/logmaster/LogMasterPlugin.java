@@ -273,6 +273,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if (!event.getGroup().equals("log-master")) {
 			return;
 		}
+		if (saveData == null) {
+			setupPlayerFile();
+		}
 		hideTabs();
 		updateTabs();
 		if (this.config.hideBelow() == TaskTier.MASTER && this.saveData.getSelectedTier() == TaskTier.MASTER && !this.taskDashboard.isVisible()) {
