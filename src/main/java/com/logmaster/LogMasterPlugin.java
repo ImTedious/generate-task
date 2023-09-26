@@ -307,6 +307,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded e) {
 		if(e.getGroupId() == WidgetInfo.COLLECTION_LOG.getGroupId()) {
+			if (saveData == null) {
+				setupPlayerFile();
+			}
 			Widget window = client.getWidget(40697857);
 
 			Widget dashboardTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
