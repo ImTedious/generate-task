@@ -273,6 +273,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if (!event.getGroup().equals("log-master")) {
 			return;
 		}
+		if (saveData == null) {
+			setupPlayerFile();
+		}
 		hideTabs();
 		updateTabs();
 		if (this.config.hideBelow() == TaskTier.MASTER && this.saveData.getSelectedTier() == TaskTier.MASTER && !this.taskDashboard.isVisible()) {
@@ -307,6 +310,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded e) {
 		if(e.getGroupId() == WidgetInfo.COLLECTION_LOG.getGroupId()) {
+			if (saveData == null) {
+				setupPlayerFile();
+			}
 			Widget window = client.getWidget(40697857);
 
 			Widget dashboardTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
