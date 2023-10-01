@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.IndexedSprite;
+import net.runelite.api.ItemComposition;
 import net.runelite.api.MessageNode;
 import net.runelite.api.Player;
 import net.runelite.api.SoundEffectID;
@@ -38,12 +40,14 @@ import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.input.MouseWheelListener;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.Text;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,6 +55,7 @@ import okhttp3.Response;
 
 import javax.inject.Inject;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,6 +68,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static net.runelite.http.api.RuneLiteAPI.GSON;
@@ -101,7 +107,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	public static final int TASKLIST_ELITE_TAB_HOVER_SPRITE_ID = -20024;
 	public static final int TASKLIST_MASTER_TAB_SPRITE_ID = -20025;
 	public static final int TASKLIST_MASTER_TAB_HOVER_SPRITE_ID = -20026;
-	private static final String TASK_CHAT_COMMAND = "!task";
+	private static final String TASK_CHAT_COMMAND = "!tasker";
 
 
 	@Inject
@@ -134,6 +140,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	@Inject
 	private ChatCommandManager chatCommandManager;
 
+	@Inject
+	private ItemManager itemManager;
+
 	private SpriteDefinition[] spriteDefinitions;
 	private TieredTaskList tasks;
 
@@ -148,6 +157,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	private List<UIButton> tabs;
 	private UIButton taskListTab;
 	private UIButton taskDashboardTab;
+
+	private Map<Integer, Integer> chatSpriteMap = new HashMap<>();
 
 	private int activeTab = 0;
 
@@ -166,7 +177,34 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		mouseManager.registerMouseWheelListener(this);
 		this.taskOverlay.setResizable(true);
 		this.overlayManager.add(this.taskOverlay);
+		this.clientThread.invoke(this::populateChatSpriteMap);
 		chatCommandManager.registerCommandAsync(TASK_CHAT_COMMAND, this::getTaskCommandData);
+	}
+
+	private void populateChatSpriteMap() {
+		Set<Integer> itemIdsToLoad = new HashSet<>();
+		for (TaskTier tier : TaskTier.values()) {
+			itemIdsToLoad.addAll(this.tasks.getForTier(tier).stream().map(Task::getItemID).collect(Collectors.toList()));
+		}
+		List<Integer> itemIdsToLoadOrdered = new ArrayList<>(itemIdsToLoad);
+		final IndexedSprite[] modIcons = client.getModIcons();
+
+		final IndexedSprite[] newModIcons = Arrays.copyOf(modIcons, modIcons.length + itemIdsToLoadOrdered.size());
+		int modIconIdx = modIcons.length;
+
+		for (int i = 0; i < itemIdsToLoadOrdered.size(); i++)
+		{
+			final Integer itemId = itemIdsToLoadOrdered.get(i);
+			final ItemComposition itemComposition = itemManager.getItemComposition(itemId);
+			final BufferedImage image = ImageUtil.resizeImage(itemManager.getImage(itemComposition.getId()), 18, 16);
+			final IndexedSprite sprite = ImageUtil.getImageIndexedSprite(image, client);
+			final int spriteIndex = modIconIdx + i;
+
+			newModIcons[spriteIndex] = sprite;
+			chatSpriteMap.put(itemId, spriteIndex);
+		}
+
+		client.setModIcons(newModIcons);
 	}
 
 	private void getTaskCommandData(ChatMessage chatMessage, String message) {
@@ -187,6 +225,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 			chatMessageBuilder
 					.append(ChatColorType.NORMAL)
 					.append(" Current task: ")
+					.img(chatSpriteMap.getOrDefault(saveData.getActiveTaskPointer().getTask().getItemID(), Integer.MIN_VALUE))
 					.append(ChatColorType.HIGHLIGHT)
 					.append(saveData.getActiveTaskPointer().getTask().getDescription());
 		} else {
