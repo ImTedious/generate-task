@@ -37,6 +37,7 @@ import net.runelite.client.input.MouseManager;
 import net.runelite.client.input.MouseWheelListener;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -116,6 +117,12 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	@Inject
 	private MouseManager mouseManager;
 
+	@Inject
+	protected TaskOverlay taskOverlay;
+
+	@Inject
+	private OverlayManager overlayManager;
+
 	private SpriteDefinition[] spriteDefinitions;
 	private TieredTaskList tasks;
 
@@ -146,6 +153,24 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		}
 		this.spriteManager.addSpriteOverrides(spriteDefinitions);
 		mouseManager.registerMouseWheelListener(this);
+		this.taskOverlay.setResizable(true);
+		this.overlayManager.add(this.taskOverlay);
+		String longest = "";
+		for (TaskTier tier : TaskTier.values()) {
+			for (Task task : this.tasks.getForTier(tier)) {
+				if (task.getDescription().length() > longest.length()) {
+					longest = task.getDescription();
+				}
+			}
+		}
+		log.info("Longest task: [{}]", longest);
+	}
+
+	protected Task currentTask() {
+		if (saveData == null || saveData.getActiveTaskPointer() == null) {
+			return null;
+		}
+		return saveData.getActiveTaskPointer().getTask();
 	}
 
 	protected void loadRemoteTaskList() {
@@ -281,7 +306,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		if (this.config.hideBelow() == TaskTier.MASTER && this.saveData.getSelectedTier() == TaskTier.MASTER && !this.taskDashboard.isVisible()) {
 			this.taskListTab.setSprites(TASKLIST_TAB_HOVER_SPRITE_ID);
 		}
-		if (this.taskDashboardCheckbox.isEnabled()) {
+		if (this.taskDashboard != null && this.taskDashboardCheckbox.isEnabled()) {
 			showTabs();
 			if (this.saveData.getSelectedTier() != null && Arrays.asList(TaskTier.values()).indexOf(this.saveData.getSelectedTier()) < Arrays.asList(TaskTier.values()).indexOf(this.config.hideBelow())) {
 				activateTaskDashboard();
@@ -376,6 +401,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		int tabIndex = 0;
 		for (TaskTier tier : TaskTier.values()) {
 			if (tabIndex > 0 || tier == config.hideBelow()) {
+				if (tabs == null) {
+					return;
+				}
 				if (this.saveData.getSelectedTier() == tier && !this.taskDashboard.isVisible()) {
 					tabs.get(tabIndex).setSprites(tier.tabSpriteHoverId);
 				} else {
@@ -633,5 +661,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	LogMasterConfig provideConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(LogMasterConfig.class);
+	}
+
+	public boolean isDashboardOpen() {
+		return this.taskDashboard != null && this.taskDashboard.isVisible();
 	}
 }

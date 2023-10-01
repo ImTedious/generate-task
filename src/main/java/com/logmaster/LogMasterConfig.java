@@ -58,4 +58,17 @@ public interface LogMasterConfig extends Config
     {
         return true;
     }
+
+    @ConfigItem(
+            keyName = "displayCurrentTaskOverlay",
+            name = "Display current task overlay",
+            description = "Enable an overlay showing the currently assigned task (when one exists)",
+            position = 5
+    )
+    default boolean displayCurrentTaskOverlay()
+    {
+        return true;
+    }
+
+
 }
