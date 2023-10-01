@@ -177,8 +177,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		mouseManager.registerMouseWheelListener(this);
 		this.taskOverlay.setResizable(true);
 		this.overlayManager.add(this.taskOverlay);
-		this.clientThread.invoke(this::populateChatSpriteMap);
-		chatCommandManager.registerCommandAsync(TASK_CHAT_COMMAND, this::getTaskCommandData);
+		// TODO when task save data can be stored and access externally; populate this with other people's data
+//		this.clientThread.invoke(this::populateChatSpriteMap);
+//		chatCommandManager.registerCommandAsync(TASK_CHAT_COMMAND, this::getTaskCommandData);
 	}
 
 	private void populateChatSpriteMap() {
@@ -208,9 +209,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	}
 
 	private void getTaskCommandData(ChatMessage chatMessage, String message) {
-		if (!config.taskChatCommand()) {
-			return;
-		}
+//		if (!config.taskChatCommand()) {
+//			return;
+//		}
 
 		Integer percentage = this.completionPercentages().get(this.getCurrentTier());
 
