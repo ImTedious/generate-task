@@ -19,7 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.MessageNode;
+import net.runelite.api.Player;
 import net.runelite.api.SoundEffectID;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetClosed;
@@ -29,6 +32,9 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.api.widgets.WidgetType;
 import net.runelite.client.RuneLite;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.chat.ChatColorType;
+import net.runelite.client.chat.ChatCommandManager;
+import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -38,6 +44,7 @@ import net.runelite.client.input.MouseWheelListener;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.Text;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -94,6 +101,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 	public static final int TASKLIST_ELITE_TAB_HOVER_SPRITE_ID = -20024;
 	public static final int TASKLIST_MASTER_TAB_SPRITE_ID = -20025;
 	public static final int TASKLIST_MASTER_TAB_HOVER_SPRITE_ID = -20026;
+	private static final String TASK_CHAT_COMMAND = "!task";
 
 
 	@Inject
@@ -122,6 +130,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 
 	@Inject
 	private OverlayManager overlayManager;
+
+	@Inject
+	private ChatCommandManager chatCommandManager;
 
 	private SpriteDefinition[] spriteDefinitions;
 	private TieredTaskList tasks;
@@ -155,15 +166,40 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener
 		mouseManager.registerMouseWheelListener(this);
 		this.taskOverlay.setResizable(true);
 		this.overlayManager.add(this.taskOverlay);
-		String longest = "";
-		for (TaskTier tier : TaskTier.values()) {
-			for (Task task : this.tasks.getForTier(tier)) {
-				if (task.getDescription().length() > longest.length()) {
-					longest = task.getDescription();
-				}
-			}
+		chatCommandManager.registerCommandAsync(TASK_CHAT_COMMAND, this::getTaskCommandData);
+	}
+
+	private void getTaskCommandData(ChatMessage chatMessage, String message) {
+		if (!config.taskChatCommand()) {
+			return;
 		}
-		log.info("Longest task: [{}]", longest);
+
+		Integer percentage = this.completionPercentages().get(this.getCurrentTier());
+
+		ChatMessageBuilder chatMessageBuilder =
+				new ChatMessageBuilder()
+						.append(ChatColorType.NORMAL)
+						.append("Progress: ")
+						.append(ChatColorType.HIGHLIGHT)
+						.append(percentage + "% " + this.getCurrentTier().displayName);
+
+		if (saveData.getActiveTaskPointer() != null) {
+			chatMessageBuilder
+					.append(ChatColorType.NORMAL)
+					.append(" Current task: ")
+					.append(ChatColorType.HIGHLIGHT)
+					.append(saveData.getActiveTaskPointer().getTask().getDescription());
+		} else {
+			chatMessageBuilder
+					.append(ChatColorType.NORMAL)
+					.append(" No current task.");
+		}
+
+		final String response = chatMessageBuilder.build();
+
+		final MessageNode messageNode = chatMessage.getMessageNode();
+		messageNode.setRuneLiteFormatMessage(response);
+		client.refreshChat();
 	}
 
 	protected Task currentTask() {
