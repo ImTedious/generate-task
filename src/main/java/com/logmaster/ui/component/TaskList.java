@@ -1,12 +1,14 @@
-package com.logmaster;
+package com.logmaster.ui.component;
 
+import com.logmaster.LogMasterPlugin;
 import com.logmaster.domain.Task;
 import com.logmaster.domain.TaskTier;
 import com.logmaster.domain.TieredTaskList;
-import com.logmaster.ui.UIButton;
-import com.logmaster.ui.UIGraphic;
-import com.logmaster.ui.UILabel;
-import com.logmaster.ui.UIPage;
+import com.logmaster.persistence.SaveDataManager;
+import com.logmaster.ui.generic.UIButton;
+import com.logmaster.ui.generic.UIGraphic;
+import com.logmaster.ui.generic.UILabel;
+import com.logmaster.ui.generic.UIPage;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.widgets.ItemQuantityMode;
 import net.runelite.api.widgets.Widget;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.logmaster.LogMasterPlugin.getCenterX;
+import static com.logmaster.ui.InterfaceConstants.*;
 
 @Slf4j
 public class TaskList extends UIPage {
@@ -37,10 +40,12 @@ public class TaskList extends UIPage {
     private final int ARROW_SPRITE_HEIGHT = 20;
     private final int ARROW_Y_OFFSET = 40;
 
-    private Widget window;
-    private TieredTaskList tasks;
-    private LogMasterPlugin plugin;
-    private ClientThread clientThread;
+    private final Widget window;
+    private final TieredTaskList tasks;
+    private final LogMasterPlugin plugin;
+    private final ClientThread clientThread;
+
+    private final SaveDataManager saveDataManager;
 
     private Rectangle bounds = new Rectangle();
 
@@ -50,11 +55,12 @@ public class TaskList extends UIPage {
 
     private int topTaskIndex = 0;
 
-    public TaskList(Widget window, TieredTaskList tasks, LogMasterPlugin plugin, ClientThread clientThread) {
+    public TaskList(Widget window, TieredTaskList tasks, LogMasterPlugin plugin, ClientThread clientThread, SaveDataManager saveDataManager) {
         this.window = window;
         this.tasks = tasks;
         this.plugin = plugin;
         this.clientThread = clientThread;
+        this.saveDataManager = saveDataManager;
 
         refreshTasks(0);
 
@@ -112,12 +118,12 @@ public class TaskList extends UIPage {
             TaskTier finalRelevantTier = relevantTier;
             taskBg.addAction("Mark", () -> plugin.completeTask(task.getId(), finalRelevantTier));
 
-            if (plugin.getSaveData().getProgress().get(relevantTier).contains(task.getId())) {
-                taskBg.setSprite(LogMasterPlugin.TASK_COMPLETE_BACKGROUND_SPRITE_ID);
-            } else if (plugin.getSaveData().getActiveTaskPointer() != null && plugin.getSaveData().getActiveTaskPointer().getTaskTier() == relevantTier && plugin.getSaveData().getActiveTaskPointer().getTask().getId() == task.getId()) {
-                taskBg.setSprite(LogMasterPlugin.TASK_CURRENT_BACKGROUND_SPRITE_ID);
+            if (saveDataManager.getSaveData().getProgress().get(relevantTier).contains(task.getId())) {
+                taskBg.setSprite(TASK_COMPLETE_BACKGROUND_SPRITE_ID);
+            } else if (saveDataManager.getSaveData().getActiveTaskPointer() != null && saveDataManager.getSaveData().getActiveTaskPointer().getTaskTier() == relevantTier && saveDataManager.getSaveData().getActiveTaskPointer().getTask().getId() == task.getId()) {
+                taskBg.setSprite(TASK_CURRENT_BACKGROUND_SPRITE_ID);
             } else {
-                taskBg.setSprite(LogMasterPlugin.TASK_LIST_BACKGROUND_SPRITE_ID);
+                taskBg.setSprite(TASK_LIST_BACKGROUND_SPRITE_ID);
             }
 
             UILabel taskLabel;

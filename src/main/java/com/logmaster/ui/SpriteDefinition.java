@@ -1,4 +1,4 @@
-package com.logmaster;
+package com.logmaster.ui;
 
 import lombok.Getter;
 import net.runelite.client.game.SpriteOverride;

@@ -1,6 +1,10 @@
-package com.logmaster;
+package com.logmaster.ui.component;
 
+import com.logmaster.LogMasterConfig;
+import com.logmaster.LogMasterPlugin;
 import com.logmaster.domain.Task;
+import com.logmaster.persistence.SaveDataManager;
+import com.logmaster.ui.InterfaceManager;
 import net.runelite.client.config.RuneLiteConfig;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.overlay.Overlay;
@@ -39,11 +43,17 @@ public class TaskOverlay extends Overlay {
     @Inject
     private ItemManager itemManager;
 
+    @Inject
+    private InterfaceManager interfaceManager;
+
+    @Inject
+    private SaveDataManager saveDataManager;
+
     @Override
     public Dimension render(Graphics2D g) {
         try {
-            Task currentTask = plugin.currentTask();
-            if (!config.displayCurrentTaskOverlay() || currentTask == null || plugin.isDashboardOpen()) {
+            Task currentTask = saveDataManager.currentTask();
+            if (!config.displayCurrentTaskOverlay() || currentTask == null || interfaceManager.isDashboardOpen()) {
                 return EMPTY;
             }
 

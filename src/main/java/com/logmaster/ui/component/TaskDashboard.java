@@ -1,10 +1,14 @@
-package com.logmaster;
+package com.logmaster.ui.component;
 
+import com.logmaster.LogMasterConfig;
+import com.logmaster.LogMasterPlugin;
 import com.logmaster.domain.Task;
-import com.logmaster.ui.UIButton;
-import com.logmaster.ui.UIGraphic;
-import com.logmaster.ui.UILabel;
-import com.logmaster.ui.UIPage;
+import com.logmaster.persistence.SaveDataManager;
+import com.logmaster.task.TaskService;
+import com.logmaster.ui.generic.UIButton;
+import com.logmaster.ui.generic.UIGraphic;
+import com.logmaster.ui.generic.UILabel;
+import com.logmaster.ui.generic.UIPage;
 import lombok.Getter;
 import net.runelite.api.FontID;
 import net.runelite.api.widgets.ItemQuantityMode;
@@ -15,6 +19,8 @@ import javax.swing.Timer;
 import java.awt.Color;
 
 import static com.logmaster.LogMasterPlugin.*;
+import static com.logmaster.ui.InterfaceConstants.COLLECTION_LOG_WINDOW_HEIGHT;
+import static com.logmaster.ui.InterfaceConstants.COLLECTION_LOG_WINDOW_WIDTH;
 
 public class TaskDashboard extends UIPage {
     private final int DEFAULT_BUTTON_WIDTH = 140;
@@ -35,6 +41,10 @@ public class TaskDashboard extends UIPage {
 
     private LogMasterConfig config;
 
+    private final TaskService taskService;
+
+    private final SaveDataManager saveDataManager;
+
     private UILabel title;
     private UILabel taskLabel;
     private UILabel percentCompletion;
@@ -45,10 +55,12 @@ public class TaskDashboard extends UIPage {
     private UIButton completeTaskBtn;
     private UIButton generateTaskBtn;
 
-    public TaskDashboard(LogMasterPlugin plugin, LogMasterConfig config, Widget window) {
+    public TaskDashboard(LogMasterPlugin plugin, LogMasterConfig config, Widget window, TaskService taskService, SaveDataManager saveDataManager) {
         this.window = window;
         this.plugin = plugin;
         this.config = config;
+        this.taskService = taskService;
+        this.saveDataManager = saveDataManager;
 
         createTaskDetails();
 
@@ -145,8 +157,8 @@ public class TaskDashboard extends UIPage {
     }
 
     public void updatePercentages() {
-        if (this.plugin != null && this.plugin.completionPercentages() != null && this.plugin.getCurrentTier() != null) {
-            Integer percentage = this.plugin.completionPercentages().get(this.plugin.getCurrentTier());
+        if (this.plugin != null && taskService.completionPercentages(saveDataManager.getSaveData()) != null && this.plugin.getCurrentTier() != null) {
+            Integer percentage = taskService.completionPercentages(saveDataManager.getSaveData()).get(this.plugin.getCurrentTier());
             if (percentage != null) {
                 this.percentCompletion.setText("<col=" + getCompletionColor(percentage) + ">" + percentage + "%</col> " + this.plugin.getCurrentTier().displayName + " Completed");
             }

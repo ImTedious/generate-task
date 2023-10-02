@@ -1,4 +1,4 @@
-package com.logmaster.ui;
+package com.logmaster.ui.generic;
 
 import lombok.Getter;
 import lombok.Setter;

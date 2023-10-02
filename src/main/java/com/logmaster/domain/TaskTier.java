@@ -1,6 +1,6 @@
 package com.logmaster.domain;
 
-import static com.logmaster.LogMasterPlugin.*;
+import static com.logmaster.ui.InterfaceConstants.*;
 
 public enum TaskTier {
     EASY("Easy", TASKLIST_EASY_TAB_SPRITE_ID, TASKLIST_EASY_TAB_HOVER_SPRITE_ID),

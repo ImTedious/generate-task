@@ -7,9 +7,14 @@ import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Range;
 import net.runelite.client.plugins.camera.ControlFunction;
 
-@ConfigGroup("log-master")
+import static com.logmaster.LogMasterConfig.CONFIG_GROUP;
+
+@ConfigGroup(CONFIG_GROUP)
 public interface LogMasterConfig extends Config
 {
+    String CONFIG_GROUP = "log-master";
+
+    String SAVE_DATA_KEY = "save-data";
 
     @Range(
             min = 1000,

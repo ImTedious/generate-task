@@ -1,4 +1,4 @@
-package com.logmaster.ui;
+package com.logmaster.ui.generic;
 
 /**
  * A listener interface for receiving menu actions
