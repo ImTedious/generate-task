@@ -7,9 +7,14 @@ import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Range;
 import net.runelite.client.plugins.camera.ControlFunction;
 
-@ConfigGroup("log-master")
+import static com.logmaster.LogMasterConfig.CONFIG_GROUP;
+
+@ConfigGroup(CONFIG_GROUP)
 public interface LogMasterConfig extends Config
 {
+    String CONFIG_GROUP = "log-master";
+
+    String SAVE_DATA_KEY = "save-data";
 
     @Range(
             min = 1000,
@@ -58,4 +63,28 @@ public interface LogMasterConfig extends Config
     {
         return true;
     }
+
+    @ConfigItem(
+            keyName = "displayCurrentTaskOverlay",
+            name = "Display current task overlay",
+            description = "Enable an overlay showing the currently assigned task (when one exists)",
+            position = 5
+    )
+    default boolean displayCurrentTaskOverlay()
+    {
+        return true;
+    }
+//
+//    @ConfigItem(
+//            keyName = "taskChatCommand",
+//            name = "Enable !task command",
+//            description = "Enable the !task chat command to show your current tier progress and task",
+//            position = 6
+//    )
+//    default boolean taskChatCommand()
+//    {
+//        return true;
+//    }
+
+
 }

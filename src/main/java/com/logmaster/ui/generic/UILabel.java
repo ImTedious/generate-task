@@ -1,4 +1,4 @@
-package com.logmaster.ui;
+package com.logmaster.ui.generic;
 
 import net.runelite.api.FontID;
 import net.runelite.api.widgets.Widget;
