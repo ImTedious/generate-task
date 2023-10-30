@@ -97,6 +97,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 		interfaceManager.initialise();
 		this.taskOverlay.setResizable(true);
 		this.overlayManager.add(this.taskOverlay);
+		this.taskService.getTaskList();
 		// TODO when task save data can be stored and access externally; populate this with other people's data
 //		this.clientThread.invoke(this::populateChatSpriteMap);
 //		chatCommandManager.registerCommandAsync(TASK_CHAT_COMMAND, this::getTaskCommandData);

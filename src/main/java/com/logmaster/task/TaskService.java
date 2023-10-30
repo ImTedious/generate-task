@@ -47,9 +47,7 @@ public class TaskService {
     private TieredTaskList localList;
 
     public TieredTaskList getTaskList() {
-        if (localList == null) {
-            loadTaskList();
-        }
+        loadTaskList();
         return localList;
     }
 
