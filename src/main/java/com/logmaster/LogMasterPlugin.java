@@ -106,6 +106,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	@Override
 	protected void shutDown() throws Exception {
 		mouseManager.unregisterMouseWheelListener(this);
+		this.overlayManager.remove(this.taskOverlay);
 	}
 
 	@Subscribe
