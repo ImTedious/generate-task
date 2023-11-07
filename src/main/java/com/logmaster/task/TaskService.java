@@ -47,6 +47,9 @@ public class TaskService {
     private TieredTaskList localList;
 
     public TieredTaskList getTaskList() {
+        if (localList == null) {
+            this.localList = FileUtils.loadDefinitionResource(TieredTaskList.class, DEF_FILE_TASKS, gson);
+        }
         loadTaskList();
         return localList;
     }
