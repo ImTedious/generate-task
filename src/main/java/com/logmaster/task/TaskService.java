@@ -48,8 +48,9 @@ public class TaskService {
 
     public TieredTaskList getTaskList() {
         if (localList == null) {
-            loadTaskList();
+            this.localList = FileUtils.loadDefinitionResource(TieredTaskList.class, DEF_FILE_TASKS, gson);
         }
+        loadTaskList();
         return localList;
     }
 
@@ -66,9 +67,10 @@ public class TaskService {
     }
 
     private void loadTaskList() {
-        this.localList = FileUtils.loadDefinitionResource(TieredTaskList.class, DEF_FILE_TASKS, gson);
         if (config.loadRemoteTaskList()) {
             loadRemoteTaskList();
+        } else {
+            this.localList = FileUtils.loadDefinitionResource(TieredTaskList.class, DEF_FILE_TASKS, gson);
         }
     }
 
@@ -98,6 +100,7 @@ public class TaskService {
             });
         } catch (IOException e) {
             log.error("Unable to load remote task list, will defer to the default task list");
+            this.localList = FileUtils.loadDefinitionResource(TieredTaskList.class, DEF_FILE_TASKS, gson);
         }
     }
 
