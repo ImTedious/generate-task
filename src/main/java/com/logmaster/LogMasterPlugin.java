@@ -17,8 +17,8 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetClosed;
 import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.widgets.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatCommandManager;
 import net.runelite.client.config.ConfigManager;
@@ -128,14 +128,14 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded e) {
-		if(e.getGroupId() == WidgetInfo.COLLECTION_LOG.getGroupId()) {
+		if(e.getGroupId() == InterfaceID.COLLECTION_LOG) {
 			interfaceManager.handleCollectionLogOpen();
 		}
 	}
 
 	@Subscribe
 	public void onWidgetClosed(WidgetClosed e) {
-		if(e.getGroupId() == WidgetInfo.COLLECTION_LOG.getGroupId()) {
+		if(e.getGroupId() == InterfaceID.COLLECTION_LOG) {
 			interfaceManager.handleCollectionLogClose();
 		}
 	}
