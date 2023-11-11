@@ -36,13 +36,10 @@ public class SaveDataManager {
     private SaveData saveData;
 
     public SaveData getSaveData() {
+        saveData = loadRLProfileSaveData();
         if (saveData == null) {
-            // First check if there's a save associated with the RL profile
-            SaveData rlProfileSave = loadRLProfileSaveData();
             SaveData localSave = loadLocalPlayerSaveData();
-            if (rlProfileSave != null) {
-                saveData = rlProfileSave;
-            } else if (localSave != null) {
+            if (localSave != null) {
                 saveData = localSave;
             } else {
                 saveData = initialiseSaveData();
