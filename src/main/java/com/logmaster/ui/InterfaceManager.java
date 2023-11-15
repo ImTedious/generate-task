@@ -124,6 +124,7 @@ public class InterfaceManager {
             if (this.saveDataManager.getSaveData().getSelectedTier() != TaskTier.MASTER) {
                 this.taskList.goToTop();
                 this.saveDataManager.getSaveData().setSelectedTier(TaskTier.MASTER);
+                this.saveDataManager.save();
             }
             updateTabs();
             taskListTab.setSprites(TASKLIST_TAB_HOVER_SPRITE_ID);
@@ -212,6 +213,7 @@ public class InterfaceManager {
                     if (this.saveDataManager.getSaveData().getSelectedTier() != tier) {
                         this.taskList.goToTop();
                         this.saveDataManager.getSaveData().setSelectedTier(tier);
+                        this.saveDataManager.save();
                     }
                     updateTabs();
                     tabs.get(finalTabIndex).setSprites(tier.tabSpriteHoverId);
@@ -230,7 +232,7 @@ public class InterfaceManager {
     }
 
     private void createTaskList(Widget window) {
-        this.taskList = new TaskList(window, taskService.getTaskList(), plugin, clientThread, this.saveDataManager);
+        this.taskList = new TaskList(window, taskService, plugin, clientThread, this.saveDataManager);
         this.taskList.setVisibility(false);
     }
 

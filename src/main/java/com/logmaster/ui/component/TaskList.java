@@ -5,6 +5,7 @@ import com.logmaster.domain.Task;
 import com.logmaster.domain.TaskTier;
 import com.logmaster.domain.TieredTaskList;
 import com.logmaster.persistence.SaveDataManager;
+import com.logmaster.task.TaskService;
 import com.logmaster.ui.generic.UIButton;
 import com.logmaster.ui.generic.UIGraphic;
 import com.logmaster.ui.generic.UILabel;
@@ -41,7 +42,7 @@ public class TaskList extends UIPage {
     private final int ARROW_Y_OFFSET = 40;
 
     private final Widget window;
-    private final TieredTaskList tasks;
+    private final TaskService taskService;
     private final LogMasterPlugin plugin;
     private final ClientThread clientThread;
 
@@ -55,9 +56,9 @@ public class TaskList extends UIPage {
 
     private int topTaskIndex = 0;
 
-    public TaskList(Widget window, TieredTaskList tasks, LogMasterPlugin plugin, ClientThread clientThread, SaveDataManager saveDataManager) {
+    public TaskList(Widget window, TaskService taskService, LogMasterPlugin plugin, ClientThread clientThread, SaveDataManager saveDataManager) {
         this.window = window;
-        this.tasks = tasks;
+        this.taskService = taskService;
         this.plugin = plugin;
         this.clientThread = clientThread;
         this.saveDataManager = saveDataManager;
@@ -89,7 +90,7 @@ public class TaskList extends UIPage {
         if (relevantTier == null) {
             relevantTier = TaskTier.MASTER;
         }
-        if (topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > tasks.getForTier(relevantTier).size()) {
+        if (topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > taskService.getTaskList().getForTier(relevantTier).size()) {
             return;
         }
 
@@ -169,9 +170,10 @@ public class TaskList extends UIPage {
 
     private List<Task> getTasksToShow(TaskTier relevantTier, int topTaskIndex) {
         List<Task> tasksToShow = new ArrayList<>();
+        List<Task> taskList = taskService.getTaskList().getForTier(relevantTier);
         for(int i=0;i<TASKS_PER_PAGE;i++) {
-            if(topTaskIndex + i > tasks.getForTier(relevantTier).size()) break;
-            tasksToShow.add(tasks.getForTier(relevantTier).get(topTaskIndex+i));
+            if(topTaskIndex + i > taskList.size()) break;
+            tasksToShow.add(taskList.get(topTaskIndex+i));
         }
 
         return tasksToShow;
