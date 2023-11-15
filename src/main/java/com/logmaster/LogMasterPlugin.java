@@ -174,6 +174,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 		newTaskPointer.setTask(uniqueTasks.get(index));
 		newTaskPointer.setTaskTier(getCurrentTier());
 		this.saveDataManager.getSaveData().setActiveTaskPointer(newTaskPointer);
+		this.saveDataManager.save();
 		interfaceManager.rollTask(this.saveDataManager.getSaveData().getActiveTaskPointer().getTask().getDescription(), this.saveDataManager.getSaveData().getActiveTaskPointer().getTask().getItemID(), config.rollPastCompleted() ? taskService.getForTier(getCurrentTier()) : uniqueTasks);
 		log.debug("Task generated: "+this.saveDataManager.getSaveData().getActiveTaskPointer().getTask().getDescription());
 
@@ -202,6 +203,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	public void nullCurrentTask() {
 		this.saveDataManager.getSaveData().setActiveTaskPointer(null);
+		this.saveDataManager.save();
 		interfaceManager.clearCurrentTask();
 	}
 

@@ -76,7 +76,7 @@ public class TaskService {
 
 
     private void loadRemoteTaskList() {
-        log.info("Loading remote task list");
+        log.debug("Loading remote task list");
         // Load the remote task list
         try {
             taskListClient.getTaskList(new Callback() {
