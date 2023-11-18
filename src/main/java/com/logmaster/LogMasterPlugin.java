@@ -196,9 +196,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 				nullCurrentTask();
 			}
 		}
-		interfaceManager.completeTask();
-
 		this.saveDataManager.save();
+		interfaceManager.completeTask();
 	}
 
 	public void nullCurrentTask() {
@@ -217,6 +216,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	public void addCompletedTask(int taskID, TaskTier tier) {
 		this.saveDataManager.getSaveData().getProgress().get(tier).add(taskID);
+		this.saveDataManager.save();
 	}
 
 	public TaskTier getCurrentTier() {
