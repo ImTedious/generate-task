@@ -61,7 +61,7 @@ public class TaskService {
     public Map<TaskTier, Integer> completionPercentages(SaveData saveData) {
         Map<TaskTier, Integer> completionPercentages = new HashMap<>();
         for (TaskTier tier : TaskTier.values()) {
-            completionPercentages.put(tier, (int) Math.round(((double) saveData.getProgress().get(tier).size() / (double) getTaskList().getForTier(tier).size()) * 100));
+            completionPercentages.put(tier, (int) Math.floor(((double) saveData.getProgress().get(tier).size() / (double) getTaskList().getForTier(tier).size()) * 100));
         }
         return completionPercentages;
     }
