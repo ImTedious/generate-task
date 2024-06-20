@@ -262,7 +262,7 @@
     },
     {
       "id": 52,
-      "itemID": 2982,
+      "itemID": 2983,
       "description": "Get the Marksman headpiece"
     },
     {
@@ -687,18 +687,43 @@
     },
     {
       "id": 138,
-      "itemID": 28620,
-      "description": "Get the full Pheasant costume"
+      "itemID": 28136,
+      "description": "Get 1 unique from Forestry"
     },
     {
       "id": 139,
-      "itemID": 28674,
-      "description": "Get the Sturdy beehive parts"
+      "itemID": 28136,
+      "description": "Get 1 unique from Forestry"
+    },
+    {
+      "id": 142,
+      "itemID": 28136,
+      "description": "Get 1 unique from Forestry"
+    },
+    {
+      "id": 143,
+      "itemID": 28136,
+      "description": "Get 1 unique from Forestry"
+    },
+    {
+      "id": 144,
+      "itemID": 28136,
+      "description": "Get 1 unique from Forestry"
     },
     {
       "id": 137,
       "itemID": 28585,
       "description": "Get a Warped sceptre"
+    },
+    {
+      "id": 140,
+      "itemID": 29309,
+      "description": "Get 1 unique from the Hunter Guild"
+    },
+    {
+      "id": 141,
+      "itemID": 29084,
+      "description": "Get the Sulphur blades"
     }
   ],
   "medium": [
@@ -1516,6 +1541,41 @@
       "id": 162,
       "itemID": 28136,
       "description": "Get 1 unique from Forestry"
+    },
+    {
+      "id": 163,
+      "itemID": 28798,
+      "description": "Get a Scurrius' spine"
+    },
+    {
+      "id": 164,
+      "itemID": 28813,
+      "description": "Get a Broken zombie axe"
+    },
+    {
+      "id": 165,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 166,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 167,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 168,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 169,
+      "itemID": 29265,
+      "description": "Get 1 unique from the Hunter Guild"
     }
   ],
   "hard": [
@@ -2448,6 +2508,56 @@
       "id": 185,
       "itemID": 28136,
       "description": "Get 1 unique from Forestry"
+    },
+    {
+      "id": 186,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 187,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 188,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 189,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 190,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 191,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 192,
+      "itemID": 29265,
+      "description": "Get 1 unique from the Hunter Guild"
+    },
+    {
+      "id": 193,
+      "itemID": 29265,
+      "description": "Get 1 unique from the Hunter Guild"
+    },
+    {
+      "id": 194,
+      "itemID": 29265,
+      "description": "Get 1 unique from the Hunter Guild"
+    },
+    {
+      "id": 195,
+      "itemID": 28924,
+      "description": "Obtain Sunfire splinters"
     }
   ],
   "elite": [
@@ -3350,6 +3460,41 @@
       "id": 178,
       "itemID": 28338,
       "description": "Get 1 unique from the DT2 bosses"
+    },
+    {
+      "id": 180,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 181,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 182,
+      "itemID": 28997,
+      "description": "Get 1 unique from Moons of Peril"
+    },
+    {
+      "id": 183,
+      "itemID": 29455,
+      "description": "Get a Teleport anchoring scroll"
+    },
+    {
+      "id": 184,
+      "itemID": 28947,
+      "description": "1 Fortis Colosseum unique"
+    },
+    {
+      "id": 185,
+      "itemID": 28947,
+      "description": "1 Fortis Colosseum unique"
+    },
+    {
+      "id": 186,
+      "itemID": 28947,
+      "description": "1 Fortis Colosseum unique"
     }
   ],
   "master": [
@@ -4004,6 +4149,26 @@
       "description": "50 CA points"
     },
     {
+      "id": 140,
+      "itemID": 25956,
+      "description": "50 CA points"
+    },
+    {
+      "id": 141,
+      "itemID": 25956,
+      "description": "50 CA points"
+    },
+    {
+      "id": 145,
+      "itemID": 25956,
+      "description": "50 CA points"
+    },
+    {
+      "id": 147,
+      "itemID": 25956,
+      "description": "50 CA points"
+    },
+    {
       "id": 130,
       "itemID": 28338,
       "description":"1 DT2 Boss unique"
@@ -4052,6 +4217,26 @@
       "id": 139,
       "itemID": 28338,
       "description":"1 DT2 Boss unique"
+    },
+    {
+      "id": 142,
+      "itemID": 28947,
+      "description": "1 Fortis Colosseum unique"
+    },
+    {
+      "id": 143,
+      "itemID": 28947,
+      "description": "1 Fortis Colosseum unique"
+    },
+    {
+      "id": 144,
+      "itemID": 28947,
+      "description": "1 Fortis Colosseum unique"
+    },
+    {
+      "id": 146,
+      "itemID": 28962,
+      "description": "Obtain the Quetzin"
     }
   ]
 }
