@@ -5,6 +5,7 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Range;
+import net.runelite.client.config.Units;
 import net.runelite.client.plugins.camera.ControlFunction;
 
 import static com.logmaster.LogMasterConfig.CONFIG_GROUP;
@@ -20,6 +21,7 @@ public interface LogMasterConfig extends Config
             min = 1000,
             max = 10000
     )
+    @Units(Units.MILLISECONDS)
     @ConfigItem(
             keyName = "rollTime",
             name = "Roll Time",
