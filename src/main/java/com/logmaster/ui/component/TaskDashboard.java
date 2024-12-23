@@ -34,6 +34,7 @@ public class TaskDashboard extends UIPage {
     private final int GENERATE_TASK_DISABLED_SPRITE_ID = -20005;
     private final int COMPLETE_TASK_DISABLED_SPRITE_ID = -20004;
     private final int TASK_BACKGROUND_SPRITE_ID = -20006;
+    private final int FAQ_BUTTON_SPRITE_ID = -20027;
 
     @Getter
     private Widget window;
@@ -93,9 +94,9 @@ public class TaskDashboard extends UIPage {
 
         Widget faqWidget = window.createChild(-1, WidgetType.GRAPHIC);
         this.faqBtn = new UIButton(faqWidget);
-        this.faqBtn.setSize(DEFAULT_BUTTON_WIDTH/4, DEFAULT_BUTTON_HEIGHT);
-        this.faqBtn.setPosition(getCenterX(window, DEFAULT_BUTTON_WIDTH) + 270, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 130);
-        this.faqBtn.setSprites(GENERATE_TASK_SPRITE_ID, GENERATE_TASK_HOVER_SPRITE_ID);
+        this.faqBtn.setSize(DEFAULT_BUTTON_WIDTH/2, DEFAULT_BUTTON_HEIGHT);
+        this.faqBtn.setPosition(getCenterX(window, DEFAULT_BUTTON_WIDTH) + 238, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 130);
+        this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_SPRITE_ID);
 
         this.add(this.title);
         this.add(this.taskBg);
@@ -234,7 +235,7 @@ public class TaskDashboard extends UIPage {
 
     public void enableFaqButton() {
         this.faqBtn.clearActions();
-        this.faqBtn.setSprites(GENERATE_TASK_SPRITE_ID, GENERATE_TASK_HOVER_SPRITE_ID);
+        this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_SPRITE_ID);
         this.faqBtn.addAction("FAQ", plugin::visitFaq);
     }
 }
