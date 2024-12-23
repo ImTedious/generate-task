@@ -315,5 +315,6 @@ public class InterfaceManager {
     public void clearCurrentTask() {
         this.taskDashboard.setTask("No task.", -1, null);
         this.taskDashboard.enableGenerateTask();
+        this.taskDashboard.enableFaqButton();
     }
 }

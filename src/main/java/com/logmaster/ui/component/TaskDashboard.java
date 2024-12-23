@@ -34,6 +34,8 @@ public class TaskDashboard extends UIPage {
     private final int GENERATE_TASK_DISABLED_SPRITE_ID = -20005;
     private final int COMPLETE_TASK_DISABLED_SPRITE_ID = -20004;
     private final int TASK_BACKGROUND_SPRITE_ID = -20006;
+    private final int FAQ_BUTTON_SPRITE_ID = -20027;
+    private final int FAQ_BUTTON_HOVER_SPRITE_ID = -20028;
 
     @Getter
     private Widget window;
@@ -54,6 +56,7 @@ public class TaskDashboard extends UIPage {
 
     private UIButton completeTaskBtn;
     private UIButton generateTaskBtn;
+    private UIButton faqBtn;
 
     public TaskDashboard(LogMasterPlugin plugin, LogMasterConfig config, Widget window, TaskService taskService, SaveDataManager saveDataManager) {
         this.window = window;
@@ -90,6 +93,12 @@ public class TaskDashboard extends UIPage {
         this.generateTaskBtn.setPosition(getCenterX(window, DEFAULT_BUTTON_WIDTH) - (DEFAULT_BUTTON_WIDTH / 2 + 15), getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 80);
         this.generateTaskBtn.setSprites(GENERATE_TASK_SPRITE_ID, GENERATE_TASK_HOVER_SPRITE_ID);
 
+        Widget faqWidget = window.createChild(-1, WidgetType.GRAPHIC);
+        this.faqBtn = new UIButton(faqWidget);
+        this.faqBtn.setSize(DEFAULT_BUTTON_WIDTH/2, DEFAULT_BUTTON_HEIGHT);
+        this.faqBtn.setPosition(getCenterX(window, DEFAULT_BUTTON_WIDTH) + 238, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 130);
+        this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_HOVER_SPRITE_ID);
+
         this.add(this.title);
         this.add(this.taskBg);
         this.add(this.taskLabel);
@@ -97,6 +106,7 @@ public class TaskDashboard extends UIPage {
         this.add(this.completeTaskBtn);
         this.add(this.generateTaskBtn);
         this.add(this.percentCompletion);
+        this.add(faqBtn);
     }
 
     private void createTaskDetails() {
@@ -145,6 +155,7 @@ public class TaskDashboard extends UIPage {
                 this.taskLabel.setText(desc);
                 this.taskImage.setItem(taskItemID);
                 this.enableCompleteTask();
+                this.enableFaqButton();
             });
             realTaskTimer.setRepeats(false);
             realTaskTimer.setCoalesce(true);
@@ -153,6 +164,7 @@ public class TaskDashboard extends UIPage {
             this.taskLabel.setText(desc);
             this.taskImage.setItem(taskItemID);
             this.enableCompleteTask();
+            this.enableFaqButton();
         }
     }
 
@@ -197,6 +209,7 @@ public class TaskDashboard extends UIPage {
 
         if (enableComplete) {
             this.enableCompleteTask();
+            this.enableFaqButton();
         }
     }
 
@@ -219,5 +232,11 @@ public class TaskDashboard extends UIPage {
         this.completeTaskBtn.clearActions();
         this.completeTaskBtn.setSprites(COMPLETE_TASK_SPRITE_ID, COMPLETE_TASK_HOVER_SPRITE_ID);
         this.completeTaskBtn.addAction("Complete", plugin::completeTask);
+    }
+
+    public void enableFaqButton() {
+        this.faqBtn.clearActions();
+        this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_HOVER_SPRITE_ID);
+        this.faqBtn.addAction("FAQ", plugin::visitFaq);
     }
 }

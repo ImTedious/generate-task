@@ -106,5 +106,13 @@
    {
       "spriteId":-20026,
       "fileName":"master-tab-hover.png"
+   },
+   {
+      "spriteId":-20027,
+      "fileName":"faqButton.png"
+   },
+   {
+      "spriteId":-20028,
+      "fileName":"faqButton_hover.png"
    }
 ]

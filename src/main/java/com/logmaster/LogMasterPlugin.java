@@ -31,6 +31,7 @@ import net.runelite.client.input.MouseWheelListener;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.LinkBrowser;
 
 import javax.inject.Inject;
 import java.awt.event.MouseWheelEvent;
@@ -254,5 +255,9 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	LogMasterConfig provideConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(LogMasterConfig.class);
+	}
+
+	public void visitFaq() {
+		LinkBrowser.browse("https://docs.google.com/document/d/e/2PACX-1vTHfXHzMQFbt_iYAP-O88uRhhz3wigh1KMiiuomU7ftli-rL_c3bRqfGYmUliE1EHcIr3LfMx2UTf2U/pub");
 	}
 }
