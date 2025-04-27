@@ -8,6 +8,7 @@ import net.runelite.api.widgets.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * UI Component classes allow for complex user interface functionality by
@@ -46,6 +47,15 @@ public abstract class UIComponent
 		this.widget.setHasListener(true);
 
 		this.actions = new ArrayList<>();
+	}
+
+	public UIComponent(Widget widget, Set<Integer> allowedTypes) {
+		this(widget);
+
+		if (!allowedTypes.contains(widget.getType())) {
+			String msg = String.format("Incompatible widget's type given; %s given, %d expected", allowedTypes, widget.getType());
+			throw new RuntimeException(msg);
+		}
 	}
 
 	/**
