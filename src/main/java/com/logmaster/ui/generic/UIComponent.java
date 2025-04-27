@@ -80,7 +80,7 @@ public abstract class UIComponent
 		if (this.actions.isEmpty())
 			return;
 
-		// Get the action action event object for this menu option
+		// Get the action event object for this menu option
 		MenuAction actionEvent = this.actions.get(e.getOp() - 1);
 
 		// Call the action listener for this option
