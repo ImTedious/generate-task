@@ -149,6 +149,12 @@ public abstract class UIComponent
 		this.widget.setOriginalHeight(height);
 	}
 
+	public void setSizeMode(int widthMode, int heightMode)
+	{
+		this.widget.setWidthMode(widthMode);
+		this.widget.setHeightMode(heightMode);
+	}
+
 	/**
 	 * Sets the position of the component, relative
 	 * to the parent layer widget
@@ -244,5 +250,9 @@ public abstract class UIComponent
 
 	public void clearActions() {
 		actions.clear();
+	}
+
+	public void revalidate() {
+		this.widget.revalidate();
 	}
 }
