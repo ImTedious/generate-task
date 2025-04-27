@@ -21,10 +21,10 @@ public abstract class UIComponent
 	private static final String BTN_NAME_FORMAT = "<col=ff9040>%s</col>";
 
 	@Getter
-	private Widget widget;
+	protected Widget widget;
 
 	/* Actions and events */
-	private List<MenuAction> actions;
+	protected List<MenuAction> actions;
 
 	@Setter
 	private ComponentEventListener<UIComponent> hoverListener;
