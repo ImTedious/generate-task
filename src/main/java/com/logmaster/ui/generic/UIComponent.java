@@ -26,10 +26,10 @@ public abstract class UIComponent
 	private List<MenuAction> actions;
 
 	@Setter
-	private ComponentEventListener hoverListener;
+	private ComponentEventListener<UIComponent> hoverListener;
 
 	@Setter
-	private ComponentEventListener leaveListener;
+	private ComponentEventListener<UIComponent> leaveListener;
 
 	/**
 	 * Constructs a new UIComponent
@@ -104,7 +104,7 @@ public abstract class UIComponent
 	 * hovering over the widget
 	 * @param listener the listener
 	 */
-	public void setOnHoverListener(ComponentEventListener listener)
+	public void setOnHoverListener(ComponentEventListener<UIComponent> listener)
 	{
 		this.hoverListener = listener;
 	}
@@ -114,7 +114,7 @@ public abstract class UIComponent
 	 * exiting from over the widget
 	 * @param listener the listener
 	 */
-	public void setOnLeaveListener(ComponentEventListener listener)
+	public void setOnLeaveListener(ComponentEventListener<UIComponent> listener)
 	{
 		this.leaveListener = listener;
 	}
