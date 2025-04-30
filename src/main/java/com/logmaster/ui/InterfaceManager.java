@@ -190,7 +190,7 @@ public class InterfaceManager {
 
         this.dropdown = new UIDropdown(container);
         this.dropdown.addOption("Tasks", "View Tasks Dashboard");
-        this.dropdown.setTabEnabledListener(this::toggleTaskDashboard);
+        this.dropdown.setOptionEnabledListener(this::toggleTaskDashboard);
     }
 
     private void updateTabs() {

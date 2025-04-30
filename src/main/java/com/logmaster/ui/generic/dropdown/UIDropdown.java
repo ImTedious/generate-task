@@ -19,7 +19,7 @@ public class UIDropdown extends UIComponent {
     private final List<UIDropdownOption> options;
 
 	@Setter
-	private ComponentEventListener<UIDropdownOption> tabEnabledListener;
+	private ComponentEventListener<UIDropdownOption> optionEnabledListener;
 
 	public UIDropdown(Widget widget) {
 		super(widget, Set.of(WidgetType.LAYER));
@@ -43,7 +43,7 @@ public class UIDropdown extends UIComponent {
                 // directly succeeded by the matching text widget
                 Widget textWidget = children[c.getIndex() + 1];
                 UIDropdownOption option = new UIDropdownOption(c, textWidget);
-                option.setEnabledListener(this::onTabEnabled);
+                option.setEnabledListener(this::onOptionEnabled);
                 this.options.add(option);
             }
         }
@@ -101,14 +101,14 @@ public class UIDropdown extends UIComponent {
         newOption.setText(text);
         newOption.setActionText(actionText);
         newOption.revalidate();
-        newOption.setEnabledListener(this::onTabEnabled);
+        newOption.setEnabledListener(this::onOptionEnabled);
 
         this.options.add(newOption);
 
         resizeTabsContainer();
     }
 
-    void onTabEnabled(UIDropdownOption src) {
+    void onOptionEnabled(UIDropdownOption src) {
         for (UIDropdownOption ui : this.options) {
             if (ui == src) continue;
             ui.setEnabled(false);
@@ -118,8 +118,8 @@ public class UIDropdown extends UIComponent {
         this.widget.setHidden(true)
             .revalidate();
 
-        if (this.tabEnabledListener != null) {
-            this.tabEnabledListener.onComponentEvent(src);
+        if (this.optionEnabledListener != null) {
+            this.optionEnabledListener.onComponentEvent(src);
         }
     }
 
