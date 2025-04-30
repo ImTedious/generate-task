@@ -724,6 +724,11 @@
       "id": 141,
       "itemID": 29084,
       "description": "Get the Sulphur blades"
+    },
+    {
+      "id": 145,
+      "itemID": 30040,
+      "description": "Get a Colossal wyrm teleport scroll"
     }
   ],
   "medium": [
@@ -1550,7 +1555,12 @@
     {
       "id": 164,
       "itemID": 28813,
-      "description": "Get a Broken zombie axe"
+      "description": "Get 1 Unique from Armoured zombies"
+    },
+    {
+      "id": 177,
+      "itemID": 28813,
+      "description": "Get 1 Unique from Armoured zombies"
     },
     {
       "id": 165,
@@ -1576,6 +1586,61 @@
       "id": 169,
       "itemID": 29265,
       "description": "Get 1 unique from the Hunter Guild"
+    },
+    {
+      "id": 170,
+      "itemID": 30042,
+      "description": "Get a Calcified acorn"
+    },
+    {
+      "id": 171,
+      "itemID": 29978,
+      "description": "Get 1 Alchemist outfit piece"
+    },
+    {
+      "id": 172,
+      "itemID": 29978,
+      "description": "Get 1 Alchemist outfit piece"
+    },
+    {
+      "id": 173,
+      "itemID": 29978,
+      "description": "Get 1 Alchemist outfit piece"
+    },
+    {
+      "id": 174,
+      "itemID": 29889,
+      "description": "Get 1 unique from Amoxliatl"
+    },
+    {
+      "id": 175,
+      "itemID": 29889,
+      "description": "Get 1 unique from Amoxliatl"
+    },
+    {
+      "id": 176,
+      "itemID": 29889,
+      "description": "Get 1 unique from Amoxliatl"
+    },
+    {
+      "id": 178,
+      "itemID": 30634,
+      "description": "Get 1 unique from Royal Titans"
+    },
+    {
+      "id": 179,
+      "itemID": 30634,
+      "description": "Get 1 unique from Royal Titans"
+    },
+    {
+      "id": 180,
+      "itemID": 30634,
+      "description": "Get 1 unique from Royal Titans"
+    },
+    {
+      "id": 181,
+      "itemID": 30634,
+      "description": "Get 1 unique from Royal Titans"
     }
   ],
   "hard": [
@@ -2381,8 +2446,13 @@
     },
     {
       "id": 160,
-      "itemID": 21067,
-      "description": "Get the Brimhaven graceful set recolour"
+      "itemID": 30044,
+      "description": "Get a Wyrm/Brimhaven graceful recolor"
+    },
+    {
+      "id": 201,
+      "itemID": 30044,
+      "description": "Get a Wyrm/Brimhaven graceful recolor"
     },
     {
       "id": 161,
@@ -2558,6 +2628,66 @@
       "id": 195,
       "itemID": 28924,
       "description": "Obtain Sunfire splinters"
+    },
+    {
+      "id": 196,
+      "itemID": 29580,
+      "description": "Get 1 unique from Tormented Demons"
+    },
+    {
+      "id": 197,
+      "itemID": 29580,
+      "description": "Get 1 unique from Tormented Demons"
+    },
+    {
+      "id": 198,
+      "itemID": 29799,
+      "description": "Get 1 unique from Araxytes/Araxxor"
+    },
+    {
+      "id": 199,
+      "itemID": 29799,
+      "description": "Get 1 unique from Araxytes/Araxxor"
+    },
+    {
+      "id": 200,
+      "itemID": 29799,
+      "description": "Get 1 unique from Araxytes/Araxxor"
+    },
+    {
+      "id": 202,
+      "itemID": 29974,
+      "description": "Get the Prescription goggles"
+    },
+    {
+      "id": 203,
+      "itemID": 29988,
+      "description": "Get the Alchemist's amulet"
+    },
+    {
+      "id": 204,
+      "itemID": 30070,
+      "description": "Get 1 unique from the Hueycoatl"
+    },
+    {
+      "id": 205,
+      "itemID": 30070,
+      "description": "Get 1 unique from the Hueycoatl"
+    },
+    {
+      "id": 206,
+      "itemID": 30070,
+      "description": "Get 1 unique from the Hueycoatl"
+    },
+    {
+      "id": 207,
+      "itemID": 30634,
+      "description": "Get 1 unique from Royal Titans"
+    },
+    {
+      "id": 208,
+      "itemID": 30634,
+      "description": "Get 1 unique from Royal Titans"
     }
   ],
   "elite": [
@@ -3495,6 +3625,56 @@
       "id": 186,
       "itemID": 28947,
       "description": "1 Fortis Colosseum unique"
+    },
+    {
+      "id": 187,
+      "itemID": 29580,
+      "description": "Get 1 unique from Tormented Demons"
+    },
+    {
+      "id": 188,
+      "itemID": 29799,
+      "description": "Get 1 unique from Araxytes/Araxxor"
+    },
+    {
+      "id": 189,
+      "itemID": 29799,
+      "description": "Get 1 unique from Araxytes/Araxxor"
+    },
+    {
+      "id": 190,
+      "itemID": 29799,
+      "description": "Get 1 unique from Araxytes/Araxxor"
+    },
+    {
+      "id": 191,
+      "itemID": 29799,
+      "description": "Get 1 unique from Araxytes/Araxxor"
+    },
+    {
+      "id": 192,
+      "itemID": 29799,
+      "description": "Get 1 unique from Araxytes/Araxxor"
+    },
+    {
+      "id": 194,
+      "itemID": 30002,
+      "description": "Get a Chugging barrel"
+    },
+    {
+      "id": 195,
+      "itemID": 29996,
+      "description": "Get a Reagent pouch"
+    },
+    {
+      "id": 196,
+      "itemID": 30070,
+      "description": "Get 1 unique from the Hueycoatl"
+    },
+    {
+      "id": 197,
+      "itemID": 30070,
+      "description": "Get 1 unique from the Hueycoatl"
     }
   ],
   "master": [
@@ -3829,6 +4009,16 @@
       "description": "1 Boss pet or jar"
     },
     {
+      "id": 148,
+      "itemID": 13262,
+      "description": "1 Boss pet or jar"
+    },
+    {
+      "id": 149,
+      "itemID": 13262,
+      "description": "1 Boss pet or jar"
+    },
+    {
       "id": 66,
       "itemID": 20663,
       "description": "1 Skilling pet"
@@ -4085,88 +4275,8 @@
     },
     {
       "id": 117,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 118,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 119,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 120,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 121,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 122,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 123,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 124,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 125,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 126,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 127,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 128,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 129,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 140,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 141,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 145,
-      "itemID": 25956,
-      "description": "50 CA points"
-    },
-    {
-      "id": 147,
-      "itemID": 25956,
-      "description": "50 CA points"
+      "itemID": 25934,
+      "description": "Master tier Combat Achievements"
     },
     {
       "id": 130,
