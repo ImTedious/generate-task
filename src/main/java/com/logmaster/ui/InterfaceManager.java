@@ -9,6 +9,7 @@ import com.logmaster.persistence.SaveDataManager;
 import com.logmaster.task.TaskService;
 import com.logmaster.ui.component.TaskDashboard;
 import com.logmaster.ui.component.TaskList;
+import com.logmaster.ui.generic.UICheckBox;
 import com.logmaster.ui.generic.dropdown.UIDropdown;
 import com.logmaster.ui.generic.dropdown.UIDropdownOption;
 import com.logmaster.ui.generic.UIButton;
@@ -67,6 +68,7 @@ public class InterfaceManager {
     private List<UIButton> tabs;
     private UIButton taskListTab;
     private UIButton taskDashboardTab;
+    private UICheckBox taskDashboardCheckbox;
     private UIDropdown dropdown;
 
     public void initialise() {
@@ -142,6 +144,7 @@ public class InterfaceManager {
 
         createTaskDashboard(window);
         createTaskList(window);
+        createTaskCheckbox();
         updateTabs();
 
         this.taskDashboard.setVisibility(false);
@@ -191,6 +194,30 @@ public class InterfaceManager {
         this.dropdown = new UIDropdown(container);
         this.dropdown.addOption("Tasks", "View Tasks Dashboard");
         this.dropdown.setOptionEnabledListener(this::toggleTaskDashboard);
+    }
+
+    private void createTaskCheckbox() {
+        Widget window = client.getWidget(621, 88);
+        if (window != null) {
+            // Create the graphic widget for the checkbox
+            Widget toggleWidget = window.createChild(-1, WidgetType.GRAPHIC);
+            Widget labelWidget = window.createChild(-1, WidgetType.TEXT);
+
+            // Wrap in checkbox, set size, position, etc.
+            taskDashboardCheckbox = new UICheckBox(toggleWidget, labelWidget);
+            taskDashboardCheckbox.setPosition(360, 10);
+            taskDashboardCheckbox.setName("Task Dashboard");
+            taskDashboardCheckbox.setEnabled(false);
+            taskDashboardCheckbox.setText("Task Dashboard");
+            labelWidget.setPos(375, 10);
+            taskDashboardCheckbox.setToggleListener((UICheckBox src) -> {
+                if (taskDashboardCheckbox.isEnabled()) {
+                    this.dropdown.setEnabledOption("Tasks");
+                } else {
+                    this.dropdown.setEnabledOption("View Log");
+                }
+            });
+        }
     }
 
     private void updateTabs() {
@@ -246,6 +273,7 @@ public class InterfaceManager {
             plugin.nullCurrentTask();
         }
 
+        this.taskDashboardCheckbox.setEnabled(isTaskDashboardEnabled());
         client.getWidget(COLLECTION_LOG_CONTENT_WIDGET_ID).setHidden(isTaskDashboardEnabled());
         client.getWidget(40697936).setHidden(isTaskDashboardEnabled());
 

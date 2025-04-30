@@ -85,6 +85,14 @@ public class UIDropdown extends UIComponent {
         return null;
     }
 
+    public void setEnabledOption(String text) {
+        for (UIDropdownOption opt : this.options) {
+            if (opt.getText().equals(text)) {
+                opt.setEnabled(true);
+            }
+        }
+    }
+
     public void addOption(String text, String actionText) {
         Widget tabContainer = this.widget;
         Widget[] children = tabContainer.getChildren();
