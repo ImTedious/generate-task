@@ -159,7 +159,7 @@ public class InterfaceManager {
             this.dropdown = null;
         }
 
-        createTaskDropdwnOption();
+        createTaskDropdownOption();
     }
 
     public boolean isDashboardOpen() {
@@ -182,7 +182,7 @@ public class InterfaceManager {
         this.taskDashboard.disableGenerateTask();
     }
 
-    private void createTaskDropdwnOption() {
+    private void createTaskDropdownOption() {
         Widget container = client.getWidget(COLLECTION_LOG_TAB_DROPDOWN_WIDGET_ID);
         if (container == null) {
             return;
