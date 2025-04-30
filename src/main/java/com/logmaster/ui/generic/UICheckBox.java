@@ -33,7 +33,7 @@ public class UICheckBox extends UIComponent
 	private boolean hovering;
 
 	@Setter
-	private ComponentEventListener toggleListener;
+	private ComponentEventListener<UICheckBox> toggleListener;
 
 	/**
 	 * Constructs a new checkbox component

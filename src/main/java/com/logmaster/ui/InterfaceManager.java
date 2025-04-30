@@ -9,9 +9,10 @@ import com.logmaster.persistence.SaveDataManager;
 import com.logmaster.task.TaskService;
 import com.logmaster.ui.component.TaskDashboard;
 import com.logmaster.ui.component.TaskList;
-import com.logmaster.ui.generic.UIButton;
 import com.logmaster.ui.generic.UICheckBox;
-import com.logmaster.ui.generic.UIComponent;
+import com.logmaster.ui.generic.dropdown.UIDropdown;
+import com.logmaster.ui.generic.dropdown.UIDropdownOption;
+import com.logmaster.ui.generic.UIButton;
 import com.logmaster.ui.generic.UIGraphic;
 import com.logmaster.util.FileUtils;
 import net.runelite.api.Client;
@@ -32,6 +33,7 @@ import static com.logmaster.ui.InterfaceConstants.*;
 
 @Singleton
 public class InterfaceManager {
+    private static final int COLLECTION_LOG_TAB_DROPDOWN_WIDGET_ID = 40697929;
 
     @Inject
     private Client client;
@@ -62,11 +64,12 @@ public class InterfaceManager {
 
     private TaskDashboard taskDashboard;
     private TaskList taskList;
-    private UICheckBox taskDashboardCheckbox;
 
     private List<UIButton> tabs;
     private UIButton taskListTab;
     private UIButton taskDashboardTab;
+    private UICheckBox taskDashboardCheckbox;
+    private UIDropdown dropdown;
 
     public void initialise() {
         this.spriteDefinitions = FileUtils.loadDefinitionResource(SpriteDefinition[].class, DEF_FILE_SPRITES, gson);
@@ -79,7 +82,7 @@ public class InterfaceManager {
         if (this.config.hideBelow() == TaskTier.MASTER && this.saveDataManager.getSaveData().getSelectedTier() == TaskTier.MASTER && !this.taskDashboard.isVisible()) {
             this.taskListTab.setSprites(TASKLIST_TAB_HOVER_SPRITE_ID);
         }
-        if (this.taskDashboard != null && this.taskDashboardCheckbox.isEnabled()) {
+        if (this.taskDashboard != null && isTaskDashboardEnabled()) {
             showTabs();
             if (this.saveDataManager.getSaveData().getSelectedTier() != null && Arrays.asList(TaskTier.values()).indexOf(this.saveDataManager.getSaveData().getSelectedTier()) < Arrays.asList(TaskTier.values()).indexOf(this.config.hideBelow())) {
                 activateTaskDashboard();
@@ -144,7 +147,6 @@ public class InterfaceManager {
         createTaskCheckbox();
         updateTabs();
 
-        this.taskDashboardCheckbox.setEnabled(false);
         this.taskDashboard.setVisibility(false);
     }
 
@@ -152,7 +154,15 @@ public class InterfaceManager {
         this.taskDashboard.setVisibility(false);
         this.taskList.setVisibility(false);
         hideTabs();
-        this.taskDashboardCheckbox.setEnabled(false);
+    }
+
+    public void handleCollectionLogScriptRan() {
+        if (this.dropdown != null) {
+            this.dropdown.cleanup();
+            this.dropdown = null;
+        }
+
+        createTaskDropdownOption();
     }
 
     public boolean isDashboardOpen() {
@@ -175,6 +185,17 @@ public class InterfaceManager {
         this.taskDashboard.disableGenerateTask();
     }
 
+    private void createTaskDropdownOption() {
+        Widget container = client.getWidget(COLLECTION_LOG_TAB_DROPDOWN_WIDGET_ID);
+        if (container == null) {
+            return;
+        }
+
+        this.dropdown = new UIDropdown(container);
+        this.dropdown.addOption("Tasks", "View Tasks Dashboard");
+        this.dropdown.setOptionEnabledListener(this::toggleTaskDashboard);
+    }
+
     private void createTaskCheckbox() {
         Widget window = client.getWidget(621, 88);
         if (window != null) {
@@ -189,7 +210,13 @@ public class InterfaceManager {
             taskDashboardCheckbox.setEnabled(false);
             taskDashboardCheckbox.setText("Task Dashboard");
             labelWidget.setPos(375, 10);
-            taskDashboardCheckbox.setToggleListener(this::toggleTaskDashboard);
+            taskDashboardCheckbox.setToggleListener((UICheckBox src) -> {
+                if (taskDashboardCheckbox.isEnabled()) {
+                    this.dropdown.setEnabledOption("Tasks");
+                } else {
+                    this.dropdown.setEnabledOption("View Log");
+                }
+            });
         }
     }
 
@@ -236,7 +263,7 @@ public class InterfaceManager {
         this.taskList.setVisibility(false);
     }
 
-    private void toggleTaskDashboard(UIComponent src) {
+    private void toggleTaskDashboard(UIDropdownOption src) {
         if(this.taskDashboard == null) return;
 
         if (saveDataManager.getSaveData().getActiveTaskPointer() != null) {
@@ -246,10 +273,11 @@ public class InterfaceManager {
             plugin.nullCurrentTask();
         }
 
-        client.getWidget(COLLECTION_LOG_CONTENT_WIDGET_ID).setHidden(this.taskDashboardCheckbox.isEnabled());
-        client.getWidget(40697936).setHidden(this.taskDashboardCheckbox.isEnabled());
+        this.taskDashboardCheckbox.setEnabled(isTaskDashboardEnabled());
+        client.getWidget(COLLECTION_LOG_CONTENT_WIDGET_ID).setHidden(isTaskDashboardEnabled());
+        client.getWidget(40697936).setHidden(isTaskDashboardEnabled());
 
-        if (this.taskDashboardCheckbox.isEnabled()) {
+        if (isTaskDashboardEnabled()) {
             activateTaskDashboard();
         } else {
             this.taskDashboard.setVisibility(false);
@@ -260,6 +288,10 @@ public class InterfaceManager {
 
         // *Boop*
         this.client.playSoundEffect(SoundEffectID.UI_BOOP);
+    }
+
+    private boolean isTaskDashboardEnabled() {
+        return this.dropdown != null && this.dropdown.getEnabledOption().getText().equals("Tasks");
     }
 
     private void hideTabs() {

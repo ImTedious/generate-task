@@ -8,6 +8,7 @@ import net.runelite.api.widgets.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * UI Component classes allow for complex user interface functionality by
@@ -20,16 +21,16 @@ public abstract class UIComponent
 	private static final String BTN_NAME_FORMAT = "<col=ff9040>%s</col>";
 
 	@Getter
-	private Widget widget;
+	protected Widget widget;
 
 	/* Actions and events */
-	private List<MenuAction> actions;
+	protected List<MenuAction> actions;
 
 	@Setter
-	private ComponentEventListener hoverListener;
+	private ComponentEventListener<UIComponent> hoverListener;
 
 	@Setter
-	private ComponentEventListener leaveListener;
+	private ComponentEventListener<UIComponent> leaveListener;
 
 	/**
 	 * Constructs a new UIComponent
@@ -46,6 +47,15 @@ public abstract class UIComponent
 		this.widget.setHasListener(true);
 
 		this.actions = new ArrayList<>();
+	}
+
+	public UIComponent(Widget widget, Set<Integer> allowedTypes) {
+		this(widget);
+
+		if (!allowedTypes.contains(widget.getType())) {
+			String msg = String.format("Incompatible widget's type given; %s given, %d expected", allowedTypes, widget.getType());
+			throw new RuntimeException(msg);
+		}
 	}
 
 	/**
@@ -70,7 +80,7 @@ public abstract class UIComponent
 		if (this.actions.isEmpty())
 			return;
 
-		// Get the action action event object for this menu option
+		// Get the action event object for this menu option
 		MenuAction actionEvent = this.actions.get(e.getOp() - 1);
 
 		// Call the action listener for this option
@@ -104,7 +114,7 @@ public abstract class UIComponent
 	 * hovering over the widget
 	 * @param listener the listener
 	 */
-	public void setOnHoverListener(ComponentEventListener listener)
+	public void setOnHoverListener(ComponentEventListener<UIComponent> listener)
 	{
 		this.hoverListener = listener;
 	}
@@ -114,7 +124,7 @@ public abstract class UIComponent
 	 * exiting from over the widget
 	 * @param listener the listener
 	 */
-	public void setOnLeaveListener(ComponentEventListener listener)
+	public void setOnLeaveListener(ComponentEventListener<UIComponent> listener)
 	{
 		this.leaveListener = listener;
 	}
@@ -137,6 +147,12 @@ public abstract class UIComponent
 	{
 		this.widget.setOriginalWidth(width);
 		this.widget.setOriginalHeight(height);
+	}
+
+	public void setSizeMode(int widthMode, int heightMode)
+	{
+		this.widget.setWidthMode(widthMode);
+		this.widget.setHeightMode(heightMode);
 	}
 
 	/**
@@ -234,5 +250,9 @@ public abstract class UIComponent
 
 	public void clearActions() {
 		actions.clear();
+	}
+
+	public void revalidate() {
+		this.widget.revalidate();
 	}
 }

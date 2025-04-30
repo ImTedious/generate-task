@@ -28,6 +28,9 @@ import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.input.MouseWheelListener;
+import net.runelite.client.menus.MenuManager;
+import net.runelite.client.menus.WidgetMenuOption;
+import net.runelite.api.events.ScriptPostFired;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -49,6 +52,7 @@ import java.util.stream.Collectors;
 public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	private static final String TASK_CHAT_COMMAND = "!tasker";
 
+    private static final int COLLECTION_LOG_SETUP_SCRIPT_ID = 7797;
 
 	@Inject
 	private Client client;
@@ -140,6 +144,13 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 			interfaceManager.handleCollectionLogClose();
 		}
 	}
+
+    @Subscribe
+    public void onScriptPostFired(ScriptPostFired scriptPostFired) {
+        if (scriptPostFired.getScriptId() == COLLECTION_LOG_SETUP_SCRIPT_ID) {
+            interfaceManager.handleCollectionLogScriptRan();
+        }
+    }
 
 	@Subscribe
 	public void onGameTick(GameTick event) {
