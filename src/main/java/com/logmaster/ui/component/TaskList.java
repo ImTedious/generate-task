@@ -197,10 +197,14 @@ public class TaskList extends UIPage {
             return;
 
         Widget collectionLogWrapper = window.getParent();
-        int relativeX = collectionLogWrapper.getRelativeX();
-        int relativeY = collectionLogWrapper.getRelativeY();
+        int wrapperX = collectionLogWrapper.getRelativeX();
+        int wrapperY = collectionLogWrapper.getRelativeY();
+        int windowWidth = window.getWidth();
+        int windowHeight = window.getHeight();
+        int windowX = window.getRelativeX();
+        int windowY = window.getRelativeY();
 
-        bounds.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-        bounds.setLocation(OFFSET_X + relativeX, OFFSET_Y + relativeY);
+        bounds.setLocation(wrapperX + windowX + OFFSET_X, wrapperY + windowY + OFFSET_Y);
+        bounds.setSize(windowWidth - OFFSET_X, windowHeight - OFFSET_Y);
     }
 }
