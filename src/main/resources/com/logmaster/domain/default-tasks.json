@@ -168,7 +168,17 @@
     {
       "id": 33,
       "itemID": 6908,
-      "description": "Get a beginner wand"
+      "description": "Upgrade the MTA wand once"
+    },
+    {
+      "id": 39,
+      "itemID": 6908,
+      "description": "Upgrade the MTA wand once"
+    },
+    {
+      "id": 146,
+      "itemID": 6908,
+      "description": "Upgrade the MTA wand once"
     },
     {
       "id": 34,
@@ -196,17 +206,27 @@
       "description": "Get Void Knight gloves"
     },
     {
-      "id": 39,
-      "itemID": 8841,
-      "description": "Get a Void Knight mace"
-    },
-    {
       "id": 40,
       "itemID": 5553,
       "description": "Get 1 piece of Rogue equipment"
     },
     {
       "id": 41,
+      "itemID": 5553,
+      "description": "Get 1 piece of Rogue equipment"
+    },
+    {
+      "id": 147,
+      "itemID": 5553,
+      "description": "Get 1 piece of Rogue equipment"
+    },
+    {
+      "id": 148,
+      "itemID": 5553,
+      "description": "Get 1 piece of Rogue equipment"
+    },
+    {
+      "id": 149,
       "itemID": 5553,
       "description": "Get 1 piece of Rogue equipment"
     },
@@ -226,12 +246,32 @@
       "description": "Get 1 piece of Lumberjack equipment"
     },
     {
+      "id": 150,
+      "itemID": 10939,
+      "description": "Get 1 piece of Lumberjack equipment"
+    },
+    {
+      "id": 151,
+      "itemID": 10939,
+      "description": "Get 1 piece of Lumberjack equipment"
+    },
+    {
+      "id": 152,
+      "itemID": 10939,
+      "description": "Get 1 piece of Lumberjack equipment"
+    },
+    {
       "id": 45,
       "itemID": 13353,
       "description": "Get the Gricoller's can"
     },
     {
       "id": 46,
+      "itemID": 13643,
+      "description": "Get 1 piece of Farmer's equipment"
+    },
+    {
+      "id": 153,
       "itemID": 13643,
       "description": "Get 1 piece of Farmer's equipment"
     },
@@ -267,28 +307,38 @@
     },
     {
       "id": 53,
-      "itemID": 10859,
-      "description": "Get a Tea flask"
+      "itemID": 10882,
+      "description": "Get a unique from Creature Creation"
     },
     {
       "id": 54,
       "itemID": 10882,
-      "description": "Get a Rune satchel"
+      "description": "Get a unique from Creature Creation"
     },
     {
       "id": 55,
-      "itemID": 10878,
-      "description": "Get a Green satchel"
+      "itemID": 10882,
+      "description": "Get a unique from Creature Creation"
     },
     {
       "id": 56,
-      "itemID": 10879,
-      "description": "Get a Red satchel"
+      "itemID": 10882,
+      "description": "Get a unique from Creature Creation"
     },
     {
       "id": 57,
-      "itemID": 10880,
-      "description": "Get a Black satchel"
+      "itemID": 10882,
+      "description": "Get a unique from Creature Creation"
+    },
+    {
+      "id": 154,
+      "itemID": 10882,
+      "description": "Get a unique from Creature Creation"
+    },
+    {
+      "id": 155,
+      "itemID": 10882,
+      "description": "Get a unique from Creature Creation"
     },
     {
       "id": 58,
@@ -336,6 +386,16 @@
       "description": "Get 2 unique Ancient pages"
     },
     {
+      "id": 156,
+      "itemID": 11341,
+      "description": "Get 2 unique Ancient pages"
+    },
+    {
+      "id": 157,
+      "itemID": 11341,
+      "description": "Get 2 unique Ancient pages"
+    },
+    {
       "id": 67,
       "itemID": 21820,
       "description": "Get Revenant ether"
@@ -352,6 +412,21 @@
     },
     {
       "id": 70,
+      "itemID": 11854,
+      "description": "Get 1 piece of Graceful equipment"
+    },
+    {
+      "id": 158,
+      "itemID": 11854,
+      "description": "Get 1 piece of Graceful equipment"
+    },
+    {
+      "id": 159,
+      "itemID": 11854,
+      "description": "Get 1 piece of Graceful equipment"
+    },
+    {
+      "id": 160,
       "itemID": 11854,
       "description": "Get 1 piece of Graceful equipment"
     },
@@ -949,18 +1024,8 @@
     },
     {
       "id": 43,
-      "itemID": 6912,
-      "description": "Upgrade the MTA wand once"
-    },
-    {
-      "id": 44,
-      "itemID": 6912,
-      "description": "Upgrade the MTA wand once"
-    },
-    {
-      "id": 45,
-      "itemID": 6912,
-      "description": "Upgrade the MTA wand once"
+      "itemID": 6914,
+      "description": "Upgrade to a Master wand"
     },
     {
       "id": 46,
@@ -998,19 +1063,9 @@
       "description": "Get a Void Knight robe"
     },
     {
-      "id": 53,
-      "itemID": 5553,
-      "description": "Get 1 piece of Rogue equipment"
-    },
-    {
-      "id": 54,
-      "itemID": 5553,
-      "description": "Get 1 piece of Rogue equipment"
-    },
-    {
-      "id": 55,
-      "itemID": 5553,
-      "description": "Get 1 piece of Rogue equipment"
+      "id": 182,
+      "itemID": 8841,
+      "description": "Get a Void Knight mace"
     },
     {
       "id": 56,
@@ -1028,32 +1083,12 @@
       "description": "Get 1 unique from Shades of Mort'ton"
     },
     {
-      "id": 59,
-      "itemID": 10939,
-      "description": "Get 1 piece of Lumberjack equipment"
-    },
-    {
-      "id": 60,
-      "itemID": 10939,
-      "description": "Get 1 piece of Lumberjack equipment"
-    },
-    {
-      "id": 61,
-      "itemID": 10939,
-      "description": "Get 1 piece of Lumberjack equipment"
-    },
-    {
       "id": 62,
       "itemID": 13642,
       "description": "Get 1 piece of Farmer's equipment"
     },
     {
       "id": 63,
-      "itemID": 13642,
-      "description": "Get 1 piece of Farmer's equipment"
-    },
-    {
-      "id": 64,
       "itemID": 13642,
       "description": "Get 1 piece of Farmer's equipment"
     },
@@ -1118,16 +1153,6 @@
       "description": "Get the Ogre forester headpiece"
     },
     {
-      "id": 77,
-      "itemID": 10881,
-      "description": "Get a Gold satchel"
-    },
-    {
-      "id": 78,
-      "itemID": 10877,
-      "description": "Get a Plain satchel"
-    },
-    {
       "id": 79,
       "itemID": 12954,
       "description": "Get a Dragon defender"
@@ -1176,31 +1201,6 @@
       "id": 88,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages"
-    },
-    {
-      "id": 89,
-      "itemID": 11341,
-      "description": "Get 2 unique Ancient pages"
-    },
-    {
-      "id": 90,
-      "itemID": 11341,
-      "description": "Get 2 unique Ancient pages"
-    },
-    {
-      "id": 91,
-      "itemID": 11854,
-      "description": "Get 1 piece of Graceful equipment"
-    },
-    {
-      "id": 92,
-      "itemID": 11854,
-      "description": "Get 1 piece of Graceful equipment"
-    },
-    {
-      "id": 93,
-      "itemID": 11854,
-      "description": "Get 1 piece of Graceful equipment"
     },
     {
       "id": 94,
@@ -1584,6 +1584,11 @@
     },
     {
       "id": 169,
+      "itemID": 29265,
+      "description": "Get 1 unique from the Hunter Guild"
+    },
+    {
+      "id": 183,
       "itemID": 29265,
       "description": "Get 1 unique from the Hunter Guild"
     },
@@ -2616,11 +2621,6 @@
     },
     {
       "id": 193,
-      "itemID": 29265,
-      "description": "Get 1 unique from the Hunter Guild"
-    },
-    {
-      "id": 194,
       "itemID": 29265,
       "description": "Get 1 unique from the Hunter Guild"
     },
@@ -3675,6 +3675,41 @@
       "id": 197,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl"
+    },
+    {
+      "id": 198,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
+    },
+    {
+      "id": 199,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
+    },
+    {
+      "id": 200,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
+    },
+    {
+      "id": 201,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
+    },
+    {
+      "id": 202,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
+    },
+    {
+      "id": 203,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
+    },
+    {
+      "id": 204,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
     }
   ],
   "master": [
@@ -3770,27 +3805,22 @@
     },
     {
       "id": 18,
-      "itemID": 12703,
+      "itemID": 24844,
       "description": "1 Minigame log slot"
     },
     {
       "id": 19,
-      "itemID": 12703,
+      "itemID": 24844,
       "description": "1 Minigame log slot"
     },
     {
       "id": 20,
-      "itemID": 12703,
+      "itemID": 24844,
       "description": "1 Minigame log slot"
     },
     {
       "id": 21,
-      "itemID": 12703,
-      "description": "1 Minigame log slot"
-    },
-    {
-      "id": 22,
-      "itemID": 12703,
+      "itemID": 24844,
       "description": "1 Minigame log slot"
     },
     {
@@ -4347,6 +4377,21 @@
       "id": 146,
       "itemID": 28962,
       "description": "Obtain the Quetzin"
+    },
+    {
+      "id": 150,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
+    },
+    {
+      "id": 151,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
+    },
+    {
+      "id": 152,
+      "itemID": 30753,
+      "description": "Get 1 unique from Yama"
     }
   ]
 }
