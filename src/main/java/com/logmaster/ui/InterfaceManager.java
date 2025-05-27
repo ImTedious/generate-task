@@ -19,7 +19,6 @@ import net.runelite.api.Client;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetSizeMode;
 import net.runelite.api.widgets.WidgetType;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.game.SpriteManager;
