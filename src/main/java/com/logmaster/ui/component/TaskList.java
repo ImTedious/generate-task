@@ -26,7 +26,7 @@ import static com.logmaster.ui.InterfaceConstants.*;
 
 @Slf4j
 public class TaskList extends UIPage {
-    private final int OFFSET_X = 10;
+    private final int OFFSET_X = 0;
     private final int OFFSET_Y = 22;
     private final int CANVAS_WIDTH = 480;
     private final int CANVAS_HEIGHT = 252;
@@ -196,12 +196,11 @@ public class TaskList extends UIPage {
         if (!this.isVisible())
             return;
 
-        Widget collectionLogWidget = window.getParent();
-        Widget collectionLogWrapper = collectionLogWidget.getParent();
+        Widget collectionLogWrapper = window.getParent();
         int relativeX = collectionLogWrapper.getRelativeX();
         int relativeY = collectionLogWrapper.getRelativeY();
 
         bounds.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-        bounds.setLocation(OFFSET_X+5+relativeX, OFFSET_Y+5+relativeY);
+        bounds.setLocation(OFFSET_X + relativeX, OFFSET_Y + relativeY);
     }
 }
