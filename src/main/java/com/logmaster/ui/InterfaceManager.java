@@ -17,6 +17,7 @@ import com.logmaster.ui.generic.UIGraphic;
 import com.logmaster.util.FileUtils;
 import net.runelite.api.Client;
 import net.runelite.api.SoundEffectID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetType;
 import net.runelite.client.callback.ClientThread;
@@ -92,13 +93,12 @@ public class InterfaceManager {
     }
 
     public void handleCollectionLogOpen() {
-        Widget window = client.getWidget(621, 88);
-
+        Widget window = client.getWidget(InterfaceID.Collection.CONTENT);
         Widget dashboardTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
         taskDashboardTab = new UIButton(dashboardTabWidget);
         taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
         taskDashboardTab.setSize(95, 21);
-        taskDashboardTab.setPosition(10, 36);
+        taskDashboardTab.setPosition(10, 0);
         taskDashboardTab.addAction("View <col=ff9040>Dashboard</col>", this::activateTaskDashboard);
         taskDashboardTab.setVisibility(false);
 
@@ -110,7 +110,7 @@ public class InterfaceManager {
             Widget tabWiget = window.createChild(-1, WidgetType.GRAPHIC);
             UIButton tab = new UIButton(tabWiget);
             tab.setSize(66, 21);
-            tab.setPosition(currentTabX, 36);
+            tab.setPosition(currentTabX, 0);
             tab.setVisibility(false);
             currentTabX += 71;
             tabs.add(tab);
@@ -119,7 +119,7 @@ public class InterfaceManager {
         Widget tabWiget = window.createChild(-1, WidgetType.GRAPHIC);
         taskListTab = new UIButton(tabWiget);
         taskListTab.setSize(95, 21);
-        taskListTab.setPosition(110, 36);
+        taskListTab.setPosition(110, 0);
         taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
         taskListTab.setVisibility(false);
         taskListTab.addAction("View <col=ff9040>Task List</col>", () -> {
@@ -140,7 +140,7 @@ public class InterfaceManager {
         UIGraphic divider = new UIGraphic(dividerWidget);
         divider.setSprite(DIVIDER_SPRITE_ID);
         divider.setSize(480, 1);
-        divider.setPosition(10, 56);
+        divider.setPosition(10, 20);
 
         createTaskDashboard(window);
         createTaskList(window);
@@ -273,9 +273,12 @@ public class InterfaceManager {
             plugin.nullCurrentTask();
         }
 
-        this.taskDashboardCheckbox.setEnabled(isTaskDashboardEnabled());
-        client.getWidget(COLLECTION_LOG_CONTENT_WIDGET_ID).setHidden(isTaskDashboardEnabled());
-        client.getWidget(40697936).setHidden(isTaskDashboardEnabled());
+        boolean enabled = isTaskDashboardEnabled();
+        this.taskDashboardCheckbox.setEnabled(enabled);
+        for (Widget c : client.getWidget(InterfaceID.Collection.CONTENT).getStaticChildren()) {
+            c.setHidden(enabled);
+        }
+        client.getWidget(InterfaceID.Collection.SEARCH_TITLE).setHidden(enabled);
 
         if (isTaskDashboardEnabled()) {
             activateTaskDashboard();
