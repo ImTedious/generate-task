@@ -86,10 +86,8 @@ public class TaskList extends UIPage {
     }
 
     public void refreshTasks(int dir) {
-        TaskTier relevantTier = plugin.getSelectedTier();
-        if (relevantTier == null) {
-            relevantTier = TaskTier.MASTER;
-        }
+        TaskTier selectedTier = plugin.getSelectedTier();
+        final TaskTier relevantTier = (selectedTier == null) ? TaskTier.MASTER : selectedTier;
         if (topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > taskService.getTaskList().getForTier(relevantTier).size()) {
             return;
         }
@@ -113,13 +111,22 @@ public class TaskList extends UIPage {
             }
 
             taskBg.clearActions();
+            taskBg.getWidget().clearActions();
             taskBg.setSize(TASK_WIDTH, TASK_HEIGHT);
             taskBg.setPosition(POS_X, POS_Y);
             taskBg.getWidget().setPos(POS_X, POS_Y);
-            TaskTier finalRelevantTier = relevantTier;
-            taskBg.addAction("Mark", () -> plugin.completeTask(task.getId(), finalRelevantTier));
 
-            if (saveDataManager.getSaveData().getProgress().get(relevantTier).contains(task.getId())) {
+            boolean taskCompleted = plugin.isTaskCompleted(task.getId(), relevantTier);
+            taskBg.addAction("Mark as " + (taskCompleted ? "<col=e74c3c>incomplete" : "<col=2ecc71>completed") + "</col>", () -> plugin.completeTask(task.getId(), relevantTier));
+            
+            if (task.getCheck().length <= 24 && task.getCheck().length > 0) {
+                for (int checkID : task.getCheck()) {
+                    String itemName = plugin.itemManager.getItemComposition(checkID).getName();
+                    taskBg.addAction((plugin.isCollectionLogItemUnlocked(checkID) ? "<col=2ecc71>" : "<col=e74c3c>") + itemName + "</col>", () -> {});
+                }
+            }
+
+            if (taskCompleted) {
                 taskBg.setSprite(TASK_COMPLETE_BACKGROUND_SPRITE_ID);
             } else if (saveDataManager.getSaveData().getActiveTaskPointer() != null && saveDataManager.getSaveData().getActiveTaskPointer().getTaskTier() == relevantTier && saveDataManager.getSaveData().getActiveTaskPointer().getTask().getId() == task.getId()) {
                 taskBg.setSprite(TASK_CURRENT_BACKGROUND_SPRITE_ID);
