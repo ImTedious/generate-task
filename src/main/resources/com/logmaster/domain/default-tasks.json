@@ -368,7 +368,7 @@
       "id": 45,
       "itemID": 13353,
       "description": "Get the Gricoller's can",
-      "check": [11353],
+      "check": [13353],
       "count": 1
     },
     {
@@ -655,7 +655,7 @@
       "id": 78,
       "itemID": 8921,
       "description": "Get a Black mask",
-      "check": [8921],
+      "check": [8901],
       "count": 1
     },
     {
@@ -991,14 +991,14 @@
       "id": 126,
       "itemID": 25641,
       "description": "Get 5 unique items at Camdozaal",
-      "check": [25633, 25635, 25637, 25639, 25641, 25686, 25688, 25690, 25692, 25694],
+      "check": [25644, 25635, 25637, 25639, 25641, 25686, 25688, 25690, 25692, 25694],
       "count": 5
     },
     {
       "id": 127,
       "itemID": 25641,
       "description": "Get 5 unique items at Camdozaal",
-      "check": [25633, 25635, 25637, 25639, 25641, 25686, 25688, 25690, 25692, 25694],
+      "check": [25644, 25635, 25637, 25639, 25641, 25686, 25688, 25690, 25692, 25694],
       "count": 10
     },
     {
@@ -1103,7 +1103,7 @@
       "id": 137,
       "itemID": 28585,
       "description": "Get a Warped sceptre",
-      "check": [28585],
+      "check": [28583],
       "count": 1
     },
     {

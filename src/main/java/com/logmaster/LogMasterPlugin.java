@@ -551,6 +551,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 			return false;
 		}
 
+		EnumComposition replacements = client.getEnum(3721);
 		// Update completed tasks automatically
 		for (TaskTier tier : TaskTier.values()) {
 			log.debug("Checking Tier: " + tier.displayName);
@@ -559,16 +560,20 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 					log.debug("Checking task {} for completion", task.getId());
 					int count = 0;
 					for (int itemId : task.getCheck()) {
-						if (isCollectionLogItemUnlocked(itemId)) {
+						// Some items have bad IDs, check these ones for a replacement
+						int replacementItemId = replacements.getIntValue(itemId);
+						if (isCollectionLogItemUnlocked(replacementItemId != -1 ? replacementItemId : itemId)) {
 							count++;
 						}
 					}
 					if (count >= task.getCount() && !isTaskCompleted(task.getId(), tier)) {
 						// Check passed, task not yet completed, mark as completed
 						completeTask(task.getId(), tier);
+						log.info("Task '{}' marked as completed for tier {}", task.getDescription(), tier.displayName);
 					} else if (count < task.getCount() && isTaskCompleted(task.getId(), tier)) {
 						// Check failed, task marked as completed, unmark completion
 						completeTask(task.getId(), tier);
+						log.info("Task '{}' un-marked as this is not completed for tier {}", task.getDescription(), tier.displayName);
 					}
 					log.debug("Has {} items out of {} to check", count, task.getCheck().length);
 				}
