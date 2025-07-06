@@ -151,78 +151,78 @@
       "id": 21,
       "itemID": 10552,
       "description": "Get Runner boots",
-      "check": [],
-      "count": 0
+      "check": [10552],
+      "count": 1
     },
     {
       "id": 22,
       "itemID": 10553,
       "description": "Get Penance gloves",
-      "check": [],
-      "count": 0
+      "check": [10553],
+      "count": 1
     },
     {
       "id": 23,
       "itemID": 10564,
       "description": "Get a Granite body",
-      "check": [],
-      "count": 0
+      "check": [10564],
+      "count": 1
     },
     {
       "id": 24,
       "itemID": 12637,
       "description": "Get 1 new halo",
-      "check": [],
-      "count": 0
+      "check": [12637, 12638, 12639],
+      "count": 1
     },
     {
       "id": 25,
       "itemID": 4069,
       "description": "Get the full red decorative set",
-      "check": [],
-      "count": 0
+      "check": [4068, 4069, 4070, 4071, 4072, 11893, 25163, 25165],
+      "count": 8
     },
     {
       "id": 26,
       "itemID": 4515,
       "description": "Get the Zamorak hood & cloak",
-      "check": [],
-      "count": 0
+      "check": [4515, 4516],
+      "count": 2
     },
     {
       "id": 27,
       "itemID": 4513,
       "description": "Get the Saradomin hood & cloak",
-      "check": [],
-      "count": 0
+      "check": [4513, 4514],
+      "count": 2
     },
     {
       "id": 28,
       "itemID": 13259,
       "description": "Get 1 Angler piece",
-      "check": [],
-      "count": 0
+      "check": [13258, 13259, 13260, 13261],
+      "count": 1
     },
     {
       "id": 29,
       "itemID": 13259,
       "description": "Get 1 Angler piece",
-      "check": [],
-      "count": 0
+      "check": [13258, 13259, 13260, 13261],
+      "count": 2
     },
     {
       "id": 30,
       "itemID": 13259,
       "description": "Get 1 Angler piece",
-      "check": [],
-      "count": 0
+      "check": [13258, 13259, 13260, 13261],
+      "count": 3
     },
     {
       "id": 31,
       "itemID": 13259,
       "description": "Get 1 Angler piece",
-      "check": [],
-      "count": 0
+      "check": [13258, 13259, 13260, 13261],
+      "count": 4
     },
     {
       "id": 32,
@@ -235,92 +235,92 @@
       "id": 33,
       "itemID": 6908,
       "description": "Upgrade the MTA wand once",
-      "check": [],
-      "count": 0
+      "check": [6908, 6910, 6912],
+      "count": 1
     },
     {
       "id": 39,
       "itemID": 6908,
       "description": "Upgrade the MTA wand once",
-      "check": [],
-      "count": 0
+      "check": [6908, 6910, 6912],
+      "count": 2
     },
     {
       "id": 146,
       "itemID": 6908,
       "description": "Upgrade the MTA wand once",
-      "check": [],
-      "count": 0
+      "check": [6908, 6910, 6912],
+      "count": 3
     },
     {
       "id": 34,
       "itemID": 6926,
       "description": "Unlock bones to peaches",
-      "check": [],
-      "count": 0
+      "check": [6926],
+      "count": 1
     },
     {
       "id": 35,
       "itemID": 6920,
       "description": "Get Infinity boots",
-      "check": [],
-      "count": 0
+      "check": [6920],
+      "count": 1
     },
     {
       "id": 36,
       "itemID": 6922,
       "description": "Get Infinity gloves",
-      "check": [],
-      "count": 0
+      "check": [6922],
+      "count": 1
     },
     {
       "id": 37,
       "itemID": 11666,
       "description": "Get a Void Knight seal",
-      "check": [],
-      "count": 0
+      "check": [11666],
+      "count": 1
     },
     {
       "id": 38,
       "itemID": 8842,
       "description": "Get Void Knight gloves",
-      "check": [],
-      "count": 0
+      "check": [8842],
+      "count": 1
     },
     {
       "id": 40,
       "itemID": 5553,
       "description": "Get 1 piece of Rogue equipment",
-      "check": [],
-      "count": 0
+      "check": [5553, 5554, 5555, 5556, 5557],
+      "count": 1
     },
     {
       "id": 41,
       "itemID": 5553,
       "description": "Get 1 piece of Rogue equipment",
-      "check": [],
-      "count": 0
+      "check": [5553, 5554, 5555, 5556, 5557],
+      "count": 2
     },
     {
       "id": 147,
       "itemID": 5553,
       "description": "Get 1 piece of Rogue equipment",
-      "check": [],
-      "count": 0
+      "check": [5553, 5554, 5555, 5556, 5557],
+      "count": 3
     },
     {
       "id": 148,
       "itemID": 5553,
       "description": "Get 1 piece of Rogue equipment",
-      "check": [],
-      "count": 0
+      "check": [5553, 5554, 5555, 5556, 5557],
+      "count": 4
     },
     {
       "id": 149,
       "itemID": 5553,
       "description": "Get 1 piece of Rogue equipment",
-      "check": [],
-      "count": 0
+      "check": [5553, 5554, 5555, 5556, 5557],
+      "count": 5
     },
     {
       "id": 42,
@@ -340,78 +340,78 @@
       "id": 44,
       "itemID": 10939,
       "description": "Get 1 piece of Lumberjack equipment",
-      "check": [],
-      "count": 0
+      "check": [10933, 10939, 10940, 10941],
+      "count": 1
     },
     {
       "id": 150,
       "itemID": 10939,
       "description": "Get 1 piece of Lumberjack equipment",
-      "check": [],
-      "count": 0
+      "check": [10933, 10939, 10940, 10941],
+      "count": 2
     },
     {
       "id": 151,
       "itemID": 10939,
       "description": "Get 1 piece of Lumberjack equipment",
-      "check": [],
-      "count": 0
+      "check": [10933, 10939, 10940, 10941],
+      "count": 3
     },
     {
       "id": 152,
       "itemID": 10939,
       "description": "Get 1 piece of Lumberjack equipment",
-      "check": [],
-      "count": 0
+      "check": [10933, 10939, 10940, 10941],
+      "count": 4
     },
     {
       "id": 45,
       "itemID": 13353,
       "description": "Get the Gricoller's can",
-      "check": [],
-      "count": 0
+      "check": [11353],
+      "count": 1
     },
     {
       "id": 46,
       "itemID": 13643,
       "description": "Get 1 piece of Farmer's equipment",
-      "check": [],
-      "count": 0
+      "check": [13640, 13641, 13642, 13643, 13644, 13645, 13646, 13647],
+      "count": 1
     },
     {
       "id": 153,
       "itemID": 13643,
       "description": "Get 1 piece of Farmer's equipment",
-      "check": [],
-      "count": 0
+      "check": [13640, 13641, 13642, 13643, 13644, 13645, 13646, 13647],
+      "count": 2
     },
     {
       "id": 47,
       "itemID": 8941,
       "description": "Get Blue Rum",
-      "check": [],
-      "count": 0
+      "check": [8941],
+      "count": 1
     },
     {
       "id": 48,
       "itemID": 8940,
       "description": "Get Red Rum",
-      "check": [],
-      "count": 0
+      "check": [8940],
+      "count": 1
     },
     {
       "id": 49,
       "itemID": 8988,
       "description": "Get The stuff",
-      "check": [],
-      "count": 0
+      "check": [8988],
+      "count": 1
     },
     {
       "id": 50,
       "itemID": 22846,
       "description": "Get the Pearl fishing rod",
-      "check": [],
-      "count": 0
+      "check": [22846],
+      "count": 1
     },
     {
       "id": 51,
@@ -424,8 +424,8 @@
       "id": 52,
       "itemID": 2983,
       "description": "Get the Marksman headpiece",
-      "check": [],
-      "count": 0
+      "check": [2983],
+      "count": 1
     },
     {
       "id": 53,
@@ -480,8 +480,8 @@
       "id": 58,
       "itemID": 8850,
       "description": "Get a Rune defender",
-      "check": [],
-      "count": 0
+      "check": [8850],
+      "count": 1
     },
     {
       "id": 59,
@@ -529,211 +529,211 @@
       "id": 65,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 2
     },
     {
       "id": 66,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 4
     },
     {
       "id": 156,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 6
     },
     {
       "id": 157,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 8
     },
     {
       "id": 67,
       "itemID": 21820,
       "description": "Get Revenant ether",
-      "check": [],
-      "count": 0
+      "check": [21820],
+      "count": 1
     },
     {
       "id": 68,
       "itemID": 11854,
       "description": "Get 1 piece of Graceful equipment",
-      "check": [],
-      "count": 0
+      "check": [11850, 11852, 11854, 11856, 11858, 11860],
+      "count": 1
     },
     {
       "id": 69,
       "itemID": 11854,
       "description": "Get 1 piece of Graceful equipment",
-      "check": [],
-      "count": 0
+      "check": [11850, 11852, 11854, 11856, 11858, 11860],
+      "count": 2
     },
     {
       "id": 70,
       "itemID": 11854,
       "description": "Get 1 piece of Graceful equipment",
-      "check": [],
-      "count": 0
+      "check": [11850, 11852, 11854, 11856, 11858, 11860],
+      "count": 3
     },
     {
       "id": 158,
       "itemID": 11854,
       "description": "Get 1 piece of Graceful equipment",
-      "check": [],
-      "count": 0
+      "check": [11850, 11852, 11854, 11856, 11858, 11860],
+      "count": 4
     },
     {
       "id": 159,
       "itemID": 11854,
       "description": "Get 1 piece of Graceful equipment",
-      "check": [],
-      "count": 0
+      "check": [11850, 11852, 11854, 11856, 11858, 11860],
+      "count": 5
     },
     {
       "id": 160,
       "itemID": 11854,
       "description": "Get 1 piece of Graceful equipment",
-      "check": [],
-      "count": 0
+      "check": [11850, 11852, 11854, 11856, 11858, 11860],
+      "count": 6
     },
     {
       "id": 71,
       "itemID": 7975,
       "description": "Get a Crawling hand",
-      "check": [],
-      "count": 0
+      "check": [7975],
+      "count": 1
     },
     {
       "id": 72,
       "itemID": 7976,
       "description": "Get a Cockatrice head",
-      "check": [],
-      "count": 0
+      "check": [7976],
+      "count": 1
     },
     {
       "id": 73,
       "itemID": 6665,
       "description": "Get 1 unique from Mogres",
-      "check": [],
-      "count": 0
+      "check": [6665, 6666],
+      "count": 1
     },
     {
       "id": 74,
       "itemID": 6665,
       "description": "Get 1 unique from Mogres",
-      "check": [],
-      "count": 0
+      "check": [6665, 6666],
+      "count": 2
     },
     {
       "id": 75,
       "itemID": 11037,
       "description": "Get a Brine sabre",
-      "check": [],
-      "count": 0
+      "check": [11037],
+      "count": 1
     },
     {
       "id": 76,
       "itemID": 11902,
       "description": "Get 1 unique from Turoths",
-      "check": [],
-      "count": 0
+      "check": [11902, 4113],
+      "count": 1
     },
     {
       "id": 77,
       "itemID": 11902,
       "description": "Get 1 unique from Turoths",
-      "check": [],
-      "count": 0
+      "check": [11902, 4113],
+      "count": 2
     },
     {
       "id": 78,
       "itemID": 8921,
       "description": "Get a Black mask",
-      "check": [],
-      "count": 0
+      "check": [8921],
+      "count": 1
     },
     {
       "id": 79,
       "itemID": 4119,
       "description": "Get the next tier of metal boots",
-      "check": [],
-      "count": 0
+      "check": [4119, 4121, 4123, 4125, 4127, 4119, 4131],
+      "count": 1
     },
     {
       "id": 80,
       "itemID": 4119,
       "description": "Get the next tier of metal boots",
-      "check": [],
-      "count": 0
+      "check": [4119, 4121, 4123, 4125, 4127, 4119, 4131],
+      "count": 2
     },
     {
       "id": 81,
       "itemID": 4119,
       "description": "Get the next tier of metal boots",
-      "check": [],
-      "count": 0
+      "check": [4119, 4121, 4123, 4125, 4127, 4119, 4131],
+      "count": 3
     },
     {
       "id": 82,
       "itemID": 4119,
       "description": "Get the next tier of metal boots",
-      "check": [],
-      "count": 0
+      "check": [4119, 4121, 4123, 4125, 4127, 4119, 4131],
+      "count": 4
     },
     {
       "id": 83,
       "itemID": 4119,
       "description": "Get the next tier of metal boots",
-      "check": [],
-      "count": 0
+      "check": [4119, 4121, 4123, 4125, 4127, 4119, 4131],
+      "count": 5
     },
     {
       "id": 84,
       "itemID": 4109,
       "description": "Get a Mystic hat (light)",
-      "check": [],
-      "count": 0
+      "check": [4109],
+      "count": 1
     },
     {
       "id": 85,
       "itemID": 4115,
       "description": "Get Mystic gloves (light)",
-      "check": [],
-      "count": 0
+      "check": [4115],
+      "count": 1
     },
     {
       "id": 86,
       "itemID": 4117,
       "description": "Get Mystic boots (light)",
-      "check": [],
-      "count": 0
+      "check": [4117],
+      "count": 1
     },
     {
       "id": 87,
       "itemID": 4099,
       "description": "Get 1 unique from Infernal Mages",
-      "check": [],
-      "count": 0
+      "check": [4099, 4107],
+      "count": 1
     },
     {
       "id": 88,
       "itemID": 4099,
       "description": "Get 1 unique from Infernal Mages",
-      "check": [],
-      "count": 0
+      "check": [4099, 4107],
+      "count": 2
     },
     {
       "id": 89,
       "itemID": 4105,
       "description": "Get Mystic gloves (dark)",
-      "check": [],
-      "count": 0
+      "check": [4105],
+      "count": 1
     },
     {
       "id": 90,
@@ -753,120 +753,120 @@
       "id": 92,
       "itemID": 7991,
       "description": "Get a Big swordfish",
-      "check": [],
-      "count": 0
+      "check": [7991],
+      "count": 1
     },
     {
       "id": 93,
       "itemID": 7989,
       "description": "Get a Big bass",
-      "check": [],
-      "count": 0
+      "check": [7989],
+      "count": 1
     },
     {
       "id": 94,
       "itemID": 10976,
       "description": "Get a Long bone",
-      "check": [],
-      "count": 0
+      "check": [10976],
+      "count": 1
     },
     {
       "id": 95,
       "itemID": 11942,
       "description": "Get an Ecumenical key",
-      "check": [],
-      "count": 0
+      "check": [11942],
+      "count": 1
     },
     {
       "id": 96,
       "itemID": 19685,
       "description": "Get 1 unique Dark totem piece / Ancient shard",
-      "check": [],
-      "count": 0
+      "check": [19677, 19679, 19681, 19683],
+      "count": 1
     },
     {
       "id": 97,
       "itemID": 19685,
       "description": "Get 1 unique Dark totem piece / Ancient shard",
-      "check": [],
-      "count": 0
+      "check": [19677, 19679, 19681, 19683],
+      "count": 2
     },
     {
       "id": 98,
       "itemID": 19685,
       "description": "Get 1 unique Dark totem piece / Ancient shard",
-      "check": [],
-      "count": 0
+      "check": [19677, 19679, 19681, 19683],
+      "count": 3
     },
     {
       "id": 99,
       "itemID": 19685,
       "description": "Get 1 unique Dark totem piece / Ancient shard",
-      "check": [],
-      "count": 0
+      "check": [19677, 19679, 19681, 19683],
+      "count": 4
     },
     {
       "id": 100,
       "itemID": 21343,
       "description": "Get Mining gloves",
-      "check": [],
-      "count": 0
+      "check": [21343],
+      "count": 1
     },
     {
       "id": 101,
       "itemID": 9007,
       "description": "Get a Right skull half",
-      "check": [],
-      "count": 0
+      "check": [9007],
+      "count": 1
     },
     {
       "id": 102,
       "itemID": 9008,
       "description": "Get a Left skull half",
-      "check": [],
-      "count": 0
+      "check": [9008],
+      "count": 1
     },
     {
       "id": 103,
       "itemID": 9010,
       "description": "Get a Top of sceptre",
-      "check": [],
-      "count": 0
+      "check": [9010],
+      "count": 1
     },
     {
       "id": 104,
       "itemID": 9011,
       "description": "Get a Bottom of sceptre",
-      "check": [],
-      "count": 0
+      "check": [9011],
+      "count": 1
     },
     {
       "id": 105,
       "itemID": 22374,
       "description": "Get a Mossy key",
-      "check": [],
-      "count": 0
+      "check": [22374],
+      "count": 1
     },
     {
       "id": 106,
       "itemID": 20754,
       "description": "Get a Giant key",
-      "check": [],
-      "count": 0
+      "check": [20754],
+      "count": 1
     },
     {
       "id": 107,
       "itemID": 7536,
       "description": "Get a Fresh crab claw & Fresh crab shell",
-      "check": [],
-      "count": 0
+      "check": [7536, 7538],
+      "count": 2
     },
     {
       "id": 108,
       "itemID": 13392,
       "description": "Get a Xeric's talisman (inert)",
-      "check": [],
-      "count": 0
+      "check": [13392],
+      "count": 1
     },
     {
       "id": 109,
@@ -956,8 +956,8 @@
       "id": 121,
       "itemID": 24884,
       "description": "Get a Supply crate from Mahogany Homes",
-      "check": [],
-      "count": 0
+      "check": [24884],
+      "count": 1
     },
     {
       "id": 122,
@@ -991,15 +991,15 @@
       "id": 126,
       "itemID": 25641,
       "description": "Get 5 unique items at Camdozaal",
-      "check": [],
-      "count": 0
+      "check": [25633, 25635, 25637, 25639, 25641, 25686, 25688, 25690, 25692, 25694],
+      "count": 5
     },
     {
       "id": 127,
       "itemID": 25641,
       "description": "Get 5 unique items at Camdozaal",
-      "check": [],
-      "count": 0
+      "check": [25633, 25635, 25637, 25639, 25641, 25686, 25688, 25690, 25692, 25694],
+      "count": 10
     },
     {
       "id": 128,
@@ -1103,8 +1103,8 @@
       "id": 137,
       "itemID": 28585,
       "description": "Get a Warped sceptre",
-      "check": [],
-      "count": 0
+      "check": [28585],
+      "count": 1
     },
     {
       "id": 140,
@@ -1117,15 +1117,15 @@
       "id": 141,
       "itemID": 29084,
       "description": "Get the Sulphur blades",
-      "check": [],
-      "count": 0
+      "check": [29084],
+      "count": 1
     },
     {
       "id": 145,
       "itemID": 30040,
       "description": "Get a Colossal wyrm teleport scroll",
-      "check": [],
-      "count": 0
+      "check": [30040],
+      "count": 1
     }
   ],
   "medium": [
@@ -1189,22 +1189,22 @@
       "id": 8,
       "itemID": 6570,
       "description": "Get a Fire cape",
-      "check": [],
-      "count": 0
+      "check": [6570],
+      "count": 1
     },
     {
       "id": 9,
       "itemID": 21726,
       "description": "Get Granite dust",
-      "check": [],
-      "count": 0
+      "check": [21726],
+      "count": 1
     },
     {
       "id": 10,
       "itemID": 20756,
       "description": "Get a Hill giant club",
-      "check": [],
-      "count": 0
+      "check": [20756],
+      "count": 1
     },
     {
       "id": 11,
@@ -1357,50 +1357,50 @@
       "id": 32,
       "itemID": 10548,
       "description": "Get a Fighter hat",
-      "check": [],
-      "count": 0
+      "check": [10548],
+      "count": 1
     },
     {
       "id": 33,
       "itemID": 10547,
       "description": "Get a Healer hat",
-      "check": [],
-      "count": 0
+      "check": [10547],
+      "count": 1
     },
     {
       "id": 34,
       "itemID": 10549,
       "description": "Get a Runner hat",
-      "check": [],
-      "count": 0
+      "check": [10549],
+      "count": 1
     },
     {
       "id": 35,
       "itemID": 10550,
       "description": "Get a Ranger hat",
-      "check": [],
-      "count": 0
+      "check": [10550],
+      "count": 1
     },
     {
       "id": 36,
       "itemID": 10551,
       "description": "Get a Fighter torso",
-      "check": [],
-      "count": 0
+      "check": [10551],
+      "count": 1
     },
     {
       "id": 37,
       "itemID": 10589,
       "description": "Get a Granite helm",
-      "check": [],
-      "count": 0
+      "check": [10589],
+      "count": 1
     },
     {
       "id": 38,
       "itemID": 12637,
       "description": "Get 1 new halo",
-      "check": [],
-      "count": 0
+      "check": [12637, 12638, 12639],
+      "count": 2
     },
     {
       "id": 39,
@@ -1434,64 +1434,64 @@
       "id": 43,
       "itemID": 6914,
       "description": "Upgrade to a Master wand",
-      "check": [],
-      "count": 0
+      "check": [6914],
+      "count": 1
     },
     {
       "id": 46,
       "itemID": 6918,
       "description": "Get an Infinity hat",
-      "check": [],
-      "count": 0
+      "check": [6918],
+      "count": 1
     },
     {
       "id": 47,
       "itemID": 6889,
       "description": "Get a Mage's book",
-      "check": [],
-      "count": 0
+      "check": [6889],
+      "count": 1
     },
     {
       "id": 48,
       "itemID": 11665,
       "description": "Get a Void melee helm",
-      "check": [],
-      "count": 0
+      "check": [11665],
+      "count": 1
     },
     {
       "id": 49,
       "itemID": 11663,
       "description": "Get a Void magic helm",
-      "check": [],
-      "count": 0
+      "check": [11663],
+      "count": 1
     },
     {
       "id": 50,
       "itemID": 11664,
       "description": "Get a Void ranger helm",
-      "check": [],
-      "count": 0
+      "check": [11664],
+      "count": 1
     },
     {
       "id": 51,
       "itemID": 8839,
       "description": "Get a Void Knight top",
-      "check": [],
-      "count": 0
+      "check": [8839],
+      "count": 1
     },
     {
       "id": 52,
       "itemID": 8840,
       "description": "Get a Void Knight robe",
-      "check": [],
-      "count": 0
+      "check": [8840],
+      "count": 1
     },
     {
       "id": 182,
       "itemID": 8841,
       "description": "Get a Void Knight mace",
-      "check": [],
-      "count": 0
+      "check": [8841],
+      "count": 1
     },
     {
       "id": 56,
@@ -1518,22 +1518,22 @@
       "id": 62,
       "itemID": 13642,
       "description": "Get 1 piece of Farmer's equipment",
-      "check": [],
-      "count": 0
+      "check": [13640, 13641, 13642, 13643, 13644, 13645, 13646, 13647],
+      "count": 2
     },
     {
       "id": 63,
       "itemID": 13642,
       "description": "Get 1 piece of Farmer's equipment",
-      "check": [],
-      "count": 0
+      "check": [13640, 13641, 13642, 13643, 13644, 13645, 13646, 13647],
+      "count": 3
     },
     {
       "id": 65,
       "itemID": 13639,
       "description": "Get the Seed box",
-      "check": [],
-      "count": 0
+      "check": [13639],
+      "count": 1
     },
     {
       "id": 66,
@@ -1553,29 +1553,29 @@
       "id": 68,
       "itemID": 8966,
       "description": "Get the Cutthroat flag",
-      "check": [],
-      "count": 0
+      "check": [8966],
+      "count": 1
     },
     {
       "id": 69,
       "itemID": 8967,
       "description": "Get the Gilded smile flag",
-      "check": [],
-      "count": 0
+      "check": [8967],
+      "count": 1
     },
     {
       "id": 70,
       "itemID": 22844,
       "description": "Get the Pearl fly fishing rod",
-      "check": [],
-      "count": 0
+      "check": [22844],
+      "count": 1
     },
     {
       "id": 71,
       "itemID": 22842,
       "description": "Get the Pearl barbarian rod",
-      "check": [],
-      "count": 0
+      "check": [22842],
+      "count": 1
     },
     {
       "id": 72,
@@ -1609,15 +1609,15 @@
       "id": 76,
       "itemID": 2986,
       "description": "Get the Ogre forester headpiece",
-      "check": [],
-      "count": 0
+      "check": [2986],
+      "count": 1
     },
     {
       "id": 79,
       "itemID": 12954,
       "description": "Get a Dragon defender",
-      "check": [],
-      "count": 0
+      "check": [12954],
+      "count": 1
     },
     {
       "id": 80,
@@ -1644,43 +1644,43 @@
       "id": 83,
       "itemID": 12019,
       "description": "Get the Coal bag",
-      "check": [],
-      "count": 0
+      "check": [12019],
+      "count": 1
     },
     {
       "id": 84,
       "itemID": 12020,
       "description": "Get the Gem bag",
-      "check": [],
-      "count": 0
+      "check": [12020],
+      "count": 1
     },
     {
       "id": 85,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 10
     },
     {
       "id": 86,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 12
     },
     {
       "id": 87,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 14
     },
     {
       "id": 88,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 16
     },
     {
       "id": 94,
@@ -1693,8 +1693,8 @@
       "id": 95,
       "itemID": 7977,
       "description": "Get a Basilisk head",
-      "check": [],
-      "count": 0
+      "check": [7977],
+      "count": 1
     },
     {
       "id": 96,
@@ -1728,36 +1728,36 @@
       "id": 100,
       "itemID": 21646,
       "description": "Get a Granite longsword",
-      "check": [],
-      "count": 0
+      "check": [21646],
+      "count": 1
     },
     {
       "id": 101,
       "itemID": 6809,
       "description": "Get Granite legs",
-      "check": [],
-      "count": 0
+      "check": [6809],
+      "count": 1
     },
     {
       "id": 102,
       "itemID": 4119,
       "description": "Get the next tier of metal boots",
-      "check": [],
-      "count": 0
+      "check": [4119, 4121, 4123, 4125, 4127, 4119, 4131],
+      "count": 6
     },
     {
       "id": 103,
       "itemID": 4119,
       "description": "Get the next tier of metal boots",
-      "check": [],
-      "count": 0
+      "check": [4119, 4121, 4123, 4125, 4127, 4119, 4131],
+      "count": 7
     },
     {
       "id": 104,
       "itemID": 4103,
       "description": "Get a Mystic robe bottom (dark)",
-      "check": [],
-      "count": 0
+      "check": [4103],
+      "count": 1
     },
     {
       "id": 105,
@@ -1791,29 +1791,29 @@
       "id": 109,
       "itemID": 7993,
       "description": "Get a Big shark",
-      "check": [],
-      "count": 0
+      "check": [7993],
+      "count": 1
     },
     {
       "id": 110,
       "itemID": 10977,
       "description": "Get a Curved bone",
-      "check": [],
-      "count": 0
+      "check": [10977],
+      "count": 1
     },
     {
       "id": 111,
       "itemID": 21838,
       "description": "Get a Shaman mask",
-      "check": [],
-      "count": 0
+      "check": [21838],
+      "count": 1
     },
     {
       "id": 112,
       "itemID": 21345,
       "description": "Get Superior mining gloves",
-      "check": [],
-      "count": 0
+      "check": [21345],
+      "count": 1
     },
     {
       "id": 113,
@@ -1917,29 +1917,29 @@
       "id": 127,
       "itemID": 23522,
       "description": "Get a Mask of Ranul",
-      "check": [],
-      "count": 0
+      "check": [23522],
+      "count": 1
     },
     {
       "id": 128,
       "itemID": 23517,
       "description": "Get a Giant egg sac(full)",
-      "check": [],
-      "count": 0
+      "check": [23517],
+      "count": 1
     },
     {
       "id": 129,
       "itemID": 13226,
       "description": "Get a Herb sack",
-      "check": [],
-      "count": 0
+      "check": [13226],
+      "count": 1
     },
     {
       "id": 130,
       "itemID": 24882,
       "description": "Get a Plank sack",
-      "check": [],
-      "count": 0
+      "check": [24882],
+      "count": 1
     },
     {
       "id": 131,
@@ -1959,85 +1959,85 @@
       "id": 133,
       "itemID": 25340,
       "description": "Get an Ectoplasmator",
-      "check": [],
-      "count": 0
+      "check": [25340],
+      "count": 1
     },
     {
       "id": 134,
       "itemID": 10555,
       "description": "Get a Penance skirt",
-      "check": [],
-      "count": 0
+      "check": [10555],
+      "count": 1
     },
     {
       "id": 135,
       "itemID": 12802,
       "description": "Get a Ward upgrade kit",
-      "check": [],
-      "count": 0
+      "check": [12802],
+      "count": 1
     },
     {
       "id": 136,
       "itemID": 12849,
       "description": "Get a Granite clamp",
-      "check": [],
-      "count": 0
+      "check": [12849],
+      "count": 1
     },
     {
       "id": 137,
       "itemID": 12771,
       "description": "Get a Volcanic whip mix",
-      "check": [],
-      "count": 0
+      "check": [12771],
+      "count": 1
     },
     {
       "id": 138,
       "itemID": 12769,
       "description": "Get a Frozen whip mix",
-      "check": [],
-      "count": 0
+      "check": [12769],
+      "count": 1
     },
     {
       "id": 139,
       "itemID": 12798,
       "description": "Get a Steam staff upgrade kit",
-      "check": [],
-      "count": 0
+      "check": [12798],
+      "count": 1
     },
     {
       "id": 140,
       "itemID": 21202,
       "description": "Get a Lava staff upgrade kit",
-      "check": [],
-      "count": 0
+      "check": [21202],
+      "count": 1
     },
     {
       "id": 141,
       "itemID": 12800,
       "description": "Get a Dragon pickaxe upgrade kit",
-      "check": [],
-      "count": 0
+      "check": [12800],
+      "count": 1
     },
     {
       "id": 142,
       "itemID": 24229,
       "description": "Get an Ornate maul handle",
-      "check": [],
-      "count": 0
+      "check": [24229],
+      "count": 1
     },
     {
       "id": 143,
       "itemID": 25539,
       "description": "Get a Celestial ring",
-      "check": [],
-      "count": 0
+      "check": [25539],
+      "count": 1
     },
     {
       "id": 144,
       "itemID": 25547,
       "description": "Get a Star fragment",
-      "check": [],
-      "count": 0
+      "check": [25547],
+      "count": 1
     },
     {
       "id": 145,
@@ -2064,8 +2064,8 @@
       "id": 148,
       "itemID": 21649,
       "description": "Get the Merfolk trident",
-      "check": [],
-      "count": 0
+      "check": [21649],
+      "count": 1
     },
     {
       "id": 149,
@@ -2169,8 +2169,8 @@
       "id": 163,
       "itemID": 28798,
       "description": "Get a Scurrius' spine",
-      "check": [],
-      "count": 0
+      "check": [28798],
+      "count": 1
     },
     {
       "id": 164,
@@ -2232,8 +2232,8 @@
       "id": 170,
       "itemID": 30042,
       "description": "Get a Calcified acorn",
-      "check": [],
-      "count": 0
+      "check": [30042],
+      "count": 1
     },
     {
       "id": 171,
@@ -2878,8 +2878,8 @@
       "id": 81,
       "itemID": 12637,
       "description": "Get 1 new halo",
-      "check": [],
-      "count": 0
+      "check": [12637, 12638, 12639],
+      "count": 3
     },
     {
       "id": 82,
@@ -3046,22 +3046,22 @@
       "id": 105,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 18
     },
     {
       "id": 106,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 20
     },
     {
       "id": 107,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 22
     },
     {
       "id": 108,
@@ -3074,8 +3074,8 @@
       "id": 109,
       "itemID": 11840,
       "description": "Get Dragon boots",
-      "check": [],
-      "count": 0
+      "check": [11840],
+      "count": 1
     },
     {
       "id": 110,
@@ -4567,15 +4567,15 @@
       "id": 114,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 24
     },
     {
       "id": 115,
       "itemID": 11341,
       "description": "Get 2 unique Ancient pages",
-      "check": [],
-      "count": 0
+      "check": [11341, 11342, 11343, 11344, 11345, 11346, 11347, 11348, 11349, 11350, 11351, 11352, 11353, 11354, 11355, 11356, 11357, 11358, 11359, 11360, 11361, 11362, 11363, 11364, 11365, 11366],
+      "count": 26
     },
     {
       "id": 116,
