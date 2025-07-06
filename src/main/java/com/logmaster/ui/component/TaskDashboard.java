@@ -36,6 +36,9 @@ public class TaskDashboard extends UIPage {
     private final int TASK_BACKGROUND_SPRITE_ID = -20006;
     private final int FAQ_BUTTON_SPRITE_ID = -20027;
     private final int FAQ_BUTTON_HOVER_SPRITE_ID = -20028;
+    private final int EMPTY_BUTTON_SPRITE_ID = -20029;
+    private final int EMPTY_BUTTON_HOVER_SPRITE_ID = -20030;
+    private final int SYNC_BUTTON_SPRITE_ID = -20031;
 
     @Getter
     private Widget window;
@@ -57,6 +60,7 @@ public class TaskDashboard extends UIPage {
     private UIButton completeTaskBtn;
     private UIButton generateTaskBtn;
     private UIButton faqBtn;
+    private UIButton syncBtn;
 
     public TaskDashboard(LogMasterPlugin plugin, LogMasterConfig config, Widget window, TaskService taskService, SaveDataManager saveDataManager) {
         this.window = window;
@@ -99,6 +103,13 @@ public class TaskDashboard extends UIPage {
         this.faqBtn.setPosition(getCenterX(window, DEFAULT_BUTTON_WIDTH) + 238, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
         this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_HOVER_SPRITE_ID);
 
+        
+        Widget syncWidget = window.createChild(-1, WidgetType.GRAPHIC);
+        this.syncBtn = new UIButton(syncWidget);
+        this.syncBtn.setSize(DEFAULT_BUTTON_WIDTH/2, DEFAULT_BUTTON_HEIGHT);
+        this.syncBtn.setPosition(getCenterX(window, DEFAULT_BUTTON_WIDTH) -100, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
+        this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_SPRITE_ID);
+
         this.add(this.title);
         this.add(this.taskBg);
         this.add(this.taskLabel);
@@ -107,6 +118,7 @@ public class TaskDashboard extends UIPage {
         this.add(this.generateTaskBtn);
         this.add(this.percentCompletion);
         this.add(faqBtn);
+        this.add(syncBtn);
     }
 
     private void createTaskDetails() {
@@ -238,5 +250,12 @@ public class TaskDashboard extends UIPage {
         this.faqBtn.clearActions();
         this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_HOVER_SPRITE_ID);
         this.faqBtn.addAction("FAQ", plugin::visitFaq);
+        this.enableSyncButton();
+    }
+
+    public void enableSyncButton() {
+        this.syncBtn.clearActions();
+        this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_SPRITE_ID);
+        this.syncBtn.addAction("Auto sync completed collection log slots", plugin::sync);
     }
 }

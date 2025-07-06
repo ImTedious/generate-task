@@ -114,5 +114,17 @@
    {
       "spriteId":-20028,
       "fileName":"faqButton_hover.png"
+   },
+   {
+      "spriteId":-20029,
+      "fileName":"emptyButton.png"
+   },
+   {
+      "spriteId":-20030,
+      "fileName":"emptyButton_hover.png"
+   },
+   {
+      "spriteId":-20031,
+      "fileName":"syncButton.png"
    }
 ]
