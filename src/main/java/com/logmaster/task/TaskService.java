@@ -19,9 +19,8 @@ import okhttp3.Response;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Singleton
 @Slf4j
@@ -59,10 +58,25 @@ public class TaskService {
     }
 
     public Map<TaskTier, Integer> completionPercentages(SaveData saveData) {
+        Map<TaskTier, Set<Integer>> progressData = saveData.getProgress();
+        TieredTaskList taskList = getTaskList();
+
         Map<TaskTier, Integer> completionPercentages = new HashMap<>();
         for (TaskTier tier : TaskTier.values()) {
-            completionPercentages.put(tier, (int) Math.floor(((double) saveData.getProgress().get(tier).size() / (double) getTaskList().getForTier(tier).size()) * 100));
+            Set<Integer> tierCompletedTasks = new HashSet<>(progressData.get(tier));
+            Set<Integer> tierTaskIdList = taskList.getForTier(tier)
+                    .stream()
+                    .mapToInt(Task::getId)
+                    .boxed()
+                    .collect(Collectors.toSet());
+
+            tierCompletedTasks.retainAll(tierTaskIdList);
+
+            double tierPercentage = 100d * tierCompletedTasks.size() / tierTaskIdList.size();
+
+            completionPercentages.put(tier, (int) Math.floor(tierPercentage));
         }
+
         return completionPercentages;
     }
 
