@@ -112,7 +112,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	private InterfaceManager interfaceManager;
 
 	@Inject
-	private ItemManager itemManager;
+	public ItemManager itemManager;
 
 	private Map<Integer, Integer> chatSpriteMap = new HashMap<>();
 
@@ -533,22 +533,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	}
 
 	public void sync() {
-		client.menuAction(-1, net.runelite.api.gameval.InterfaceID.Collection.SEARCH_TOGGLE, MenuAction.CC_OP, 1, -1, "Search", null);
-		client.runScript(2240);
-		// Delayed check and mark collection log items automatically
-		new Thread(() -> {
-			try {
-				Thread.sleep(2400);
-				clientThread.invokeLater(this::autoSyncCollectionLog);
-			} catch (InterruptedException e) {
-				log.warn("Delayed autoSyncCollectionLog interrupted", e);
-			}
-		}).start();
-	}
-
-	public boolean autoSyncCollectionLog() {
 		if (clogItemsBitSet.isEmpty()) {
-			return false;
+			return;
 		}
 
 		EnumComposition replacements = client.getEnum(3721);
@@ -579,7 +565,5 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 				}
 			}
 		}
-
-		return true;
 	}
 }

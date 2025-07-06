@@ -16,6 +16,7 @@ import com.logmaster.ui.generic.UIButton;
 import com.logmaster.ui.generic.UIGraphic;
 import com.logmaster.util.FileUtils;
 import net.runelite.api.Client;
+import net.runelite.api.MenuAction;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
@@ -264,6 +265,9 @@ public class InterfaceManager {
     }
 
     private void toggleTaskDashboard(UIDropdownOption src) {
+        // Toggle the search on and off to refresh the player items collected
+        client.menuAction(-1, net.runelite.api.gameval.InterfaceID.Collection.SEARCH_TOGGLE, MenuAction.CC_OP, 1, -1, "Search", null);
+        client.runScript(2240);
         if(this.taskDashboard == null) return;
 
         if (saveDataManager.getSaveData().getActiveTaskPointer() != null) {
