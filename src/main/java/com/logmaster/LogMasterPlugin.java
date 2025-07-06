@@ -4,6 +4,7 @@ import com.google.inject.Provides;
 import com.logmaster.domain.Task;
 import com.logmaster.domain.TaskPointer;
 import com.logmaster.domain.TaskTier;
+import com.logmaster.domain.TieredTaskList;
 import com.logmaster.persistence.SaveDataManager;
 import com.logmaster.task.TaskService;
 import com.logmaster.ui.InterfaceManager;
@@ -39,10 +40,7 @@ import net.runelite.client.util.LinkBrowser;
 import javax.inject.Inject;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -81,7 +79,7 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	@Inject
 	private TaskService taskService;
-	
+
 	@Inject
 	private SaveDataManager saveDataManager;
 
@@ -232,21 +230,24 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	}
 
 	public TaskTier getCurrentTier() {
-		if (this.saveDataManager.getSaveData().getProgress().get(TaskTier.EASY).size() < taskService.getTaskList().getEasy().size() &&
-				!Arrays.asList(TaskTier.MEDIUM, TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
-			return TaskTier.EASY;
-		} else if (this.saveDataManager.getSaveData().getProgress().get(TaskTier.MEDIUM).size() < taskService.getTaskList().getMedium().size() &&
-				!Arrays.asList(TaskTier.HARD, TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
-			return TaskTier.MEDIUM;
-		} else if (this.saveDataManager.getSaveData().getProgress().get(TaskTier.HARD).size() < taskService.getTaskList().getHard().size() &&
-				!Arrays.asList(TaskTier.ELITE, TaskTier.MASTER).contains(config.hideBelow())) {
-			return TaskTier.HARD;
-		} else if (this.saveDataManager.getSaveData().getProgress().get(TaskTier.ELITE).size() < taskService.getTaskList().getElite().size() &&
-				TaskTier.MASTER != config.hideBelow()) {
-			return TaskTier.ELITE;
-		} else {
-			return TaskTier.MASTER;
+		TaskTier[] allTiers = TaskTier.values();
+		int firstVisibleTier = 0;
+		for (int i = 0; i < allTiers.length; i++) {
+			if (config.hideBelow() == allTiers[i]) {
+				firstVisibleTier = i;
+			}
 		}
+
+		Map<TaskTier, Integer> tierPercentages = taskService.completionPercentages(saveDataManager.getSaveData());
+		for (int i = firstVisibleTier; i < allTiers.length; i++) {
+			TaskTier tier = allTiers[i];
+			if (tierPercentages.get(tier) < 100) {
+				return tier;
+			}
+		}
+
+
+		return TaskTier.MASTER;
 	}
 
 	public TaskTier getSelectedTier() {
