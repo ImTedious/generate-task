@@ -6,5 +6,7 @@ import lombok.Getter;
 public class Task {
     private int id;
     private String description;
-    private int itemID;
+    private Integer itemID;
+    private int[] check;
+    private Integer count;
 }
