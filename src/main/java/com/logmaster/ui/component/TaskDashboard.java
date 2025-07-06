@@ -25,6 +25,7 @@ import static com.logmaster.ui.InterfaceConstants.COLLECTION_LOG_WINDOW_WIDTH;
 public class TaskDashboard extends UIPage {
     private final int DEFAULT_BUTTON_WIDTH = 140;
     private final int DEFAULT_BUTTON_HEIGHT = 30;
+    private final int SMALL_BUTTON_WIDTH = 68;
     private final int DEFAULT_TASK_DETAILS_WIDTH = 300;
     private final int DEFAULT_TASK_DETAILS_HEIGHT = 75;
     private final int GENERATE_TASK_SPRITE_ID = -20001;
@@ -99,15 +100,15 @@ public class TaskDashboard extends UIPage {
 
         Widget faqWidget = window.createChild(-1, WidgetType.GRAPHIC);
         this.faqBtn = new UIButton(faqWidget);
-        this.faqBtn.setSize(DEFAULT_BUTTON_WIDTH/2, DEFAULT_BUTTON_HEIGHT);
-        this.faqBtn.setPosition(getCenterX(window, DEFAULT_BUTTON_WIDTH) + 238, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
+        this.faqBtn.setSize(SMALL_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+        this.faqBtn.setPosition(getCenterX(window, SMALL_BUTTON_WIDTH) + 190, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
         this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_HOVER_SPRITE_ID);
 
         
         Widget syncWidget = window.createChild(-1, WidgetType.GRAPHIC);
         this.syncBtn = new UIButton(syncWidget);
-        this.syncBtn.setSize(DEFAULT_BUTTON_WIDTH/2, DEFAULT_BUTTON_HEIGHT);
-        this.syncBtn.setPosition(getCenterX(window, DEFAULT_BUTTON_WIDTH) -100, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
+        this.syncBtn.setSize(SMALL_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+        this.syncBtn.setPosition(getCenterX(window, SMALL_BUTTON_WIDTH) - 190, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
         this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_SPRITE_ID);
 
         this.add(this.title);
@@ -236,7 +237,6 @@ public class TaskDashboard extends UIPage {
     public void disableCompleteTask() {
         this.completeTaskBtn.setSprites(COMPLETE_TASK_DISABLED_SPRITE_ID);
         this.completeTaskBtn.clearActions();
-
         this.completeTaskBtn.addAction("Disabled", plugin::playFailSound);
     }
 
@@ -250,6 +250,7 @@ public class TaskDashboard extends UIPage {
         this.faqBtn.clearActions();
         this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_HOVER_SPRITE_ID);
         this.faqBtn.addAction("FAQ", plugin::visitFaq);
+        this.faqBtn.setPosition(getCenterX(window, SMALL_BUTTON_WIDTH) + 190, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
         this.enableSyncButton();
     }
 
@@ -257,5 +258,6 @@ public class TaskDashboard extends UIPage {
         this.syncBtn.clearActions();
         this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_SPRITE_ID);
         this.syncBtn.addAction("Auto sync completed collection log slots", plugin::sync);
+        this.syncBtn.setPosition(getCenterX(window, SMALL_BUTTON_WIDTH) - 190, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
     }
 }
