@@ -1,5 +1,7 @@
 package com.logmaster;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.inject.Provides;
 import com.logmaster.domain.Task;
 import com.logmaster.domain.TaskPointer;
@@ -11,8 +13,13 @@ import com.logmaster.ui.component.TaskOverlay;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.EnumComposition;
 import net.runelite.api.GameState;
+import net.runelite.api.MenuAction;
+import net.runelite.api.Skill;
 import net.runelite.api.SoundEffectID;
+import net.runelite.api.StructComposition;
+import net.runelite.api.VarbitComposition;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetClosed;
@@ -28,19 +35,30 @@ import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.input.MouseWheelListener;
-import net.runelite.client.menus.MenuManager;
-import net.runelite.client.menus.WidgetMenuOption;
 import net.runelite.api.events.ScriptPostFired;
+import net.runelite.api.events.ScriptPreFired;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.LinkBrowser;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import javax.inject.Inject;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.BitSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,7 +70,7 @@ import java.util.stream.Collectors;
 public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	private static final String TASK_CHAT_COMMAND = "!tasker";
 
-    private static final int COLLECTION_LOG_SETUP_SCRIPT_ID = 7797;
+	private static final int COLLECTION_LOG_SETUP_SCRIPT_ID = 7797;
 
 	@Inject
 	private Client client;
@@ -63,9 +81,14 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	@Inject
 	private LogMasterConfig config;
 
+	@Inject
+	private OkHttpClient okHttpClient;
 
 	@Inject
 	private SpriteManager spriteManager;
+	
+	@Inject
+	private Gson gson;
 
 	@Inject
 	private MouseManager mouseManager;
@@ -98,6 +121,25 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	@Override
 	protected void startUp() throws Exception
 	{
+		// Collection log auto sync config
+		clientThread.invoke(() -> {
+			if (client.getIndexConfig() == null || client.getGameState().ordinal() < GameState.LOGIN_SCREEN.ordinal())
+			{
+				log.debug("Failed to get varbitComposition, state = {}", client.getGameState());
+				return false;
+			}
+			collectionLogItemIdsFromCache.addAll(parseCacheForClog());
+			populateCollectionLogItemIdToBitsetIndex();
+			final int[] varbitIds = client.getIndexConfig().getFileIds(VARBITS_ARCHIVE_ID);
+			for (int id : varbitIds)
+			{
+				varbitCompositions.put(id, client.getVarbit(id));
+			}
+			return true;
+		});
+		checkManifest();
+
+		// Task overlay
 		mouseManager.registerMouseWheelListener(this);
 		interfaceManager.initialise();
 		this.taskOverlay.setResizable(true);
@@ -129,6 +171,17 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 		} else if(gameStateChanged.getGameState().equals(GameState.LOGIN_SCREEN)) {
 			saveDataManager.save();
 		}
+		
+		switch (gameStateChanged.getGameState())
+		{
+			// When hopping, we need to clear any state related to the player
+			case HOPPING:
+			case LOGGING_IN:
+			case CONNECTION_LOST:
+				clogItemsBitSet.clear();
+				clogItemsCount = null;
+				break;
+		}
 	}
 
 	@Subscribe
@@ -145,12 +198,12 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 		}
 	}
 
-    @Subscribe
-    public void onScriptPostFired(ScriptPostFired scriptPostFired) {
-        if (scriptPostFired.getScriptId() == COLLECTION_LOG_SETUP_SCRIPT_ID) {
-            interfaceManager.handleCollectionLogScriptRan();
-        }
-    }
+	@Subscribe
+	public void onScriptPostFired(ScriptPostFired scriptPostFired) {
+		if (scriptPostFired.getScriptId() == COLLECTION_LOG_SETUP_SCRIPT_ID) {
+			interfaceManager.handleCollectionLogScriptRan();
+		}
+	}
 
 	@Subscribe
 	public void onGameTick(GameTick event) {
@@ -195,6 +248,10 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	public void completeTask() {
 		completeTask(saveDataManager.getSaveData().getActiveTaskPointer().getTask().getId(), saveDataManager.getSaveData().getActiveTaskPointer().getTaskTier());
+	}
+
+	public boolean isTaskCompleted(int taskID, TaskTier tier) {
+		return saveDataManager.getSaveData().getProgress().get(tier).contains(taskID);
 	}
 
 	public void completeTask(int taskID, TaskTier tier) {
@@ -261,7 +318,6 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 		client.playSoundEffect(2277);
 	}
 
-
 	@Provides
 	LogMasterConfig provideConfig(ConfigManager configManager)
 	{
@@ -270,5 +326,255 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	public void visitFaq() {
 		LinkBrowser.browse("https://docs.google.com/document/d/e/2PACX-1vTHfXHzMQFbt_iYAP-O88uRhhz3wigh1KMiiuomU7ftli-rL_c3bRqfGYmUliE1EHcIr3LfMx2UTf2U/pub");
+	}
+
+	/*
+	 * Collection log auto sync
+	 * Modified from wiki-sync plugin to get base functionality
+	 */
+	
+	private final HashSet<Integer> collectionLogItemIdsFromCache = new HashSet<>();
+	private static final HashMap<Integer, Integer> collectionLogItemIdToBitsetIndex = new HashMap<>();
+	private Manifest manifest;
+	private static final int VARBITS_ARCHIVE_ID = 14;
+	private Map<Integer, VarbitComposition> varbitCompositions = new HashMap<>();
+	private static final String MANIFEST_URL = "https://sync.runescape.wiki/runelite/manifest";
+	private static final BitSet clogItemsBitSet = new BitSet();
+	private static Integer clogItemsCount = null;
+
+	private HashSet<Integer> parseCacheForClog()
+	{
+		HashSet<Integer> itemIds = new HashSet<>();
+		// 2102 - Struct that contains the highest level tabs in the collection log (Bosses, Raids, etc)
+		// https://chisel.weirdgloop.org/structs/index.html?type=enums&id=2102
+		int[] topLevelTabStructIds = client.getEnum(2102).getIntVals();
+		for (int topLevelTabStructIndex : topLevelTabStructIds)
+		{
+			// The collection log top level tab structs contain a param that points to the enum
+			// that contains the pointers to sub tabs.
+			// ex: https://chisel.weirdgloop.org/structs/index.html?type=structs&id=471
+			StructComposition topLevelTabStruct = client.getStructComposition(topLevelTabStructIndex);
+
+			// Param 683 contains the pointer to the enum that contains the subtabs ids
+			// ex: https://chisel.weirdgloop.org/structs/index.html?type=enums&id=2103
+			int[] subtabStructIndices = client.getEnum(topLevelTabStruct.getIntValue(683)).getIntVals();
+			for (int subtabStructIndex : subtabStructIndices) {
+
+				// The subtab structs are for subtabs in the collection log (Commander Zilyana, Chambers of Xeric, etc.)
+				// and contain a pointer to the enum that contains all the item ids for that tab.
+				// ex subtab struct: https://chisel.weirdgloop.org/structs/index.html?type=structs&id=476
+				// ex subtab enum: https://chisel.weirdgloop.org/structs/index.html?type=enums&id=2109
+				StructComposition subtabStruct = client.getStructComposition(subtabStructIndex);
+				int[] clogItems = client.getEnum(subtabStruct.getIntValue(690)).getIntVals();
+				for (int clogItemId : clogItems) itemIds.add(clogItemId);
+			}
+		}
+
+		// Some items with data saved on them have replacements to fix a duping issue (satchels, flamtaer bag)
+		// Enum 3721 contains a mapping of the item ids to replace -> ids to replace them with
+		EnumComposition replacements = client.getEnum(3721);
+		for (int badItemId : replacements.getKeys())
+			itemIds.remove(badItemId);
+		for (int goodItemId : replacements.getIntVals())
+			itemIds.add(goodItemId);
+
+		return itemIds;
+	}
+
+	private void populateCollectionLogItemIdToBitsetIndex()
+	{
+		if (manifest == null)
+		{
+			log.debug("Manifest is not present so the collection log bitset index will not be updated");
+			return;
+		}
+		clientThread.invoke(() -> {
+			// Add missing keys in order to the map. Order is extremely important here so
+			// we get a stable map given the same cache data.
+			List<Integer> itemIdsMissingFromManifest = collectionLogItemIdsFromCache
+					.stream()
+					.filter((t) -> !manifest.collections.contains(t))
+					.sorted()
+					.collect(Collectors.toList());
+
+			int currentIndex = 0;
+			collectionLogItemIdToBitsetIndex.clear();
+			for (Integer itemId : manifest.collections)
+				collectionLogItemIdToBitsetIndex.put(itemId, currentIndex++);
+			for (Integer missingItemId : itemIdsMissingFromManifest) {
+				collectionLogItemIdToBitsetIndex.put(missingItemId, currentIndex++);
+			}
+			log.info("Collection log item id to bitset index mapping: {}", collectionLogItemIdToBitsetIndex);
+		});
+	}
+
+	
+	private void checkManifest()
+	{
+		Request request = new Request.Builder()
+				.url(MANIFEST_URL)
+				.build();
+		okHttpClient.newCall(request).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.debug("Failed to get manifest: ", e);
+			}
+
+			@Override
+			public void onResponse(Call call, Response response)
+			{
+				try
+				{
+					if (!response.isSuccessful())
+					{
+						log.debug("Failed to get manifest: {}", response.code());
+						return;
+					}
+					InputStream in = response.body().byteStream();
+					manifest = gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), Manifest.class);
+					populateCollectionLogItemIdToBitsetIndex();
+				}
+				catch (JsonParseException e)
+				{
+					log.debug("Failed to parse manifest: ", e);
+				}
+				finally
+				{
+					response.close();
+				}
+			}
+		});
+	}
+
+	public boolean isCollectionLogItemUnlocked(int itemId) {
+		int index = lookupCollectionLogItemIndex(itemId);
+		if (index == -1) {
+			log.debug("Item id {} not found in collection log mapping", itemId);
+			return false;
+		}
+		
+		// Check if the bit is set in our bitset
+		boolean isUnlocked = clogItemsBitSet.get(index);
+		log.debug("Item {} (index {}) is unlocked: {}", itemId, index, isUnlocked);
+		return isUnlocked;
+	}
+
+	private int lookupCollectionLogItemIndex(int itemId) {
+		// The map has not loaded yet, or failed to load.
+		if (collectionLogItemIdToBitsetIndex.isEmpty()) {
+			log.debug("Collection log item mapping not loaded yet");
+			return -1;
+		}
+		Integer result = collectionLogItemIdToBitsetIndex.get(itemId);
+		if (result == null) {
+			log.debug("Item id {} not found in the mapping of items", itemId);
+			return -1;
+		}
+		return result;
+	}
+
+	@Subscribe
+	public void onScriptPreFired(ScriptPreFired preFired) {
+		// This is fired when the collection log search is opened
+		if (preFired.getScriptId() == 4100){
+			if (collectionLogItemIdToBitsetIndex.isEmpty())
+			{
+				return;
+			}
+			clogItemsCount = collectionLogItemIdsFromCache.size();
+			Object[] args = preFired.getScriptEvent().getArguments();
+			if (args == null || args.length < 2) {
+				return;
+			}
+			int itemId = (int) args[1];
+			int idx = lookupCollectionLogItemIndex(itemId);
+			// We should never return -1 under normal circumstances
+			if (idx != -1) {
+				clogItemsBitSet.set(idx);
+				log.debug("Set collection log item {} at index {}", itemId, idx);
+			}
+		}
+	}
+
+	private int getVarbitValue(int varbitId)
+	{
+		VarbitComposition v = varbitCompositions.get(varbitId);
+		if (v == null)
+		{
+			return -1;
+		}
+
+		int value = client.getVarpValue(v.getIndex());
+		int lsb = v.getLeastSignificantBit();
+		int msb = v.getMostSignificantBit();
+		int mask = (1 << ((msb - lsb) + 1)) - 1;
+		return (value >> lsb) & mask;
+	}
+	private PlayerData getPlayerData()
+	{
+		PlayerData out = new PlayerData();
+		for (int varbitId : manifest.varbits)
+		{
+			out.varb.put(varbitId, getVarbitValue(varbitId));
+		}
+		for (int varpId : manifest.varps)
+		{
+			out.varp.put(varpId, client.getVarpValue(varpId));
+		}
+		for(Skill s : Skill.values())
+		{
+			out.level.put(s.getName(), client.getRealSkillLevel(s));
+		}
+		out.collectionLogSlots = Base64.getEncoder().encodeToString(clogItemsBitSet.toByteArray());
+		out.collectionLogItemCount = clogItemsCount;
+		return out;
+	}
+
+	public void sync() {
+		client.menuAction(-1, net.runelite.api.gameval.InterfaceID.Collection.SEARCH_TOGGLE, MenuAction.CC_OP, 1, -1, "Search", null);
+		client.runScript(2240);
+		// Delayed check and mark collection log items automatically
+		new Thread(() -> {
+			try {
+				Thread.sleep(2400);
+				clientThread.invokeLater(this::autoSyncCollectionLog);
+			} catch (InterruptedException e) {
+				log.warn("Delayed autoSyncCollectionLog interrupted", e);
+			}
+		}).start();
+	}
+
+	public boolean autoSyncCollectionLog() {
+		if (clogItemsBitSet.isEmpty()) {
+			return false;
+		}
+
+		// Update completed tasks automatically
+		for (TaskTier tier : TaskTier.values()) {
+			log.debug("Checking Tier: " + tier.displayName);
+			for (Task task : taskService.getTaskList().getForTier(tier)) {
+				if (task.getCheck() != null && task.getCheck().length > 0) {
+					log.debug("Checking task {} for completion", task.getId());
+					int count = 0;
+					for (int itemId : task.getCheck()) {
+						if (isCollectionLogItemUnlocked(itemId)) {
+							count++;
+						}
+					}
+					if (count >= task.getCount() && !isTaskCompleted(task.getId(), tier)) {
+						// Check passed, task not yet completed, mark as completed
+						completeTask(task.getId(), tier);
+					} else if (count < task.getCount() && isTaskCompleted(task.getId(), tier)) {
+						// Check failed, task marked as completed, unmark completion
+						completeTask(task.getId(), tier);
+					}
+					log.debug("Has {} items out of {} to check", count, task.getCheck().length);
+				}
+			}
+		}
+
+		return true;
 	}
 }
