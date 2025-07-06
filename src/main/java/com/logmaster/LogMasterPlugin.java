@@ -24,7 +24,7 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetClosed;
 import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatCommandManager;
@@ -186,14 +186,14 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded e) {
-		if(e.getGroupId() == InterfaceID.COLLECTION_LOG) {
+		if(e.getGroupId() == InterfaceID.COLLECTION) {
 			interfaceManager.handleCollectionLogOpen();
 		}
 	}
 
 	@Subscribe
 	public void onWidgetClosed(WidgetClosed e) {
-		if(e.getGroupId() == InterfaceID.COLLECTION_LOG) {
+		if(e.getGroupId() == InterfaceID.COLLECTION) {
 			interfaceManager.handleCollectionLogClose();
 		}
 	}
@@ -404,7 +404,6 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 			for (Integer missingItemId : itemIdsMissingFromManifest) {
 				collectionLogItemIdToBitsetIndex.put(missingItemId, currentIndex++);
 			}
-			log.info("Collection log item id to bitset index mapping: {}", collectionLogItemIdToBitsetIndex);
 		});
 	}
 
@@ -451,25 +450,21 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	public boolean isCollectionLogItemUnlocked(int itemId) {
 		int index = lookupCollectionLogItemIndex(itemId);
 		if (index == -1) {
-			log.debug("Item id {} not found in collection log mapping", itemId);
 			return false;
 		}
 		
 		// Check if the bit is set in our bitset
 		boolean isUnlocked = clogItemsBitSet.get(index);
-		log.debug("Item {} (index {}) is unlocked: {}", itemId, index, isUnlocked);
 		return isUnlocked;
 	}
 
 	private int lookupCollectionLogItemIndex(int itemId) {
 		// The map has not loaded yet, or failed to load.
 		if (collectionLogItemIdToBitsetIndex.isEmpty()) {
-			log.debug("Collection log item mapping not loaded yet");
 			return -1;
 		}
 		Integer result = collectionLogItemIdToBitsetIndex.get(itemId);
 		if (result == null) {
-			log.debug("Item id {} not found in the mapping of items", itemId);
 			return -1;
 		}
 		return result;
@@ -493,7 +488,6 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 			// We should never return -1 under normal circumstances
 			if (idx != -1) {
 				clogItemsBitSet.set(idx);
-				log.debug("Set collection log item {} at index {}", itemId, idx);
 			}
 		}
 	}
@@ -540,10 +534,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 		EnumComposition replacements = client.getEnum(3721);
 		// Update completed tasks automatically
 		for (TaskTier tier : TaskTier.values()) {
-			log.debug("Checking Tier: " + tier.displayName);
 			for (Task task : taskService.getTaskList().getForTier(tier)) {
 				if (task.getCheck() != null && task.getCheck().length > 0) {
-					log.debug("Checking task {} for completion", task.getId());
 					int count = 0;
 					for (int itemId : task.getCheck()) {
 						// Some items have bad IDs, check these ones for a replacement
@@ -555,13 +547,12 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 					if (count >= task.getCount() && !isTaskCompleted(task.getId(), tier)) {
 						// Check passed, task not yet completed, mark as completed
 						completeTask(task.getId(), tier);
-						log.info("Task '{}' marked as completed for tier {}", task.getDescription(), tier.displayName);
+						log.debug("Task '{}' marked as completed for tier {}", task.getDescription(), tier.displayName);
 					} else if (count < task.getCount() && isTaskCompleted(task.getId(), tier)) {
 						// Check failed, task marked as completed, unmark completion
 						completeTask(task.getId(), tier);
-						log.info("Task '{}' un-marked as this is not completed for tier {}", task.getDescription(), tier.displayName);
+						log.debug("Task '{}' un-marked as this is not completed for tier {}", task.getDescription(), tier.displayName);
 					}
-					log.debug("Has {} items out of {} to check", count, task.getCheck().length);
 				}
 			}
 		}

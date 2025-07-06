@@ -234,6 +234,7 @@ public class InterfaceManager {
                     tabs.get(tabIndex).setSprites(tier.tabSpriteId, tier.tabSpriteHoverId);
                 }
                 int finalTabIndex = tabIndex;
+                tabs.get(tabIndex).getWidget().setHidden(!isTaskDashboardEnabled());
                 tabs.get(tabIndex).clearActions();
                 tabs.get(tabIndex).setSize(66, 21);
                 tabs.get(tabIndex).addAction(String.format("View <col=ff9040>%s Task List</col>", tier.displayName), () -> {
@@ -251,6 +252,9 @@ public class InterfaceManager {
                 });
                 tabIndex++;
             }
+            for (int hideIndex = tabIndex; hideIndex < tabs.size(); hideIndex++) {
+                tabs.get(hideIndex).getWidget().setHidden(true);
+            }
         }
     }
 
@@ -266,8 +270,11 @@ public class InterfaceManager {
 
     private void toggleTaskDashboard(UIDropdownOption src) {
         // Toggle the search on and off to refresh the player items collected
-        client.menuAction(-1, net.runelite.api.gameval.InterfaceID.Collection.SEARCH_TOGGLE, MenuAction.CC_OP, 1, -1, "Search", null);
-        client.runScript(2240);
+        if (!isTaskDashboardEnabled()) {
+            client.menuAction(-1, net.runelite.api.gameval.InterfaceID.Collection.SEARCH_TOGGLE, MenuAction.CC_OP, 1, -1, "Search", null);
+            client.runScript(2240);
+        }
+
         if(this.taskDashboard == null) return;
 
         if (saveDataManager.getSaveData().getActiveTaskPointer() != null) {
