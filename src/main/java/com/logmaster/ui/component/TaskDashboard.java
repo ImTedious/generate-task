@@ -250,7 +250,6 @@ public class TaskDashboard extends UIPage {
         this.faqBtn.clearActions();
         this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_HOVER_SPRITE_ID);
         this.faqBtn.addAction("FAQ", plugin::visitFaq);
-        this.faqBtn.setPosition(getCenterX(window, SMALL_BUTTON_WIDTH) + 190, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
         this.enableSyncButton();
     }
 
@@ -258,6 +257,5 @@ public class TaskDashboard extends UIPage {
         this.syncBtn.clearActions();
         this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_SPRITE_ID);
         this.syncBtn.addAction("Auto sync completed collection log slots", plugin::sync);
-        this.syncBtn.setPosition(getCenterX(window, SMALL_BUTTON_WIDTH) - 190, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
     }
 }
