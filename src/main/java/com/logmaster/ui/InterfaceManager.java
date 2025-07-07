@@ -181,6 +181,24 @@ public class InterfaceManager {
         }
     }
 
+    public void handleMousePress(int mouseX, int mouseY) {
+        if(this.taskList != null && this.taskList.isVisible()) {
+            taskList.handleMousePress(mouseX, mouseY);
+        }
+    }
+
+    public void handleMouseDrag(int mouseX, int mouseY) {
+        if(this.taskList != null && this.taskList.isVisible()) {
+            taskList.handleMouseDrag(mouseX, mouseY);
+        }
+    }
+
+    public void handleMouseRelease() {
+        if(this.taskList != null) {
+            taskList.handleMouseRelease();
+        }
+    }
+
     public void disableGenerateTaskButton() {
         this.taskDashboard.disableGenerateTask();
     }
@@ -339,12 +357,14 @@ public class InterfaceManager {
         this.taskDashboard.setTask(description, itemID, tasks);
         this.taskDashboard.disableGenerateTask(false);
         this.taskList.refreshTasks(0);
+        this.taskList.refreshScrollbar(); // Update scrollbar when tasks change
         this.taskDashboard.updatePercentages();
     }
 
     public void completeTask() {
         this.taskDashboard.updatePercentages();
         taskList.refreshTasks(0);
+        taskList.refreshScrollbar(); // Update scrollbar when tasks change
     }
 
     public void clearCurrentTask() {

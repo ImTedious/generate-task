@@ -32,6 +32,15 @@ public abstract class UIComponent
 	@Setter
 	private ComponentEventListener<UIComponent> leaveListener;
 
+	@Setter
+	private ComponentEventListener<UIComponent> mousePressListener;
+
+	@Setter
+	private ComponentEventListener<UIComponent> mouseDragListener;
+
+	@Setter
+	private ComponentEventListener<UIComponent> mouseReleaseListener;
+
 	/**
 	 * Constructs a new UIComponent
 	 * @param widget the underlying game widget
@@ -127,6 +136,64 @@ public abstract class UIComponent
 	public void setOnLeaveListener(ComponentEventListener<UIComponent> listener)
 	{
 		this.leaveListener = listener;
+	}
+
+	/**
+	 * Sets a listener which will be called upon mouse press
+	 * @param listener the listener
+	 */
+	public void setOnMousePressListener(ComponentEventListener<UIComponent> listener)
+	{
+		this.mousePressListener = listener;
+	}
+
+	/**
+	 * Sets a listener which will be called upon mouse drag
+	 * @param listener the listener
+	 */
+	public void setOnMouseDragListener(ComponentEventListener<UIComponent> listener)
+	{
+		this.mouseDragListener = listener;
+	}
+
+	/**
+	 * Sets a listener which will be called upon mouse release
+	 * @param listener the listener
+	 */
+	public void setOnMouseReleaseListener(ComponentEventListener<UIComponent> listener)
+	{
+		this.mouseReleaseListener = listener;
+	}
+
+	/**
+	 * Called when mouse is pressed on this component
+	 * @param mouseX the mouse X coordinate
+	 * @param mouseY the mouse Y coordinate
+	 */
+	public void onMousePress(int mouseX, int mouseY)
+	{
+		if (this.mousePressListener != null)
+			this.mousePressListener.onComponentEvent(this);
+	}
+
+	/**
+	 * Called when mouse is dragged on this component
+	 * @param mouseX the mouse X coordinate
+	 * @param mouseY the mouse Y coordinate
+	 */
+	public void onMouseDrag(int mouseX, int mouseY)
+	{
+		if (this.mouseDragListener != null)
+			this.mouseDragListener.onComponentEvent(this);
+	}
+
+	/**
+	 * Called when mouse is released
+	 */
+	public void onMouseRelease()
+	{
+		if (this.mouseReleaseListener != null)
+			this.mouseReleaseListener.onComponentEvent(this);
 	}
 
 	/**
