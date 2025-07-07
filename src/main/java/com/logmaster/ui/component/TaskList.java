@@ -141,7 +141,7 @@ public class TaskList extends UIPage {
             topTaskIndex = Math.min(taskService.getTaskList().getForTier(relevantTier).size() - TASKS_PER_PAGE, Math.max(0, newIndex));
         }
 
-        final int POS_X = getCenterX(window, TASK_WIDTH);
+        final int POS_X = CANVAS_WIDTH / 2 - TASK_WIDTH / 2;
 
         int i = 0;
         for(Task task : getTasksToShow(relevantTier, topTaskIndex)) {
