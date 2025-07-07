@@ -1539,15 +1539,31 @@
       "id": 66,
       "itemID": 8957,
       "description": "Get 1 Naval set",
-      "check": [],
-      "count": 0
+      "check": [
+        8958, 8952, 8991,
+        8960, 8953, 8992,
+        8961, 8954, 8993,
+        8962, 8955, 8994,
+        8963, 8956, 8995,
+        8964, 8959, 8996,
+        8965, 8968, 8997
+      ],
+      "count": 3
     },
     {
       "id": 67,
       "itemID": 8957,
       "description": "Get 1 Naval set",
-      "check": [],
-      "count": 0
+      "check": [
+        8958, 8952, 8991,
+        8960, 8953, 8992,
+        8961, 8954, 8993,
+        8962, 8955, 8994,
+        8963, 8956, 8995,
+        8964, 8959, 8996,
+        8965, 8968, 8997
+      ],
+      "count": 6
     },
     {
       "id": 68,
@@ -2416,21 +2432,21 @@
       "id": 15,
       "itemID": 13273,
       "description": "Get a unique from Unsired",
-      "check": [13263, 13274, 13275, 13276, 13277, 13507, 13508],
+      "check": [7979, 13265, 13274, 13275, 13276],
       "count": 1
     },
     {
       "id": 16,
       "itemID": 13273,
       "description": "Get a unique from Unsired",
-      "check": [13263, 13274, 13275, 13276, 13277, 13507, 13508],
+      "check": [7979, 13265, 13274, 13275, 13276],
       "count": 2
     },
     {
       "id": 17,
       "itemID": 13273,
       "description": "Get a unique from Unsired",
-      "check": [13263, 13274, 13275, 13276, 13277, 13507, 13508],
+      "check": [7979, 13265, 13274, 13275, 13276],
       "count": 3
     },
     {
@@ -2444,57 +2460,57 @@
       "id": 19,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 1
     },
     {
       "id": 20,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 2
     },
     {
       "id": 21,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 3
     },
     {
       "id": 22,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 4
     },
     {
       "id": 23,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 5
     },
     {
       "id": 24,
       "itemID": 27673,
       "description": "Get 1 unique from the Wildy bosses",
-      "check": [],
-      "count": 0
+      "check": [7158, 11920, 27681, 27684, 27687, 12601, 12603, 12605, 27667, 27670, 27673],
+      "count": 1
     },
     {
       "id": 25,
       "itemID": 27673,
       "description": "Get 1 unique from the Wildy bosses",
-      "check": [],
-      "count": 0
+      "check": [7158, 11920, 27681, 27684, 27687, 12601, 12603, 12605, 27667, 27670, 27673],
+      "count": 2
     },
     {
       "id": 26,
       "itemID": 27673,
       "description": "Get 1 unique from the Wildy bosses",
-      "check": [],
-      "count": 0
+      "check": [7158, 11920, 27681, 27684, 27687, 12601, 12603, 12605, 27667, 27670, 27673],
+      "count": 3
     },
     {
       "id": 27,
@@ -2535,92 +2551,92 @@
       "id": 32,
       "itemID": 20851,
       "description": "Get a new Boss pet",
-      "check": [],
-      "count": 0
+      "check": [13262, 12646, 13178, 13247, 30152, 22746, 21291, 12647, 22473, 24491, 30154, 27590, 26348, 29836, 21748, 20851, 11995, 12643, 12644, 12645, 12816, 12650, 12652, 12655, 12649, 12648, 12921, 12651, 12653, 13181, 28801, 21273, 23495, 13225, 27352, 13177, 13179, 21992, 28960, 30622, 28250, 28252, 28246, 28248],
+      "count": 1
     },
     {
       "id": 33,
       "itemID": 11791,
       "description": "Get 1 unique drop from Zamorak GWD",
-      "check": [],
-      "count": 0
+      "check": [11787, 11791, 11824, 11816],
+      "count": 1
     },
     {
       "id": 34,
       "itemID": 11791,
       "description": "Get 1 unique drop from Zamorak GWD",
-      "check": [],
-      "count": 0
+      "check": [11787, 11791, 11824, 11816],
+      "count": 2
     },
     {
       "id": 35,
       "itemID": 6739,
       "description": "Get 1 unique drop from Dagannoth Kings",
-      "check": [6739],
-      "count": 0
+      "check": [6731, 6733, 6735, 6737, 6739, 6724, 6562],
+      "count": 1
     },
     {
       "id": 36,
       "itemID": 6739,
       "description": "Get 1 unique drop from Dagannoth Kings",
-      "check": [],
-      "count": 0
+      "check": [6731, 6733, 6735, 6737, 6739, 6724, 6562],
+      "count": 2
     },
     {
       "id": 37,
       "itemID": 6739,
       "description": "Get 1 unique drop from Dagannoth Kings",
-      "check": [],
-      "count": 0
+      "check": [6731, 6733, 6735, 6737, 6739, 6724, 6562],
+      "count": 3
     },
     {
       "id": 38,
       "itemID": 6739,
       "description": "Get 1 unique drop from Dagannoth Kings",
-      "check": [],
-      "count": 0
+      "check": [6731, 6733, 6735, 6737, 6739, 6724, 6562],
+      "count": 4
     },
     {
       "id": 39,
       "itemID": 6739,
       "description": "Get 1 unique drop from Dagannoth Kings",
-      "check": [],
-      "count": 0
+      "check": [6731, 6733, 6735, 6737, 6739, 6724, 6562],
+      "count": 5
     },
     {
       "id": 40,
       "itemID": 6739,
       "description": "Get 1 unique drop from Dagannoth Kings",
-      "check": [],
-      "count": 0
+      "check": [6731, 6733, 6735, 6737, 6739, 6724, 6562],
+      "count": 6
     },
     {
       "id": 41,
       "itemID": 6739,
       "description": "Get 1 unique drop from Dagannoth Kings",
-      "check": [],
-      "count": 0
+      "check": [6731, 6733, 6735, 6737, 6739, 6724, 6562],
+      "count": 7
     },
     {
       "id": 42,
       "itemID": 21730,
       "description": "Get 1 unique drop from Grotesque Guardians",
-      "check": [],
-      "count": 0
+      "check": [21730, 21736, 21739, 21742],
+      "count": 1
     },
     {
       "id": 43,
       "itemID": 21730,
       "description": "Get 1 unique drop from Grotesque Guardians",
-      "check": [],
-      "count": 0
+      "check": [21730, 21736, 21739, 21742],
+      "count": 2
     },
     {
       "id": 44,
       "itemID": 21730,
       "description": "Get 1 unique drop from Grotesque Guardians",
-      "check": [],
-      "count": 0
+      "check": [21730, 21736, 21739, 21742],
+      "count": 3
     },
     {
       "id": 45,
@@ -2906,29 +2922,29 @@
       "id": 85,
       "itemID": 4504,
       "description": "Get 2 White decorative pieces",
-      "check": [],
-      "count": 0
+      "check": [4503, 4504, 4505, 4506, 4507, 11894, 25167, 25169],
+      "count": 2
     },
     {
       "id": 86,
       "itemID": 4504,
       "description": "Get 2 White decorative pieces",
-      "check": [],
-      "count": 0
+      "check": [4503, 4504, 4505, 4506, 4507, 11894, 25167, 25169],
+      "count": 4
     },
     {
       "id": 87,
       "itemID": 4504,
       "description": "Get 2 White decorative pieces",
-      "check": [],
-      "count": 0
+      "check": [4503, 4504, 4505, 4506, 4507, 11894, 25167, 25169],
+      "count": 6
     },
     {
       "id": 88,
       "itemID": 4504,
       "description": "Get 2 White decorative pieces",
-      "check": [],
-      "count": 0
+      "check": [4503, 4504, 4505, 4506, 4507, 11894, 25167, 25169],
+      "count": 8
     },
     {
       "id": 89,
@@ -2948,22 +2964,46 @@
       "id": 91,
       "itemID": 8957,
       "description": "Get 1 Naval set",
-      "check": [],
-      "count": 0
+      "check": [
+        8958, 8952, 8991,
+        8960, 8953, 8992,
+        8961, 8954, 8993,
+        8962, 8955, 8994,
+        8963, 8956, 8995,
+        8964, 8959, 8996,
+        8965, 8968, 8997
+      ],
+      "count": 9
     },
     {
       "id": 92,
       "itemID": 8957,
       "description": "Get 1 Naval set",
-      "check": [],
-      "count": 0
+      "check": [
+        8958, 8952, 8991,
+        8960, 8953, 8992,
+        8961, 8954, 8993,
+        8962, 8955, 8994,
+        8963, 8956, 8995,
+        8964, 8959, 8996,
+        8965, 8968, 8997
+      ],
+      "count": 12
     },
     {
       "id": 93,
       "itemID": 8957,
       "description": "Get 1 Naval set",
-      "check": [],
-      "count": 0
+      "check": [
+        8958, 8952, 8991,
+        8960, 8953, 8992,
+        8961, 8954, 8993,
+        8962, 8955, 8994,
+        8963, 8956, 8995,
+        8964, 8959, 8996,
+        8965, 8968, 8997
+      ],
+      "count": 15
     },
     {
       "id": 94,
@@ -3018,29 +3058,29 @@
       "id": 101,
       "itemID": 19529,
       "description": "Get a unique from Demonic gorillas",
-      "check": [],
-      "count": 0
+      "check": [19529, 19586, 19589, 19592, 19601, 19610],
+      "count": 1
     },
     {
       "id": 102,
       "itemID": 19529,
       "description": "Get a unique from Demonic gorillas",
-      "check": [],
-      "count": 0
+      "check": [19529, 19586, 19589, 19592, 19601, 19610],
+      "count": 2
     },
     {
       "id": 103,
       "itemID": 19529,
       "description": "Get a unique from Demonic gorillas",
-      "check": [],
-      "count": 0
+      "check": [19529, 19586, 19589, 19592, 19601, 19610],
+      "count": 3
     },
     {
       "id": 104,
       "itemID": 19529,
       "description": "Get a unique from Demonic gorillas",
-      "check": [],
-      "count": 0
+      "check": [19529, 19586, 19589, 19592, 19601, 19610],
+      "count": 4
     },
     {
       "id": 105,
@@ -3088,8 +3128,8 @@
       "id": 111,
       "itemID": 12002,
       "description": "Get 1 unique from Thermonuclear smoke devil",
-      "check": [],
-      "count": 0
+      "check": [11998, 12002],
+      "count": 1
     },
     {
       "id": 112,
@@ -3242,15 +3282,15 @@
       "id": 133,
       "itemID": 25862,
       "description": "Get 1 unique from the Gauntlet",
-      "check": [],
-      "count": 0
+      "check": [23956, 4207],
+      "count": 1
     },
     {
       "id": 134,
       "itemID": 25862,
       "description": "Get 1 unique from the Gauntlet",
-      "check": [],
-      "count": 0
+      "check": [23956, 4207],
+      "count": 2
     },
     {
       "id": 135,
@@ -3291,64 +3331,64 @@
       "id": 140,
       "itemID": 24711,
       "description": "Get 2 uniques from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 2
     },
     {
       "id": 141,
       "itemID": 24711,
       "description": "Get 2 uniques from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 4
     },
     {
       "id": 142,
       "itemID": 24711,
       "description": "Get 2 uniques from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 6
     },
     {
       "id": 143,
       "itemID": 24711,
       "description": "Get 2 uniques from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 8
     },
     {
       "id": 144,
       "itemID": 24711,
       "description": "Get 2 uniques from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 10
     },
     {
       "id": 145,
       "itemID": 24711,
       "description": "Get 2 uniques from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 12
     },
     {
       "id": 146,
       "itemID": 19556,
       "description": "Unlock 2 monkey backpack transformations",
-      "check": [],
-      "count": 0
+      "check": [24862, 24863, 24864, 24865, 24866, 24867],
+      "count": 2
     },
     {
       "id": 147,
       "itemID": 19556,
       "description": "Unlock 2 monkey backpack transformations",
-      "check": [],
-      "count": 0
+      "check": [24862, 24863, 24864, 24865, 24866, 24867],
+      "count": 4
     },
     {
       "id": 148,
       "itemID": 19556,
       "description": "Unlock 2 monkey backpack transformations",
-      "check": [],
-      "count": 0
+      "check": [24862, 24863, 24864, 24865, 24866, 24867],
+      "count": 6
     },
     {
       "id": 149,
@@ -3403,43 +3443,43 @@
       "id": 156,
       "itemID": 12757,
       "description": "Get a new dark bow paint from LMS",
-      "check": [],
-      "count": 0
+      "check": [12757, 12759, 12761, 12763],
+      "count": 1
     },
     {
       "id": 157,
       "itemID": 12757,
       "description": "Get a new dark bow paint from LMS",
-      "check": [],
-      "count": 0
+      "check": [12757, 12759, 12761, 12763],
+      "count": 2
     },
     {
       "id": 158,
       "itemID": 12757,
       "description": "Get a new dark bow paint from LMS",
-      "check": [],
-      "count": 0
+      "check": [12757, 12759, 12761, 12763],
+      "count": 3
     },
     {
       "id": 159,
       "itemID": 12757,
       "description": "Get a new dark bow paint from LMS",
-      "check": [],
-      "count": 0
+      "check": [12757, 12759, 12761, 12763],
+      "count": 4
     },
     {
       "id": 160,
       "itemID": 30044,
       "description": "Get a Wyrm/Brimhaven graceful recolor",
-      "check": [],
-      "count": 0
+      "check": [21061, 21064, 21067, 21070, 21073, 21076, 30045, 30048, 30051, 30054, 30057, 30060],
+      "count": 6
     },
     {
       "id": 201,
       "itemID": 30044,
       "description": "Get a Wyrm/Brimhaven graceful recolor",
-      "check": [],
-      "count": 0
+      "check": [21061, 21064, 21067, 21070, 21073, 21076, 30045, 30048, 30051, 30054, 30057, 30060],
+      "count": 12
     },
     {
       "id": 161,
@@ -3480,15 +3520,15 @@
       "id": 166,
       "itemID": 25844,
       "description": "Get a unique Egg Sac from the Grubby Chest",
-      "check": [],
-      "count": 0
+      "check": [25844, 25846],
+      "count": 1
     },
     {
       "id": 167,
       "itemID": 25844,
       "description": "Get a unique Egg Sac from the Grubby Chest",
-      "check": [],
-      "count": 0
+      "check": [25844, 25846],
+      "count": 2
     },
     {
       "id": 168,
@@ -3571,29 +3611,29 @@
       "id": 179,
       "itemID": 27279,
       "description": "Get 1 unique from Tombs of Amascut",
-      "check": [],
-      "count": 0
+      "check": [27277, 25985, 27226, 27229, 27232, 25975, 26219, 27279, 27283, 27285, 27289, 30893, 27293],
+      "count": 1
     },
     {
       "id": 180,
       "itemID": 27279,
       "description": "Get 1 unique from Tombs of Amascut",
-      "check": [],
-      "count": 0
+      "check": [27277, 25985, 27226, 27229, 27232, 25975, 26219, 27279, 27283, 27285, 27289, 30893, 27293],
+      "count": 2
     },
     {
       "id": 181,
       "itemID": 27616,
       "description": "Get 1 unique from the Phantom Muspah",
-      "check": [],
-      "count": 0
+      "check": [27614, 27616, 27622, 27627],
+      "count": 1
     },
     {
       "id": 182,
       "itemID": 27616,
       "description": "Get 1 unique from the Phantom Muspah",
-      "check": [],
-      "count": 0
+      "check": [27614, 27616, 27622, 27627],
+      "count": 2
     },
     {
       "id": 183,
@@ -3683,36 +3723,36 @@
       "id": 196,
       "itemID": 29580,
       "description": "Get 1 unique from Tormented Demons",
-      "check": [],
-      "count": 0
+      "check": [29574, 29580, 29684],
+      "count": 1
     },
     {
       "id": 197,
       "itemID": 29580,
       "description": "Get 1 unique from Tormented Demons",
-      "check": [],
-      "count": 0
+      "check": [29574, 29580, 29684],
+      "count": 2
     },
     {
       "id": 198,
       "itemID": 29799,
       "description": "Get 1 unique from Araxytes/Araxxor",
-      "check": [],
-      "count": 0
+      "check": [29782, 29784, 29790, 29792, 29794, 29799, 29788, 29806, 29781],
+      "count": 1
     },
     {
       "id": 199,
       "itemID": 29799,
       "description": "Get 1 unique from Araxytes/Araxxor",
-      "check": [],
-      "count": 0
+      "check": [29782, 29784, 29790, 29792, 29794, 29799, 29788, 29806, 29781],
+      "count": 2
     },
     {
       "id": 200,
       "itemID": 29799,
       "description": "Get 1 unique from Araxytes/Araxxor",
-      "check": [],
-      "count": 0
+      "check": [29782, 29784, 29790, 29792, 29794, 29799, 29788, 29806, 29781],
+      "count": 3
     },
     {
       "id": 202,
@@ -3732,22 +3772,22 @@
       "id": 204,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [],
-      "count": 0
+      "check": [30066, 30068, 30070, 30085, 30088],
+      "count": 1
     },
     {
       "id": 205,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [],
-      "count": 0
+      "check": [30066, 30068, 30070, 30085, 30088],
+      "count": 2
     },
     {
       "id": 206,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [],
-      "count": 0
+      "check": [30066, 30068, 30070, 30085, 30088],
+      "count": 3
     },
     {
       "id": 207,
@@ -3797,71 +3837,71 @@
       "id": 4,  
       "itemID": 13273,
       "description": "Get a unique from Unsired",
-      "check": [13263, 13274, 13275, 13276, 13277, 13507, 13508],
+      "check": [7979, 13265, 13274, 13275, 13276],
       "count": 4
     },
     {
       "id": 5,
       "itemID": 13273,
       "description": "Get a unique from Unsired",
-      "check": [13263, 13274, 13275, 13276, 13277, 13507, 13508],
+      "check": [7979, 13265, 13274, 13275, 13276],
       "count": 5
     },
     {
       "id": 6,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 6
     },
     {
       "id": 7,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 7
     },
     {
       "id": 8,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 8
     },
     {
       "id": 9,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 9
     },
     {
       "id": 10,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 10
     },
     {
       "id": 11,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 11
     },
     {
       "id": 12,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 12
     },
     {
       "id": 13,
       "itemID": 22804,
       "description": "Get 1 unique item from Mount Karuulm",
-      "check": [],
-      "count": 0
+      "check": [22804, 22957, 22960, 20849, 21028, 21009, 22966, 22969, 22971, 22973, 22983, 22988, 23077],
+      "count": 13
     },
     {
       "id": 14,
@@ -3881,113 +3921,113 @@
       "id": 16,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 3
     },
     {
       "id": 17,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 4
     },
     {
       "id": 18,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 5
     },
     {
       "id": 19,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 6
     },
     {
       "id": 20,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 7
     },
     {
       "id": 21,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 8
     },
     {
       "id": 22,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 9
     },
     {
       "id": 23,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 10
     },
     {
       "id": 24,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 11
     },
     {
       "id": 25,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 12
     },
     {
       "id": 26,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 13
     },
     {
       "id": 27,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 14
     },
     {
       "id": 28,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 15
     },
     {
       "id": 29,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 16
     },
     {
       "id": 30,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 17
     },
     {
       "id": 31,
       "itemID": 11826,
       "description": "Get 1 unique drop from God Wars Dungeon",
-      "check": [],
-      "count": 0
+      "check": [11812, 11832, 11834, 11836, 11826, 11828, 11830, 11810, 11838, 11785, 11814, 13256, 11787, 11791, 11824, 11816, 26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 18
     },
     {
       "id": 32,
@@ -4028,43 +4068,43 @@
       "id": 37,
       "itemID": 12002,
       "description": "Get 1 unique from Thermonuclear smoke devil",
-      "check": [],
-      "count": 0
+      "check": [11998, 12002],
+      "count": 2
     },
     {
       "id": 38,
       "itemID": 27673,
       "description": "Get 1 unique from the Wildy bosses",
-      "check": [],
-      "count": 0
+      "check": [7158, 11920, 27681, 27684, 27687, 12601, 12603, 12605, 27667, 27670, 27673],
+      "count": 4
     },
     {
       "id": 39,
       "itemID": 27673,
       "description": "Get 1 unique from the Wildy bosses",
-      "check": [],
-      "count": 0
+      "check": [7158, 11920, 27681, 27684, 27687, 12601, 12603, 12605, 27667, 27670, 27673],
+      "count": 5
     },
     {
       "id": 40,
       "itemID": 27673,
       "description": "Get 1 unique from the Wildy bosses",
-      "check": [],
-      "count": 0
+      "check": [7158, 11920, 27681, 27684, 27687, 12601, 12603, 12605, 27667, 27670, 27673],
+      "count": 6
     },
     {
       "id": 41,
       "itemID": 27673,
       "description": "Get 1 unique from the Wildy bosses",
-      "check": [],
-      "count": 0
+      "check": [7158, 11920, 27681, 27684, 27687, 12601, 12603, 12605, 27667, 27670, 27673],
+      "count": 7
     },
     {
       "id": 42,
       "itemID": 21730,
       "description": "Get 1 unique drop from Grotesque Guardians",
-      "check": [],
-      "count": 0
+      "check": [21730, 21736, 21739, 21742],
+      "count": 4
     },
     {
       "id": 43,
@@ -4476,15 +4516,31 @@
       "id": 101,
       "itemID": 8957,
       "description": "Get 1 Naval set",
-      "check": [],
-      "count": 0
+      "check": [
+        8958, 8952, 8991,
+        8960, 8953, 8992,
+        8961, 8954, 8993,
+        8962, 8955, 8994,
+        8963, 8956, 8995,
+        8964, 8959, 8996,
+        8965, 8968, 8997
+      ],
+      "count": 18
     },
     {
       "id": 102,
       "itemID": 8957,
       "description": "Get 1 Naval set",
-      "check": [],
-      "count": 0
+      "check": [
+        8958, 8952, 8991,
+        8960, 8953, 8992,
+        8961, 8954, 8993,
+        8962, 8955, 8994,
+        8963, 8956, 8995,
+        8964, 8959, 8996,
+        8965, 8968, 8997
+      ],
+      "count": 21
     },
     {
       "id": 103,
@@ -4553,15 +4609,15 @@
       "id": 112,
       "itemID": 19529,
       "description": "Get a unique from Demonic gorillas",
-      "check": [],
-      "count": 0
+      "check": [19529, 19586, 19589, 19592, 19601, 19610],
+      "count": 5
     },
     {
       "id": 113,
       "itemID": 19529,
       "description": "Get a unique from Demonic gorillas",
-      "check": [],
-      "count": 0
+      "check": [19529, 19586, 19589, 19592, 19601, 19610],
+      "count": 6
     },
     {
       "id": 114,
@@ -4728,22 +4784,22 @@
       "id": 137,
       "itemID": 24711,
       "description": "Get 1 unique from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 13
     },
     {
       "id": 138,
       "itemID": 24711,
       "description": "Get 1 unique from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 14
     },
     {
       "id": 139,
       "itemID": 24711,
       "description": "Get 1 unique from the Hallowed Sepulchre",
-      "check": [],
-      "count": 0
+      "check": [24711, 24719, 24721, 24723, 24725, 24727, 24729, 24731, 24733, 24740, 24763, 24765, 24767, 24769, 24771],
+      "count": 15
     },
     {
       "id": 140,
@@ -4896,15 +4952,15 @@
       "id": 161,
       "itemID": 27616,
       "description": "Get 1 unique from the Phantom Muspah",
-      "check": [],
-      "count": 0
+      "check": [27614, 27616, 27622, 27627],
+      "count": 3
     },
     {
       "id": 162,
       "itemID": 27616,
       "description": "Get 1 unique from the Phantom Muspah",
-      "check": [],
-      "count": 0
+      "check": [27614, 27616, 27622, 27627],
+      "count": 4
     },
     {
       "id": 163,
@@ -5078,43 +5134,43 @@
       "id": 187,
       "itemID": 29580,
       "description": "Get 1 unique from Tormented Demons",
-      "check": [],
-      "count": 0
+      "check": [29574, 29580, 29684],
+      "count": 3
     },
     {
       "id": 188,
       "itemID": 29799,
       "description": "Get 1 unique from Araxytes/Araxxor",
-      "check": [],
-      "count": 0
+      "check": [29782, 29784, 29790, 29792, 29794, 29799, 29788, 29806, 29781],
+      "count": 4
     },
     {
       "id": 189,
       "itemID": 29799,
       "description": "Get 1 unique from Araxytes/Araxxor",
-      "check": [],
-      "count": 0
+      "check": [29782, 29784, 29790, 29792, 29794, 29799, 29788, 29806, 29781],
+      "count": 5
     },
     {
       "id": 190,
       "itemID": 29799,
       "description": "Get 1 unique from Araxytes/Araxxor",
-      "check": [],
-      "count": 0
+      "check": [29782, 29784, 29790, 29792, 29794, 29799, 29788, 29806, 29781],
+      "count": 6
     },
     {
       "id": 191,
       "itemID": 29799,
       "description": "Get 1 unique from Araxytes/Araxxor",
-      "check": [],
-      "count": 0
+      "check": [29782, 29784, 29790, 29792, 29794, 29799, 29788, 29806, 29781],
+      "count": 7
     },
     {
       "id": 192,
       "itemID": 29799,
       "description": "Get 1 unique from Araxytes/Araxxor",
-      "check": [],
-      "count": 0
+      "check": [29782, 29784, 29790, 29792, 29794, 29799, 29788, 29806, 29781],
+      "count": 8
     },
     {
       "id": 194,
@@ -5134,15 +5190,15 @@
       "id": 196,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [],
-      "count": 0
+      "check": [30066, 30068, 30070, 30085, 30088],
+      "count":4
     },
     {
       "id": 197,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [],
-      "count": 0
+      "check": [30066, 30068, 30070, 30085, 30088],
+      "count": 5
     },
     {
       "id": 198,
@@ -5892,22 +5948,22 @@
       "id": 98,
       "itemID": 26372,
       "description": "1 Nex unique",
-      "check": [],
-      "count": 0
+      "check": [26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 3
     },
     {
       "id": 99,
       "itemID": 26372,
       "description": "1 Nex unique",
-      "check": [],
-      "count": 0
+      "check": [26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 4
     },
     {
       "id": 100,
       "itemID": 26372,
       "description": "1 Nex unique",
-      "check": [],
-      "count": 0
+      "check": [26370, 26372, 26376, 26378, 26380, 26235],
+      "count": 5
     },
     {
       "id": 101,
