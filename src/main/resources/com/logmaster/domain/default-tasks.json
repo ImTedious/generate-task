@@ -2892,15 +2892,15 @@
       "id": 83,
       "itemID": 6916,
       "description": "Get an Infinity top",
-      "check": [],
-      "count": 0
+      "check": [6916],
+      "count": 1
     },
     {
       "id": 84,
       "itemID": 6924,
       "description": "Get Infinity bottoms",
-      "check": [],
-      "count": 0
+      "check": [6924],
+      "count": 1
     },
     {
       "id": 85,
@@ -2934,15 +2934,15 @@
       "id": 89,
       "itemID": 13072,
       "description": "Get an Elite void top",
-      "check": [],
-      "count": 0
+      "check": [13072],
+      "count": 1
     },
     {
       "id": 90,
       "itemID": 13073,
       "description": "Get an Elite void robe",
-      "check": [],
-      "count": 0
+      "check": [13073],
+      "count": 1
     },
     {
       "id": 91,
@@ -2969,15 +2969,15 @@
       "id": 94,
       "itemID": 8968,
       "description": "Get the Bronze fist flag",
-      "check": [],
-      "count": 0
+      "check": [8968],
+      "count": 1
     },
     {
       "id": 95,
       "itemID": 8969,
       "description": "Get the Lucky shot flag",
-      "check": [],
-      "count": 0
+      "check": [8969],
+      "count": 1
     },
     {
       "id": 96,
@@ -3067,8 +3067,8 @@
       "id": 108,
       "itemID": 7978,
       "description": "Get a Kurask head",
-      "check": [],
-      "count": 0
+      "check": [7978],
+      "count": 1
     },
     {
       "id": 109,
@@ -3081,8 +3081,8 @@
       "id": 110,
       "itemID": 11235,
       "description": "Get a Dark bow",
-      "check": [],
-      "count": 0
+      "check": [11235],
+      "count": 1
     },
     {
       "id": 111,
@@ -3109,36 +3109,36 @@
       "id": 114,
       "itemID": 13576,
       "description": "Get a Dragon warhammer",
-      "check": [],
-      "count": 0
+      "check": [13576],
+      "count": 1
     },
     {
       "id": 115,
       "itemID": 9050,
       "description": "Get a Pharaoh's sceptre",
-      "check": [],
-      "count": 0
+      "check": [9050],
+      "count": 1
     },
     {
       "id": 116,
       "itemID": 11338,
       "description": "Get Chewed bones",
-      "check": [],
-      "count": 0
+      "check": [11338],
+      "count": 1
     },
     {
       "id": 117,
       "itemID": 1249,
       "description": "Get a Dragon spear",
-      "check": [],
-      "count": 0
+      "check": [1249],
+      "count": 1
     },
     {
       "id": 118,
       "itemID": 21392,
       "description": "Get Expert mining gloves",
-      "check": [],
-      "count": 0
+      "check": [21392],
+      "count": 1
     },
     {
       "id": 119,
@@ -3228,15 +3228,15 @@
       "id": 131,
       "itemID": 22372,
       "description": "Get Bryophyta's essence",
-      "check": [],
-      "count": 0
+      "check": [22372],
+      "count": 1
     },
     {
       "id": 132,
       "itemID": 23528,
       "description": "Get a Sarachnis Cudgel",
-      "check": [],
-      "count": 0
+      "check": [23528],
+      "count": 1
     },
     {
       "id": 133,
@@ -3256,36 +3256,36 @@
       "id": 135,
       "itemID": 23943,
       "description": "Get the Elven signet",
-      "check": [],
-      "count": 0
+      "check": [23943],
+      "count": 1
     },
     {
       "id": 136,
       "itemID": 23959,
       "description": "Get an Enhanced crystal teleport seed",
-      "check": [],
-      "count": 0
+      "check": [23959],
+      "count": 1
     },
     {
       "id": 137,
       "itemID": 24268,
       "description": "Get the Basilisk jaw",
-      "check": [],
-      "count": 0
+      "check": [24268],
+      "count": 1
     },
     {
       "id": 138,
       "itemID": 2366,
       "description": "Get a shield left half",
-      "check": [],
-      "count": 0
+      "check": [2366],
+      "count": 1
     },
     {
       "id": 139,
       "itemID": 2997,
       "description": "Get a Pirate's hook",
-      "check": [],
-      "count": 0
+      "check": [2997],
+      "count": 1
     },
     {
       "id": 140,
@@ -3354,8 +3354,8 @@
       "id": 149,
       "itemID": 24880,
       "description": "Get Amy's saw",
-      "check": [],
-      "count": 0
+      "check": [24880],
+      "count": 1
     },
     {
       "id": 150,
@@ -3445,22 +3445,22 @@
       "id": 161,
       "itemID": 21541,
       "description": "Get a Volcanic mine teleport",
-      "check": [],
-      "count": 0
+      "check": [21541],
+      "count": 1
     },
     {
       "id": 162,
       "itemID": 21539,
       "description": "Get a Heat-proof vessel",
-      "check": [],
-      "count": 0
+      "check": [21539],
+      "count": 1
     },
     {
       "id": 163,
       "itemID": 21697,
       "description": "Get the Ash covered tome",
-      "check": [],
-      "count": 0
+      "check": [21697],
+      "count": 1
     },
     {
       "id": 164,
@@ -3473,8 +3473,8 @@
       "id": 165,
       "itemID": 22405,
       "description": "Get a Vial of blood (from Story mode ToB)",
-      "check": [],
-      "count": 0
+      "check": [22405],
+      "count": 1
     },
     {
       "id": 166,
@@ -3676,8 +3676,8 @@
       "id": 195,
       "itemID": 28924,
       "description": "Obtain Sunfire splinters",
-      "check": [],
-      "count": 0
+      "check": [28924],
+      "count": 1
     },
     {
       "id": 196,
@@ -3718,15 +3718,15 @@
       "id": 202,
       "itemID": 29974,
       "description": "Get the Prescription goggles",
-      "check": [],
-      "count": 0
+      "check": [29974],
+      "count": 1
     },
     {
       "id": 203,
       "itemID": 29988,
       "description": "Get the Alchemist's amulet",
-      "check": [],
-      "count": 0
+      "check": [29988],
+      "count": 1
     },
     {
       "id": 204,
@@ -4539,15 +4539,15 @@
       "id": 110,
       "itemID": 2995,
       "description": "Upgrade to the (expert) dragon archer headpiece",
-      "check": [],
-      "count": 0
+      "check": [2995],
+      "count": 1
     },
     {
       "id": 111,
       "itemID": 2995,
       "description": "Upgrade to the (expert) dragon archer headpiece",
-      "check": [],
-      "count": 0
+      "check": [2995],
+      "count": 1
     },
     {
       "id": 112,
