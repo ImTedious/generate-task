@@ -5724,22 +5724,22 @@
       "id": 66,
       "itemID": 20663,
       "description": "1 Skilling pet",
-      "check": [],
-      "count": 0
+      "check": [13320, 13321, 13322, 13324, 20659, 20661, 20663, 20691],
+      "count": 1
     },
     {
       "id": 67,
       "itemID": 20663,
       "description": "1 Skilling pet",
-      "check": [],
-      "count": 0
+      "check": [13320, 13321, 13322, 13324, 20659, 20661, 20663, 20691],
+      "count": 2
     },
     {
       "id": 68,
       "itemID": 20663,
       "description": "1 Skilling pet",
-      "check": [],
-      "count": 0
+      "check": [13320, 13321, 13322, 13324, 20659, 20661, 20663, 20691],
+      "count": 3
     },
     {
       "id": 69,
@@ -5970,119 +5970,119 @@
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 102,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 103,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 104,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 105,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 106,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 107,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 108,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 109,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 110,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 111,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 112,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 113,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 114,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 115,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 116,
       "itemID": 13280,
       "description": "A new level 99",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 117,
       "itemID": 25934,
       "description": "Master tier Combat Achievements",
       "check": [],
-      "count": 0
+      "count": -1
     },
     {
       "id": 130,
