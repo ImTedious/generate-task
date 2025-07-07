@@ -34,12 +34,13 @@ public class TaskList extends UIPage {
     private final int TASK_HEIGHT = 50;
     private final int TASK_ITEM_HEIGHT = 32;
     private final int TASK_ITEM_WIDTH = 36;
-    private final int TASKS_PER_PAGE = 5;
     private final int UP_ARROW_SPRITE_ID = -20014;
     private final int DOWN_ARROW_SPRITE_ID = -20015;
     private final int ARROW_SPRITE_WIDTH = 39;
     private final int ARROW_SPRITE_HEIGHT = 20;
     private final int ARROW_Y_OFFSET = 4;
+    
+    private int TASKS_PER_PAGE = 20; // Default value, will be updated based on window size
 
     private final Widget window;
     private final TaskService taskService;
@@ -63,9 +64,8 @@ public class TaskList extends UIPage {
         this.clientThread = clientThread;
         this.saveDataManager = saveDataManager;
 
-        refreshTasks(0);
-
         updateBounds();
+        refreshTasks(0);
 
         Widget upWidget = window.createChild(-1, WidgetType.GRAPHIC);
         UIButton upArrow = new UIButton(upWidget);
@@ -86,15 +86,21 @@ public class TaskList extends UIPage {
     }
 
     public void refreshTasks(int dir) {
+        refreshTasks(dir, false);
+    }
+    
+    public void refreshTasks(int dir, boolean forceRefresh) {
         TaskTier relevantTier = plugin.getSelectedTier();
         if (relevantTier == null) {
             relevantTier = TaskTier.MASTER;
         }
-        if (topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > taskService.getTaskList().getForTier(relevantTier).size()) {
-            return;
+        
+        if (!forceRefresh) {
+            if (topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > taskService.getTaskList().getForTier(relevantTier).size()) {
+                return;
+            }
+            topTaskIndex += dir;
         }
-
-        topTaskIndex += dir;
 
         final int POS_X = getCenterX(window, TASK_WIDTH);
 
@@ -110,6 +116,7 @@ public class TaskList extends UIPage {
             }
             else {
                 taskBg = taskBackgrounds.get(i);
+                taskBg.getWidget().setHidden(false); // Ensure it's visible
             }
 
             taskBg.clearActions();
@@ -134,6 +141,7 @@ public class TaskList extends UIPage {
                 taskLabels.add(taskLabel);
             } else {
                 taskLabel = taskLabels.get(i);
+                taskLabel.getWidget().setHidden(false); // Ensure it's visible
             }
 
             taskLabel.getWidget().setTextColor(Color.WHITE.getRGB());
@@ -152,6 +160,7 @@ public class TaskList extends UIPage {
             }
             else {
                 taskImage = taskImages.get(i);
+                taskImage.getWidget().setHidden(false); // Ensure it's visible
             }
 
             taskImage.setPosition(POS_X+12, POS_Y+6);
@@ -162,6 +171,26 @@ public class TaskList extends UIPage {
 
             i++;
         }
+        
+        // Hide any remaining task UI elements that are no longer visible
+        hideUnusedTaskElements(i);
+    }
+
+    private void hideUnusedTaskElements(int visibleCount) {
+        // Hide unused task backgrounds
+        for (int i = visibleCount; i < taskBackgrounds.size(); i++) {
+            taskBackgrounds.get(i).getWidget().setHidden(true);
+        }
+        
+        // Hide unused task labels
+        for (int i = visibleCount; i < taskLabels.size(); i++) {
+            taskLabels.get(i).getWidget().setHidden(true);
+        }
+        
+        // Hide unused task images
+        for (int i = visibleCount; i < taskImages.size(); i++) {
+            taskImages.get(i).getWidget().setHidden(true);
+        }
     }
 
     public void goToTop() {
@@ -171,11 +200,10 @@ public class TaskList extends UIPage {
     private List<Task> getTasksToShow(TaskTier relevantTier, int topTaskIndex) {
         List<Task> tasksToShow = new ArrayList<>();
         List<Task> taskList = taskService.getTaskList().getForTier(relevantTier);
-        for(int i=0;i<TASKS_PER_PAGE;i++) {
-            if(topTaskIndex + i > taskList.size()) break;
-            tasksToShow.add(taskList.get(topTaskIndex+i));
+        for (int i = 0; i < TASKS_PER_PAGE; i++) {
+            if (topTaskIndex + i >= taskList.size()) break;
+            tasksToShow.add(taskList.get(topTaskIndex + i));
         }
-
         return tasksToShow;
     }
 
@@ -193,8 +221,10 @@ public class TaskList extends UIPage {
 
     public void updateBounds()
     {
-        if (!this.isVisible())
+        if (!this.isVisible()) {
+            TASKS_PER_PAGE = 20; // Default value, will be updated based on window size
             return;
+        }
 
         Widget collectionLogWrapper = window.getParent();
         int wrapperX = collectionLogWrapper.getRelativeX();
@@ -203,6 +233,22 @@ public class TaskList extends UIPage {
         int windowHeight = window.getHeight();
         int windowX = window.getRelativeX();
         int windowY = window.getRelativeY();
+
+        // Recalculate how many tasks can be displayed
+        int newTasksPerPage = Math.max(1, (windowHeight - OFFSET_Y) / TASK_HEIGHT);
+        if (newTasksPerPage != TASKS_PER_PAGE) {
+            TASKS_PER_PAGE = newTasksPerPage;
+            // Ensure topTaskIndex is valid for the new page size
+            TaskTier relevantTier = plugin.getSelectedTier();
+            if (relevantTier == null) {
+                relevantTier = TaskTier.MASTER;
+            }
+            int maxTopIndex = Math.max(0, taskService.getTaskList().getForTier(relevantTier).size() - TASKS_PER_PAGE);
+            topTaskIndex = Math.min(topTaskIndex, maxTopIndex);
+            
+            // Force refresh the task display
+            refreshTasks(0, true);
+        }
 
         bounds.setLocation(wrapperX + windowX + OFFSET_X, wrapperY + windowY + OFFSET_Y);
         bounds.setSize(windowWidth - OFFSET_X, windowHeight - OFFSET_Y);
