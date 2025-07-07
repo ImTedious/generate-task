@@ -446,6 +446,10 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	}
 
 	public boolean isCollectionLogItemUnlocked(int itemId) {
+		// Some items have bad IDs, check these ones for a replacement
+		EnumComposition replacements = client.getEnum(3721);
+		int replacementItemId = replacements.getIntValue(itemId);
+		itemId = replacementItemId >= 0 ? replacementItemId : itemId;
 		int index = lookupCollectionLogItemIndex(itemId);
 		if (index == -1) {
 			return false;
@@ -529,16 +533,13 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 			return;
 		}
 
-		EnumComposition replacements = client.getEnum(3721);
 		// Update completed tasks automatically
 		for (TaskTier tier : TaskTier.values()) {
 			for (Task task : taskService.getTaskList().getForTier(tier)) {
 				if (task.getCheck() != null && task.getCheck().length > 0) {
 					int count = 0;
 					for (int itemId : task.getCheck()) {
-						// Some items have bad IDs, check these ones for a replacement
-						int replacementItemId = replacements.getIntValue(itemId);
-						if (isCollectionLogItemUnlocked(replacementItemId != -1 ? replacementItemId : itemId)) {
+						if (isCollectionLogItemUnlocked(itemId)) {
 							count++;
 						}
 					}
