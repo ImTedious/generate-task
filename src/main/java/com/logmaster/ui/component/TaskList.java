@@ -65,7 +65,6 @@ public class TaskList extends UIPage {
     private boolean isDraggingThumb = false;
     private int dragStartY = 0;
     private int dragStartTopIndex = 0;
-
     private int topTaskIndex = 0;
 
     public TaskList(Widget window, TaskService taskService, LogMasterPlugin plugin, ClientThread clientThread, SaveDataManager saveDataManager) {
@@ -92,40 +91,38 @@ public class TaskList extends UIPage {
         upArrow.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT*2 + ARROW_Y_OFFSET);
         upArrow.addAction("Scroll up", () -> refreshTasks(-1));
 
-        // Create scrollbar track
+        createScrollbarComponents();
+        this.add(upArrow);
+        this.add(pageUpButton);
+        this.add(downArrow);
+        this.add(pageDownButton);
+        updateScrollbar();
+    }
+
+    private void createScrollbarComponents() {
         scrollbarTrackWidget = window.createChild(-1, WidgetType.RECTANGLE);
         scrollbarTrackWidget.setFilled(true);
-        scrollbarTrackWidget.setTextColor(0x665948); // Dark gray background
-        scrollbarTrackWidget.setSize(SCROLLBAR_WIDTH - 2, 200); // Initial size, will be updated in updateScrollbar()
+        scrollbarTrackWidget.setTextColor(0x665948);
+        scrollbarTrackWidget.setSize(SCROLLBAR_WIDTH - 2, 200);
         scrollbarTrackWidget.setPos(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 1, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET);
         
-        // Create scrollbar thumb (created after track to ensure it appears on top)
         scrollbarThumbWidget = window.createChild(-1, WidgetType.RECTANGLE);
         scrollbarThumbWidget.setFilled(true);
-        scrollbarThumbWidget.setTextColor(0x473e33); // Light gray thumb
-        scrollbarThumbWidget.setSize(SCROLLBAR_WIDTH - 6, SCROLLBAR_THUMB_MIN_HEIGHT); // Slightly smaller than track
+        scrollbarThumbWidget.setTextColor(0x473e33);
+        scrollbarThumbWidget.setSize(SCROLLBAR_WIDTH - 6, SCROLLBAR_THUMB_MIN_HEIGHT);
         scrollbarThumbWidget.setPos(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 3, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET);
 
         Widget downWidget = window.createChild(-1, WidgetType.GRAPHIC);
         downArrow = new UIButton(downWidget);
         downArrow.setSprites(DOWN_ARROW_SPRITE_ID);
         downArrow.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
-        // Position will be set in updateScrollbar()
         downArrow.addAction("Scroll down", () -> refreshTasks(1));
 
         Widget pageDownWidget = window.createChild(-1, WidgetType.GRAPHIC);
         pageDownButton = new UIButton(pageDownWidget);
         pageDownButton.setSprites(PAGE_DOWN_ARROW_SPRITE_ID);
         pageDownButton.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
-        // Position will be set in updateScrollbar()
         pageDownButton.addAction("Page down", () -> refreshTasks(TASKS_PER_PAGE));
-
-        this.add(upArrow);
-        this.add(pageUpButton);
-        this.add(downArrow);
-        this.add(pageDownButton);
-        
-        updateScrollbar();
     }
 
     public void refreshTasks(int dir) {
@@ -310,130 +307,79 @@ public class TaskList extends UIPage {
     }
 
     private void updateArrowPositions() {
-        // Calculate scrollbar track height based on tasks per page
         int scrollbarTrackHeight = (TASKS_PER_PAGE * TASK_HEIGHT) - (ARROW_SPRITE_HEIGHT * 4);
-        
-        // Calculate and update arrow positions
         int scrollbarEndY = ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + scrollbarTrackHeight;
         
-        // Force arrow position updates by hiding and showing them
-        downArrow.getWidget().setHidden(true);
-        downArrow.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), scrollbarEndY - 2);
-        downArrow.getWidget().setHidden(false);
-        downArrow.getWidget().revalidate();
-        
-        pageDownButton.getWidget().setHidden(true);
-        pageDownButton.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), scrollbarEndY + ARROW_SPRITE_HEIGHT - 2);
-        pageDownButton.getWidget().setHidden(false);
-        pageDownButton.getWidget().revalidate();
+        forceWidgetPositionUpdate(downArrow, CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), scrollbarEndY - 2);
+        forceWidgetPositionUpdate(pageDownButton, CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), scrollbarEndY + ARROW_SPRITE_HEIGHT - 2);
+    }
+
+    private void forceWidgetPositionUpdate(UIButton button, int x, int y) {
+        button.getWidget().setHidden(true);
+        button.setPosition(x, y);
+        button.getWidget().setHidden(false);
+        button.getWidget().revalidate();
     }
 
     private void updateScrollbar() {
         if (!this.isVisible()) {
-            // Hide scrollbar components when not visible
-            if (scrollbarTrackWidget != null) {
-                scrollbarTrackWidget.setHidden(true);
-            }
-            if (scrollbarThumbWidget != null) {
-                scrollbarThumbWidget.setHidden(true);
-            }
+            setScrollbarVisibility(false);
             return;
         }
 
         TaskTier relevantTier = plugin.getSelectedTier();
-        if (relevantTier == null) {
-            relevantTier = TaskTier.MASTER;
-        }
+        if (relevantTier == null) relevantTier = TaskTier.MASTER;
         
         int totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
-        
-        // Calculate scrollbar track height based on tasks per page
         int scrollbarTrackHeight = (TASKS_PER_PAGE * TASK_HEIGHT) - (ARROW_SPRITE_HEIGHT * 4);
         
-        // Force track size update by hiding and showing it
-        scrollbarTrackWidget.setHidden(true);
-        scrollbarTrackWidget.setSize(SCROLLBAR_WIDTH - 2, scrollbarTrackHeight);
-        scrollbarTrackWidget.setHidden(false);
-        scrollbarTrackWidget.revalidate();
-        
-        // Update arrow positions as well
+        forceWidgetUpdate(scrollbarTrackWidget, SCROLLBAR_WIDTH - 2, scrollbarTrackHeight);
         updateArrowPositions();
         
         if (totalTasks <= TASKS_PER_PAGE) {
-            // Hide scrollbar if all tasks fit on one page
-            scrollbarTrackWidget.setHidden(true);
-            scrollbarThumbWidget.setHidden(true);
+            setScrollbarVisibility(false);
         } else {
-            // Show scrollbar only if task list is visible
-            scrollbarTrackWidget.setHidden(false);
-            scrollbarThumbWidget.setHidden(false);
-            
-            // Ensure topTaskIndex is valid for current task count
-            int maxTopIndex = Math.max(0, totalTasks - TASKS_PER_PAGE);
-            topTaskIndex = Math.min(topTaskIndex, maxTopIndex);
-            
-            // Calculate thumb size based on visible ratio
-            int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)TASKS_PER_PAGE / totalTasks)));
-
-            // Calculate thumb position based on scroll position
-            int maxScrollPosition = Math.max(1, totalTasks - TASKS_PER_PAGE);
-            int thumbMaxY = scrollbarTrackHeight - thumbHeight;
-            int thumbY = maxScrollPosition > 0 ? (int)(thumbMaxY * ((double)topTaskIndex / maxScrollPosition)) : 0;
-            
-            // Update thumb size and position
-            scrollbarThumbWidget.setSize(SCROLLBAR_WIDTH - 6, thumbHeight);
-            int newX = CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 3;
-            int newY = ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + thumbY;
-            scrollbarThumbWidget.setPos(newX, newY);
-            
-            // Force redraw by hiding and showing the widget
-            scrollbarThumbWidget.setHidden(true);
-            scrollbarThumbWidget.setHidden(false);
-            scrollbarThumbWidget.revalidate();
+            setScrollbarVisibility(true);
+            updateScrollbarThumb(totalTasks, scrollbarTrackHeight);
         }
+    }
+
+    private void forceWidgetUpdate(Widget widget, int width, int height) {
+        widget.setHidden(true);
+        widget.setSize(width, height);
+        widget.setHidden(false);
+        widget.revalidate();
+    }
+
+    private void updateScrollbarThumb(int totalTasks, int scrollbarTrackHeight) {
+        topTaskIndex = Math.min(topTaskIndex, Math.max(0, totalTasks - TASKS_PER_PAGE));
         
-        log.info("Updating scrollbar: totalTasks={}, TASKS_PER_PAGE={}, topTaskIndex={}, scrollbarTrackHeight={}, scrollbarEndY={}",
-                totalTasks, TASKS_PER_PAGE, topTaskIndex, scrollbarTrackHeight, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + scrollbarTrackHeight);
+        int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)TASKS_PER_PAGE / totalTasks)));
+        int maxScrollPosition = Math.max(1, totalTasks - TASKS_PER_PAGE);
+        int thumbY = maxScrollPosition > 0 ? (int)((scrollbarTrackHeight - thumbHeight) * ((double)topTaskIndex / maxScrollPosition)) : 0;
+        
+        scrollbarThumbWidget.setSize(SCROLLBAR_WIDTH - 6, thumbHeight);
+        scrollbarThumbWidget.setPos(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 3, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + thumbY);
+        
+        forceWidgetUpdate(scrollbarThumbWidget, SCROLLBAR_WIDTH - 6, thumbHeight);
+    }
+
+    private void setScrollbarVisibility(boolean visible) {
+        if (scrollbarTrackWidget != null) scrollbarTrackWidget.setHidden(!visible);
+        if (scrollbarThumbWidget != null) scrollbarThumbWidget.setHidden(!visible);
     }
 
     public void setVisibility(boolean visible) {
         super.setVisibility(visible);
-        
-        // Also control scrollbar visibility
-        if (scrollbarTrackWidget != null) {
-            scrollbarTrackWidget.setHidden(!visible);
-        }
-        if (scrollbarThumbWidget != null) {
-            scrollbarThumbWidget.setHidden(!visible);
-        }
-        
-        // Update scrollbar when becoming visible
-        if (visible) {
-            updateScrollbar();
-        }
+        setScrollbarVisibility(visible && this.isVisible());
+        if (visible) updateScrollbar();
     }
 
     public void handleMousePress(int mouseX, int mouseY) {
-        if (!this.isVisible()) {
-            return;
-        }
+        if (!this.isVisible()) return;
         
         clientThread.invoke(() -> {
-            // Get absolute positions for the scrollbar thumb
-            Widget collectionLogWrapper = window.getParent();
-            int wrapperX = collectionLogWrapper.getRelativeX();
-            int wrapperY = collectionLogWrapper.getRelativeY();
-            int windowX = window.getRelativeX();
-            int windowY = window.getRelativeY();
-            
-            int thumbAbsX = wrapperX + windowX + scrollbarThumbWidget.getRelativeX();
-            int thumbAbsY = wrapperY + windowY + scrollbarThumbWidget.getRelativeY();
-            int thumbWidth = scrollbarThumbWidget.getWidth();
-            int thumbHeight = scrollbarThumbWidget.getHeight();
-            
-            // Check if click is on the scroll thumb
-            if (mouseX >= thumbAbsX && mouseX <= thumbAbsX + thumbWidth && 
-                mouseY >= thumbAbsY && mouseY <= thumbAbsY + thumbHeight) {
+            if (isPointInScrollThumb(mouseX, mouseY)) {
                 isDraggingThumb = true;
                 dragStartY = mouseY;
                 dragStartTopIndex = topTaskIndex;
@@ -442,42 +388,44 @@ public class TaskList extends UIPage {
     }
 
     public void handleMouseDrag(int mouseX, int mouseY) {
-        if (!isDraggingThumb || !this.isVisible()) {
-            return;
-        }
+        if (!isDraggingThumb || !this.isVisible()) return;
         
         clientThread.invoke(() -> {
             TaskTier relevantTier = plugin.getSelectedTier();
-            if (relevantTier == null) {
-                relevantTier = TaskTier.MASTER;
-            }
+            if (relevantTier == null) relevantTier = TaskTier.MASTER;
             
             int totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
-            if (totalTasks <= TASKS_PER_PAGE) {
-                return;
-            }
+            if (totalTasks <= TASKS_PER_PAGE) return;
             
-            // Calculate scrollbar track height
-            int scrollbarTrackHeight = (TASKS_PER_PAGE * TASK_HEIGHT) - (ARROW_SPRITE_HEIGHT * 4);
-            int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)TASKS_PER_PAGE / totalTasks)));
-            int thumbMaxY = scrollbarTrackHeight - thumbHeight;
-            
-            // Calculate how much the mouse has moved
-            int deltaY = mouseY - dragStartY;
-            
-            // Convert mouse movement to scroll position
-            int maxScrollPosition = totalTasks - TASKS_PER_PAGE;
-            double scrollRatio = thumbMaxY > 0 ? (double)deltaY / thumbMaxY : 0;
-            int newTopIndex = dragStartTopIndex + (int)(scrollRatio * maxScrollPosition);
-            
-            // Clamp to valid range
-            newTopIndex = Math.clamp(newTopIndex, 0, maxScrollPosition);
-            
+            int newTopIndex = calculateNewScrollPosition(mouseY, totalTasks);
             if (newTopIndex != topTaskIndex) {
                 topTaskIndex = newTopIndex;
                 refreshTasks(0, true);
             }
         });
+    }
+
+    private boolean isPointInScrollThumb(int mouseX, int mouseY) {
+        Widget collectionLogWrapper = window.getParent();
+        int baseX = collectionLogWrapper.getRelativeX() + window.getRelativeX();
+        int baseY = collectionLogWrapper.getRelativeY() + window.getRelativeY();
+        
+        int thumbX = baseX + scrollbarThumbWidget.getRelativeX();
+        int thumbY = baseY + scrollbarThumbWidget.getRelativeY();
+        
+        return mouseX >= thumbX && mouseX <= thumbX + scrollbarThumbWidget.getWidth() && 
+               mouseY >= thumbY && mouseY <= thumbY + scrollbarThumbWidget.getHeight();
+    }
+
+    private int calculateNewScrollPosition(int mouseY, int totalTasks) {
+        int scrollbarTrackHeight = (TASKS_PER_PAGE * TASK_HEIGHT) - (ARROW_SPRITE_HEIGHT * 4);
+        int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)TASKS_PER_PAGE / totalTasks)));
+        int deltaY = mouseY - dragStartY;
+        
+        double scrollRatio = (scrollbarTrackHeight - thumbHeight) > 0 ? (double)deltaY / (scrollbarTrackHeight - thumbHeight) : 0;
+        int newTopIndex = dragStartTopIndex + (int)(scrollRatio * (totalTasks - TASKS_PER_PAGE));
+        
+        return Math.clamp(newTopIndex, 0, totalTasks - TASKS_PER_PAGE);
     }
 
     public void handleMouseRelease() {
