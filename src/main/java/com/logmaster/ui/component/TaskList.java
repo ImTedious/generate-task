@@ -138,7 +138,7 @@ public class TaskList extends UIPage {
         if (!forceRefresh) {
             int newIndex = topTaskIndex + dir;
             // Ensure we don't go past the valid range
-            topTaskIndex = Math.clamp(newIndex, 0, taskService.getTaskList().getForTier(relevantTier).size() - TASKS_PER_PAGE - 1);
+            topTaskIndex = Math.clamp(newIndex, 0, taskService.getTaskList().getForTier(relevantTier).size() - TASKS_PER_PAGE);
         }
 
         final int POS_X = getCenterX(window, TASK_WIDTH);
