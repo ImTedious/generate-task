@@ -357,14 +357,12 @@ public class InterfaceManager {
         this.taskDashboard.setTask(description, itemID, tasks);
         this.taskDashboard.disableGenerateTask(false);
         this.taskList.refreshTasks(0);
-        this.taskList.refreshScrollbar(); // Update scrollbar when tasks change
         this.taskDashboard.updatePercentages();
     }
 
     public void completeTask() {
         this.taskDashboard.updatePercentages();
         taskList.refreshTasks(0);
-        taskList.refreshScrollbar(); // Update scrollbar when tasks change
     }
 
     public void clearCurrentTask() {

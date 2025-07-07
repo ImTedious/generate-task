@@ -138,7 +138,7 @@ public class TaskList extends UIPage {
         if (!forceRefresh) {
             int newIndex = topTaskIndex + dir;
             // Ensure we don't go past the valid range
-            topTaskIndex = Math.clamp(newIndex, 0, taskService.getTaskList().getForTier(relevantTier).size() - TASKS_PER_PAGE);
+            topTaskIndex = Math.min(taskService.getTaskList().getForTier(relevantTier).size() - TASKS_PER_PAGE, Math.max(0, newIndex));
         }
 
         final int POS_X = getCenterX(window, TASK_WIDTH);
@@ -425,7 +425,7 @@ public class TaskList extends UIPage {
         double scrollRatio = (scrollbarTrackHeight - thumbHeight) > 0 ? (double)deltaY / (scrollbarTrackHeight - thumbHeight) : 0;
         int newTopIndex = dragStartTopIndex + (int)(scrollRatio * (totalTasks - TASKS_PER_PAGE));
         
-        return Math.clamp(newTopIndex, 0, totalTasks - TASKS_PER_PAGE);
+        return Math.min(totalTasks - TASKS_PER_PAGE, Math.max(newTopIndex, 0));
     }
 
     public void handleMouseRelease() {
