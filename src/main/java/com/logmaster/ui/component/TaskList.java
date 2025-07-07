@@ -34,8 +34,10 @@ public class TaskList extends UIPage {
     private final int TASK_HEIGHT = 50;
     private final int TASK_ITEM_HEIGHT = 32;
     private final int TASK_ITEM_WIDTH = 36;
+    private final int PAGE_UP_ARROW_SPRITE_ID = -20029;
     private final int UP_ARROW_SPRITE_ID = -20014;
     private final int DOWN_ARROW_SPRITE_ID = -20015;
+    private final int PAGE_DOWN_ARROW_SPRITE_ID = -20030;
     private final int ARROW_SPRITE_WIDTH = 39;
     private final int ARROW_SPRITE_HEIGHT = 20;
     private final int ARROW_Y_OFFSET = 4;
@@ -67,22 +69,38 @@ public class TaskList extends UIPage {
         updateBounds();
         refreshTasks(0);
 
+        Widget pageUpWidget = window.createChild(-1, WidgetType.GRAPHIC);
+        UIButton pageUpButton = new UIButton(pageUpWidget);
+        pageUpButton.setSprites(PAGE_UP_ARROW_SPRITE_ID);
+        pageUpButton.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
+        pageUpButton.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT + ARROW_Y_OFFSET);
+        pageUpButton.addAction("Page up", () -> refreshTasks(-TASKS_PER_PAGE));
+
         Widget upWidget = window.createChild(-1, WidgetType.GRAPHIC);
         UIButton upArrow = new UIButton(upWidget);
         upArrow.setSprites(UP_ARROW_SPRITE_ID);
         upArrow.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
-        upArrow.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT + ARROW_Y_OFFSET);
+        upArrow.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT*2 + ARROW_Y_OFFSET);
         upArrow.addAction("Scroll up", () -> refreshTasks(-1));
 
         Widget downWidget = window.createChild(-1, WidgetType.GRAPHIC);
         UIButton downArrow = new UIButton(downWidget);
         downArrow.setSprites(DOWN_ARROW_SPRITE_ID);
         downArrow.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
-        downArrow.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT*2 + ARROW_Y_OFFSET);
+        downArrow.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET);
         downArrow.addAction("Scroll down", () -> refreshTasks(1));
 
+        Widget pageDownWidget = window.createChild(-1, WidgetType.GRAPHIC);
+        UIButton pageDownButton = new UIButton(pageDownWidget);
+        pageDownButton.setSprites(PAGE_DOWN_ARROW_SPRITE_ID);
+        pageDownButton.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
+        pageDownButton.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT*4 + ARROW_Y_OFFSET);
+        pageDownButton.addAction("Page down", () -> refreshTasks(TASKS_PER_PAGE));
+
         this.add(upArrow);
+        this.add(pageUpButton);
         this.add(downArrow);
+        this.add(pageDownButton);
     }
 
     public void refreshTasks(int dir) {
@@ -96,10 +114,9 @@ public class TaskList extends UIPage {
         }
         
         if (!forceRefresh) {
-            if (topTaskIndex+dir < 0 || topTaskIndex + dir + TASKS_PER_PAGE > taskService.getTaskList().getForTier(relevantTier).size()) {
-                return;
-            }
-            topTaskIndex += dir;
+            int newIndex = topTaskIndex + dir;
+            // Ensure we don't go past the valid range
+            topTaskIndex = Math.clamp(newIndex, 0, taskService.getTaskList().getForTier(relevantTier).size() - TASKS_PER_PAGE - 1);
         }
 
         final int POS_X = getCenterX(window, TASK_WIDTH);
