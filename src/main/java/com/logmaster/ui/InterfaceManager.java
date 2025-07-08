@@ -400,7 +400,6 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     public void rollTask(String description, int itemID, List<Task> tasks) {
         this.taskDashboard.setTask(description, itemID, tasks);
         this.taskDashboard.disableGenerateTask(false);
-        this.taskList.refreshTasks(0);
         this.taskDashboard.updatePercentages();
     }
 
