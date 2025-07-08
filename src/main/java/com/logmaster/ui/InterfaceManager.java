@@ -80,13 +80,9 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     }
 
     public void updateAfterConfigChange() {
-        if (tabManager != null) {
-            tabManager.updateTabs();
-            tabManager.updateAfterConfigChange();
-        }
         if (this.taskDashboard != null && isTaskDashboardEnabled()) {
             if (tabManager != null) {
-                tabManager.showTabs();
+                tabManager.updateTabs();
             }
             if (this.saveDataManager.getSaveData().getSelectedTier() != null && Arrays.asList(TaskTier.values()).indexOf(this.saveDataManager.getSaveData().getSelectedTier()) < Arrays.asList(TaskTier.values()).indexOf(this.config.hideBelow())) {
                 if (tabManager != null) {
@@ -104,20 +100,15 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
         createTaskList(window);
         createTabManager(window);
         createTaskCheckbox();
-        
-        if (tabManager != null) {
-            tabManager.updateTabs();
-        }
 
+        this.tabManager.updateTabs();
         this.taskDashboard.setVisibility(false);
     }
 
     public void handleCollectionLogClose() {
         this.taskDashboard.setVisibility(false);
         this.taskList.setVisibility(false);
-        if (tabManager != null) {
-            tabManager.hideTabs();
-        }
+        tabManager.hideTabs();
     }
 
     public void handleCollectionLogScriptRan() {
@@ -287,16 +278,11 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
         client.getWidget(InterfaceID.Collection.SEARCH_TITLE).setHidden(enabled);
 
         if (isTaskDashboardEnabled()) {
-            if (tabManager != null) {
-                tabManager.activateTaskDashboard();
-            }
+            this.tabManager.activateTaskDashboard();
         } else {
             this.taskDashboard.setVisibility(false);
             this.taskList.setVisibility(false);
-
-            if (tabManager != null) {
-                tabManager.hideTabs();
-            }
+            this.tabManager.hideTabs();
         }
 
         // *Boop*

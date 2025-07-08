@@ -20,7 +20,6 @@ public class TabManager {
     private final Widget window;
     
     private List<UIButton> tabs;
-    private UIButton taskListTab;
     private UIButton taskDashboardTab;
     
     private TaskDashboard taskDashboard;
@@ -42,6 +41,19 @@ public class TabManager {
     }
 
     private void createTabs() {
+        // Remove any existing tabs from the window
+        if (tabs != null) {
+            for (UIButton tab : tabs) {
+                if (tab != null && tab.getWidget() != null) {
+                    tab.getWidget().setHidden(true);
+                }
+            }
+        }
+        tabs = new ArrayList<>();
+        // Remove and recreate dashboard tab
+        if (taskDashboardTab != null && taskDashboardTab.getWidget() != null) {
+            taskDashboardTab.getWidget().setHidden(true);
+        }
         Widget dashboardTabWidget = window.createChild(-1, WidgetType.GRAPHIC);
         taskDashboardTab = new UIButton(dashboardTabWidget);
         taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
@@ -49,23 +61,14 @@ public class TabManager {
         taskDashboardTab.setPosition(10, 0);
         taskDashboardTab.addAction("View <col=ff9040>Dashboard</col>", this::activateTaskDashboard);
         taskDashboardTab.setVisibility(false);
-
-        tabs = new ArrayList<>();
-        // Will be positioned dynamically in updateTabPositions()
-        for (int i = 0; i < 5; i++) {
+        // Always create all tabs for all tiers
+        for (TaskTier tier : TaskTier.values()) {
             Widget tabWidget = window.createChild(-1, WidgetType.GRAPHIC);
             UIButton tab = new UIButton(tabWidget);
             tab.setSize(66, 21);
             tab.setVisibility(false);
             tabs.add(tab);
         }
-
-        Widget tabWidget = window.createChild(-1, WidgetType.GRAPHIC);
-        taskListTab = new UIButton(tabWidget);
-        taskListTab.setSize(95, 21);
-        taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
-        taskListTab.setVisibility(false);
-        taskListTab.addAction("View <col=ff9040>Task List</col>", this::activateTaskList);
     }
 
     private void createDivider() {
@@ -83,75 +86,56 @@ public class TabManager {
         divider.getWidget().setSize(windowWidth - 20, 1);
         divider.getWidget().revalidate();
         
-        // Update tab positions
-        updateTabPositions();
-        
         // Force widget position updates for all tabs
         taskDashboardTab.getWidget().revalidate();
-        taskListTab.getWidget().revalidate();
         for (UIButton tab : tabs) {
             tab.getWidget().revalidate();
         }
+
+        // Update tab positions
+        updateTabPositions();
     }
 
     private void updateTabPositions() {
         int windowWidth = window.getWidth();
         int availableWidth = windowWidth - 20; // 10px margin on each side
         int dashboardTabWidth = 95;
-        int masterTabWidth = 95;
         int regularTabWidth = 66;
-        
-        // Calculate number of visible tier tabs
+        // Count only visible tabs
         int visibleTierTabs = 0;
         for (TaskTier tier : TaskTier.values()) {
-            if (visibleTierTabs > 0 || tier == config.hideBelow()) {
+            if (tier.ordinal() >= config.hideBelow().ordinal()) {
                 visibleTierTabs++;
             }
         }
-        
-        if (config.hideBelow() == TaskTier.MASTER) {
-            // Only dashboard and master tabs
-            int totalTabsWidth = dashboardTabWidth + masterTabWidth;
-            int spacing = Math.max(10, (availableWidth - totalTabsWidth) / 3); // Minimum 10px spacing
-            
-            int dashboardX = 10 + spacing;
-            int masterX = 10 + spacing + dashboardTabWidth + spacing;
-            
-            taskDashboardTab.setPosition(dashboardX, 0);
-            taskDashboardTab.getWidget().setPos(dashboardX, 0);
-            
-            taskListTab.setPosition(masterX, 0);
-            taskListTab.getWidget().setPos(masterX, 0);
-        } else {
-            // Dashboard tab + tier tabs
-            int totalTabsWidth = dashboardTabWidth + (visibleTierTabs * regularTabWidth);
-            int spacing = Math.max(10, (availableWidth - totalTabsWidth) / (visibleTierTabs + 2)); // Minimum 10px spacing
-            
-            int dashboardX = 10 + spacing;
-            taskDashboardTab.setPosition(dashboardX, 0);
-            taskDashboardTab.getWidget().setPos(dashboardX, 0);
-            
-            int currentX = 10 + spacing + dashboardTabWidth + spacing;
-            int tabIndex = 0;
-            for (TaskTier tier : TaskTier.values()) {
-                if (tabIndex > 0 || tier == config.hideBelow()) {
-                    if (tabIndex < tabs.size()) {
-                        tabs.get(tabIndex).setPosition(currentX, 0);
-                        tabs.get(tabIndex).getWidget().setPos(currentX, 0);
-                        currentX += regularTabWidth + spacing;
-                    }
-                    tabIndex++;
-                }
+        int totalTabsWidth = dashboardTabWidth + (visibleTierTabs * regularTabWidth);
+        int spacing = Math.max(10, (availableWidth - totalTabsWidth) / (visibleTierTabs + 2)); // Minimum 10px spacing
+        int dashboardX = 10 + spacing;
+        taskDashboardTab.setPosition(dashboardX, 0);
+        taskDashboardTab.getWidget().setPos(dashboardX, 0);
+        int currentX = dashboardX + dashboardTabWidth + spacing;
+        int tabIndex = 0;
+        for (TaskTier tier : TaskTier.values()) {
+            if (tier.ordinal() >= config.hideBelow().ordinal()) {
+                UIButton tab = tabs.get(tabIndex);
+                tab.setPosition(currentX, 0);
+                tab.getWidget().setPos(currentX, 0);
+                currentX += regularTabWidth + spacing;
             }
+            tabIndex++;
+        }
+        // Revalidate all tabs
+        for (UIButton tab : tabs) {
+            tab.revalidate();
+            tab.getWidget().revalidate();
         }
     }
 
     public void updateTabs() {
-        updateTabPositions(); // Update positions first
-        
+        hideTabs();
         int tabIndex = 0;
         for (TaskTier tier : TaskTier.values()) {
-            if (tabIndex > 0 || tier == config.hideBelow()) {
+            if (tier.ordinal() >= config.hideBelow().ordinal()) {
                 if (tabs == null) {
                     return;
                 }
@@ -166,8 +150,8 @@ public class TabManager {
                 tabs.get(tabIndex).addAction(String.format("View <col=ff9040>%s Task List</col>", tier.displayName), () -> {
                     activateTaskListForTier(tier, finalTabIndex);
                 });
-                tabIndex++;
             }
+            tabIndex++;
         }
         showTabs();
     }
@@ -182,21 +166,7 @@ public class TabManager {
         updateTabs();
         tabs.get(tabIndex).setSprites(tier.tabSpriteHoverId);
         this.taskDashboard.setVisibility(false);
-        this.taskList.refreshTasks(0);
-        this.taskList.setVisibility(true);
-    }
-
-    private void activateTaskList() {
-        taskDashboardTab.setSprites(DASHBOARD_TAB_SPRITE_ID, DASHBOARD_TAB_HOVER_SPRITE_ID);
-        if (this.saveDataManager.getSaveData().getSelectedTier() != TaskTier.MASTER) {
-            this.taskList.goToTop();
-            this.saveDataManager.getSaveData().setSelectedTier(TaskTier.MASTER);
-            this.saveDataManager.save();
-        }
-        updateTabs();
-        taskListTab.setSprites(TASKLIST_TAB_HOVER_SPRITE_ID);
-        this.taskDashboard.setVisibility(false);
-        this.taskList.refreshTasks(0);
+        this.taskList.refreshTasks(0, true);
         this.taskList.setVisibility(true);
     }
 
@@ -204,7 +174,6 @@ public class TabManager {
         this.taskDashboardTab.setSprites(DASHBOARD_TAB_HOVER_SPRITE_ID);
         this.taskList.setVisibility(false);
         this.taskDashboard.setVisibility(true);
-        this.taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
         updateTabs();
     }
 
@@ -213,39 +182,39 @@ public class TabManager {
             this.taskDashboardTab.setVisibility(false);
         }
         if (this.tabs != null) {
-            this.tabs.forEach(t -> t.setVisibility(false));
-        }
-        if (this.taskListTab != null) {
-            this.taskListTab.setVisibility(false);
+            this.tabs.forEach(t -> {
+                t.setVisibility(false);
+            });
         }
     }
 
     public void showTabs() {
+        // Hide tabs if neither list is visible
         if (!this.taskList.isVisible() && !this.taskDashboard.isVisible()) {
-            this.hideTabs(); // Hide tabs if neither list is visible
+            this.hideTabs();
             return;
         }
-        updateTabPositions(); // Update positions when showing tabs
-        
         if (this.taskDashboardTab != null) {
             this.taskDashboardTab.setVisibility(true);
         }
-        if (this.config.hideBelow() == TaskTier.MASTER) {
-            this.taskListTab.setVisibility(true);
-        } else {
-            int tabIndex = 0;
-            for (TaskTier tier : TaskTier.values()) {
-                if (tabIndex > 0 || tier == config.hideBelow()) {
-                    this.tabs.get(tabIndex).setVisibility(true);
-                    tabIndex++;
-                }
+        int tabIndex = 0;
+        for (TaskTier tier : TaskTier.values()) {
+            UIButton tab = this.tabs.get(tabIndex);
+            if (tier.ordinal() >= config.hideBelow().ordinal()) {
+                tab.setVisibility(true);
+            } else {
+                // Move out of view before hiding
+                tab.setPosition(-1000, 0);
+                tab.getWidget().setPos(-1000, 0);
+                tab.setVisibility(false);
             }
+            tabIndex++;
         }
+        updateTabPositions();
     }
 
-    public void updateAfterConfigChange() {
-        if (this.config.hideBelow() == TaskTier.MASTER && this.saveDataManager.getSaveData().getSelectedTier() == TaskTier.MASTER && !this.taskDashboard.isVisible()) {
-            this.taskListTab.setSprites(TASKLIST_TAB_HOVER_SPRITE_ID);
-        }
+    public void onConfigChanged() {
+        createTabs();
+        updateTabs();
     }
 }
