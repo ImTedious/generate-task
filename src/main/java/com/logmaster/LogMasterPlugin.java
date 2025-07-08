@@ -36,7 +36,6 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.MouseManager;
-import net.runelite.client.input.MouseWheelListener;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.events.ScriptPreFired;
 import net.runelite.client.plugins.Plugin;
@@ -50,6 +49,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import javax.inject.Inject;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 @PluginDescriptor(
 	name = "Collection Log Master"
 )
-public class LogMasterPlugin extends Plugin implements MouseWheelListener {
+public class LogMasterPlugin extends Plugin {
 	private static final String TASK_CHAT_COMMAND = "!tasker";
 
 	private static final int COLLECTION_LOG_SETUP_SCRIPT_ID = 7797;
@@ -120,8 +120,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	@Override
 	protected void startUp() throws Exception
 	{
-		// Task overlay
-		mouseManager.registerMouseWheelListener(this);
+		mouseManager.registerMouseWheelListener(interfaceManager);
+		mouseManager.registerMouseListener(interfaceManager);
 		interfaceManager.initialise();
 		clogItemsManager.initialise();
 		this.taskOverlay.setResizable(true);
@@ -134,7 +134,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	@Override
 	protected void shutDown() throws Exception {
-		mouseManager.unregisterMouseWheelListener(this);
+		mouseManager.unregisterMouseWheelListener(interfaceManager);
+		mouseManager.unregisterMouseListener(interfaceManager);
 		this.overlayManager.remove(this.taskOverlay);
 	}
 
@@ -189,12 +190,6 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	@Subscribe
 	public void onGameTick(GameTick event) {
 		interfaceManager.updateTaskListBounds();
-	}
-
-	@Override
-	public MouseWheelEvent mouseWheelMoved(MouseWheelEvent event) {
-		interfaceManager.handleMouseWheel(event);
-		return event;
 	}
 
 	public void generateTask() {

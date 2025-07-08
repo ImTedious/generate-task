@@ -117,14 +117,26 @@
    },
    {
       "spriteId":-20029,
-      "fileName":"emptyButton.png"
+      "fileName":"page-up-arrow.png"
    },
    {
       "spriteId":-20030,
-      "fileName":"emptyButton_hover.png"
+      "fileName":"page-down-arrow.png"
    },
    {
       "spriteId":-20031,
-      "fileName":"syncButton.png"
+      "fileName":"thumb-top.png"
+   },
+   {
+      "spriteId":-20032,
+      "fileName":"thumb-middle.png"
+   },
+   {
+      "spriteId":-20033,
+      "fileName":"thumb-bottom.png"
+   },
+   {
+      "spriteId":-20034,
+      "fileName":"sync-button.png"
    }
 ]

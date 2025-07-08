@@ -32,6 +32,15 @@ public abstract class UIComponent
 	@Setter
 	private ComponentEventListener<UIComponent> leaveListener;
 
+	@Setter
+	private ComponentEventListener<UIComponent> mousePressListener;
+
+	@Setter
+	private ComponentEventListener<UIComponent> mouseDragListener;
+
+	@Setter
+	private ComponentEventListener<UIComponent> mouseReleaseListener;
+
 	/**
 	 * Constructs a new UIComponent
 	 * @param widget the underlying game widget
