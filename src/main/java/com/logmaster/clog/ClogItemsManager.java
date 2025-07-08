@@ -1,7 +1,6 @@
 package com.logmaster.clog;
 
 import net.runelite.client.callback.ClientThread;
-import net.runelite.client.game.SpriteManager;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -10,36 +9,32 @@ import okhttp3.OkHttpClient;
 import net.runelite.api.Client;
 import net.runelite.api.EnumComposition;
 import net.runelite.api.GameState;
-import net.runelite.api.Skill;
+import net.runelite.api.MenuAction;
 import net.runelite.api.StructComposition;
 
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.logmaster.LogMasterConfig;
 import com.logmaster.LogMasterPlugin;
 import com.logmaster.domain.Task;
 import com.logmaster.domain.TaskTier;
 import com.logmaster.task.TaskService;
+import com.logmaster.ui.InterfaceManager;
 
 import net.runelite.api.VarbitComposition;
 import net.runelite.api.events.ScriptPreFired;
 
-import java.util.Set;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 @Slf4j
@@ -52,13 +47,13 @@ public class ClogItemsManager {
     private ClientThread clientThread;
 
     @Inject
-    private LogMasterConfig config;
-
-    @Inject
     private LogMasterPlugin plugin;
 
     @Inject
     private TaskService taskService;
+
+    @Inject
+    private InterfaceManager interfaceManager;
 
 	@Inject
 	private OkHttpClient okHttpClient;
@@ -73,13 +68,16 @@ public class ClogItemsManager {
 	private Map<Integer, VarbitComposition> varbitCompositions = new HashMap<>();
 	private static final String MANIFEST_URL = "https://sync.runescape.wiki/runelite/manifest";
 	private static final BitSet clogItemsBitSet = new BitSet();
+    private final Object syncButtonLock = new Object();
+    private java.util.Timer syncButtonTimer = new java.util.Timer("SyncButtonTimer", true);
+    private java.util.TimerTask syncButtonTask = null;
 
     public void initialise() {
 		// Collection log auto sync config
 		clientThread.invoke(() -> {
 			if (client.getIndexConfig() == null || client.getGameState().ordinal() < GameState.LOGIN_SCREEN.ordinal())
 			{
-				log.debug("Failed to get varbitComposition, state = {}", client.getGameState());
+				log.warn("Failed to get varbitComposition, state = {}", client.getGameState());
 				return false;
 			}
 			collectionLogItemIdsFromCache.addAll(parseCacheForClog());
@@ -137,7 +135,7 @@ public class ClogItemsManager {
 	{
 		if (manifest == null)
 		{
-			log.debug("Manifest is not present so the collection log bitset index will not be updated");
+			log.warn("Manifest is not present so the collection log bitset index will not be updated");
 			return;
 		}
 		clientThread.invoke(() -> {
@@ -169,7 +167,7 @@ public class ClogItemsManager {
 			@Override
 			public void onFailure(Call call, IOException e)
 			{
-				log.debug("Failed to get manifest: ", e);
+				log.warn("Failed to get manifest: ", e);
 			}
 
 			@Override
@@ -179,7 +177,7 @@ public class ClogItemsManager {
 				{
 					if (!response.isSuccessful())
 					{
-						log.debug("Failed to get manifest: {}", response.code());
+						log.warn("Failed to get manifest: {}", response.code());
 						return;
 					}
 					InputStream in = response.body().byteStream();
@@ -188,7 +186,7 @@ public class ClogItemsManager {
 				}
 				catch (JsonParseException e)
 				{
-					log.debug("Failed to parse manifest: ", e);
+					log.warn("Failed to parse manifest: ", e);
 				}
 				finally
 				{
@@ -225,20 +223,20 @@ public class ClogItemsManager {
 		return result;
 	}
 
-	private int getVarbitValue(int varbitId)
-	{
-		VarbitComposition v = varbitCompositions.get(varbitId);
-		if (v == null)
-		{
-			return -1;
-		}
-
-		int value = client.getVarpValue(v.getIndex());
-		int lsb = v.getLeastSignificantBit();
-		int msb = v.getMostSignificantBit();
-		int mask = (1 << ((msb - lsb) + 1)) - 1;
-		return (value >> lsb) & mask;
-	}
+    private void scheduleSync() {
+        synchronized (syncButtonLock) {
+            if (syncButtonTask != null) {
+                syncButtonTask.cancel();
+            }
+            syncButtonTask = new java.util.TimerTask() {
+                @Override
+                public void run() {
+                    clientThread.invokeLater(() -> syncClogWithProgress());
+                }
+            };
+            syncButtonTimer.schedule(syncButtonTask, 3000);
+        }
+    }
 
     public void updatePlayersCollectionLogItems(ScriptPreFired preFired) {
         if (collectionLogItemIdToBitsetIndex.isEmpty())
@@ -254,6 +252,8 @@ public class ClogItemsManager {
         // We should never return -1 under normal circumstances
         if (idx != -1) {
             clogItemsBitSet.set(idx);
+            disableButton("Loading collection log items...");
+            scheduleSync();
         }
     }
 
@@ -261,10 +261,32 @@ public class ClogItemsManager {
         clogItemsBitSet.clear();
     }
 
+    public void enableButton() {
+        if (interfaceManager.taskDashboard != null) {
+            interfaceManager.taskDashboard.enableSyncButton();
+        }
+    }
+
+    public void disableButton(String reason) {
+        if (interfaceManager.taskDashboard != null) {
+            interfaceManager.taskDashboard.disableSyncButton(reason);
+        }
+    }
+
 	public void sync() {
 		if (clogItemsBitSet.isEmpty()) {
-			return;
+            disableButton("Loading collection log items...");
+            client.menuAction(-1, net.runelite.api.gameval.InterfaceID.Collection.SEARCH_TOGGLE, MenuAction.CC_OP, 1, -1, "Search", null);
+            client.runScript(2240);
 		}
+    }
+
+    public void syncClogWithProgress() {
+		if (clogItemsBitSet.isEmpty()) {
+            return;
+        }
+        
+        disableButton("Updating progress...");
 
 		// Update completed tasks automatically
 		for (TaskTier tier : TaskTier.values()) {
@@ -288,5 +310,7 @@ public class ClogItemsManager {
 				}
 			}
 		}
+        clearCollectionLog();
+        enableButton();
 	}
 }

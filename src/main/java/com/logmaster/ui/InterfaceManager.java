@@ -16,7 +16,6 @@ import com.logmaster.ui.generic.UIButton;
 import com.logmaster.ui.generic.UIGraphic;
 import com.logmaster.util.FileUtils;
 import net.runelite.api.Client;
-import net.runelite.api.MenuAction;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
@@ -67,7 +66,7 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
 
     private SpriteDefinition[] spriteDefinitions;
 
-    private TaskDashboard taskDashboard;
+    public TaskDashboard taskDashboard;
     private TaskList taskList;
 
     private List<UIButton> tabs;
@@ -272,6 +271,8 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
             taskDashboardCheckbox.setEnabled(false);
             taskDashboardCheckbox.setText("Task Dashboard");
             labelWidget.setPos(375, 10);
+                    
+
             taskDashboardCheckbox.setToggleListener((UICheckBox src) -> {
                 if (taskDashboardCheckbox.isEnabled()) {
                     this.dropdown.setEnabledOption("Tasks");
@@ -330,12 +331,6 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     }
 
     private void toggleTaskDashboard(UIDropdownOption src) {
-        // Toggle the search on and off to refresh the player items collected
-        if (!isTaskDashboardEnabled()) {
-            client.menuAction(-1, net.runelite.api.gameval.InterfaceID.Collection.SEARCH_TOGGLE, MenuAction.CC_OP, 1, -1, "Search", null);
-            client.runScript(2240);
-        }
-
         if(this.taskDashboard == null) return;
 
         if (saveDataManager.getSaveData().getActiveTaskPointer() != null) {

@@ -260,4 +260,10 @@ public class TaskDashboard extends UIPage {
         this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_HOVER_SPRITE_ID);
         this.syncBtn.addAction("Auto sync completed collection log slots", clogItemsManager::sync);
     }
+
+    public void disableSyncButton(String reason) {
+        this.syncBtn.clearActions();
+        this.syncBtn.setSprites(SYNC_BUTTON_DISABLED_SPRITE_ID);
+        this.syncBtn.addAction(reason, plugin::playFailSound);
+    }
 }
