@@ -122,5 +122,17 @@
    {
       "spriteId":-20030,
       "fileName":"page-down-arrow.png"
+   },
+   {
+      "spriteId":-20031,
+      "fileName":"thumb-top.png"
+   },
+   {
+      "spriteId":-20032,
+      "fileName":"thumb-middle.png"
+   },
+   {
+      "spriteId":-20033,
+      "fileName":"thumb-bottom.png"
    }
 ]
