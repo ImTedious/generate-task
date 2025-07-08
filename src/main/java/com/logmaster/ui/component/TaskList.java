@@ -146,10 +146,8 @@ public class TaskList extends UIPage {
     }
     
     public void refreshTasks(int dir, boolean forceRefresh) {
-        TaskTier relevantTier = plugin.getSelectedTier();
-        if (relevantTier == null) {
-            relevantTier = TaskTier.MASTER;
-        }
+        TaskTier selectedTier = plugin.getSelectedTier();
+        final TaskTier relevantTier = (selectedTier == null) ? TaskTier.MASTER : selectedTier;
         
         if (!forceRefresh) {
             int newIndex = topTaskIndex + dir;

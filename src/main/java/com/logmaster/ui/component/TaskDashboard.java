@@ -38,9 +38,7 @@ public class TaskDashboard extends UIPage {
     private final int TASK_BACKGROUND_SPRITE_ID = -20006;
     private final int FAQ_BUTTON_SPRITE_ID = -20027;
     private final int FAQ_BUTTON_HOVER_SPRITE_ID = -20028;
-    private final int EMPTY_BUTTON_SPRITE_ID = -20029;
-    private final int EMPTY_BUTTON_HOVER_SPRITE_ID = -20030;
-    private final int SYNC_BUTTON_SPRITE_ID = -20031;
+    private final int SYNC_BUTTON_SPRITE_ID = -20034;
 
     @Getter
     private Widget window;
