@@ -138,6 +138,9 @@ public class InterfaceManager {
         if (this.taskDashboard != null) {
             taskDashboard.updateBounds();
         }
+        if (this.tabManager != null) {
+            tabManager.updateBounds();
+        }
         if (this.taskDashboardCheckbox != null) {
             Widget window = client.getWidget(621, 88);
             if (window != null) {

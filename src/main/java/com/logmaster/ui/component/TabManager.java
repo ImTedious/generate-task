@@ -25,6 +25,7 @@ public class TabManager {
     
     private TaskDashboard taskDashboard;
     private TaskList taskList;
+    private UIGraphic divider;
 
     public TabManager(Widget window, LogMasterConfig config, SaveDataManager saveDataManager) {
         this.window = window;
@@ -50,22 +51,18 @@ public class TabManager {
         taskDashboardTab.setVisibility(false);
 
         tabs = new ArrayList<>();
-        int currentTabX = 110;
-
+        // Will be positioned dynamically in updateTabPositions()
         for (int i = 0; i < 5; i++) {
             Widget tabWidget = window.createChild(-1, WidgetType.GRAPHIC);
             UIButton tab = new UIButton(tabWidget);
             tab.setSize(66, 21);
-            tab.setPosition(currentTabX, 0);
             tab.setVisibility(false);
-            currentTabX += 71;
             tabs.add(tab);
         }
 
         Widget tabWidget = window.createChild(-1, WidgetType.GRAPHIC);
         taskListTab = new UIButton(tabWidget);
         taskListTab.setSize(95, 21);
-        taskListTab.setPosition(110, 0);
         taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
         taskListTab.setVisibility(false);
         taskListTab.addAction("View <col=ff9040>Task List</col>", this::activateTaskList);
@@ -73,13 +70,85 @@ public class TabManager {
 
     private void createDivider() {
         Widget dividerWidget = window.createChild(-1, WidgetType.GRAPHIC);
-        UIGraphic divider = new UIGraphic(dividerWidget);
+        divider = new UIGraphic(dividerWidget);
         divider.setSprite(DIVIDER_SPRITE_ID);
-        divider.setSize(480, 1);
+        divider.setSize(window.getWidth() - 20, 1); // Full width minus margins
         divider.setPosition(10, 20);
     }
 
+    public void updateBounds() {
+        // Update divider width to match window width
+        int windowWidth = window.getWidth();
+        divider.setSize(windowWidth - 20, 1);
+        divider.getWidget().setSize(windowWidth - 20, 1);
+        divider.getWidget().revalidate();
+        
+        // Update tab positions
+        updateTabPositions();
+        
+        // Force widget position updates for all tabs
+        taskDashboardTab.getWidget().revalidate();
+        taskListTab.getWidget().revalidate();
+        for (UIButton tab : tabs) {
+            tab.getWidget().revalidate();
+        }
+    }
+
+    private void updateTabPositions() {
+        int windowWidth = window.getWidth();
+        int availableWidth = windowWidth - 20; // 10px margin on each side
+        int dashboardTabWidth = 95;
+        int masterTabWidth = 95;
+        int regularTabWidth = 66;
+        
+        // Calculate number of visible tier tabs
+        int visibleTierTabs = 0;
+        for (TaskTier tier : TaskTier.values()) {
+            if (visibleTierTabs > 0 || tier == config.hideBelow()) {
+                visibleTierTabs++;
+            }
+        }
+        
+        if (config.hideBelow() == TaskTier.MASTER) {
+            // Only dashboard and master tabs
+            int totalTabsWidth = dashboardTabWidth + masterTabWidth;
+            int spacing = Math.max(10, (availableWidth - totalTabsWidth) / 3); // Minimum 10px spacing
+            
+            int dashboardX = 10 + spacing;
+            int masterX = 10 + spacing + dashboardTabWidth + spacing;
+            
+            taskDashboardTab.setPosition(dashboardX, 0);
+            taskDashboardTab.getWidget().setPos(dashboardX, 0);
+            
+            taskListTab.setPosition(masterX, 0);
+            taskListTab.getWidget().setPos(masterX, 0);
+        } else {
+            // Dashboard tab + tier tabs
+            int totalTabsWidth = dashboardTabWidth + (visibleTierTabs * regularTabWidth);
+            int spacing = Math.max(10, (availableWidth - totalTabsWidth) / (visibleTierTabs + 2)); // Minimum 10px spacing
+            
+            int dashboardX = 10 + spacing;
+            taskDashboardTab.setPosition(dashboardX, 0);
+            taskDashboardTab.getWidget().setPos(dashboardX, 0);
+            
+            int currentX = 10 + spacing + dashboardTabWidth + spacing;
+            int tabIndex = 0;
+            for (TaskTier tier : TaskTier.values()) {
+                if (tabIndex > 0 || tier == config.hideBelow()) {
+                    if (tabIndex < tabs.size()) {
+                        tabs.get(tabIndex).setPosition(currentX, 0);
+                        tabs.get(tabIndex).getWidget().setPos(currentX, 0);
+                        currentX += regularTabWidth + spacing;
+                    }
+                    tabIndex++;
+                }
+            }
+        }
+    }
+
     public void updateTabs() {
+        updateTabPositions(); // Update positions first
+        
         int tabIndex = 0;
         for (TaskTier tier : TaskTier.values()) {
             if (tabIndex > 0 || tier == config.hideBelow()) {
@@ -152,6 +221,8 @@ public class TabManager {
     }
 
     public void showTabs() {
+        updateTabPositions(); // Update positions when showing tabs
+        
         if (this.taskDashboardTab != null) {
             this.taskDashboardTab.setVisibility(true);
         }
