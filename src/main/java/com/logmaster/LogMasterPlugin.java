@@ -250,7 +250,13 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	}
 
 	public void completeTask(int taskID, TaskTier tier) {
-		this.client.playSoundEffect(SoundEffectID.UI_BOOP);
+		completeTask(taskID, tier, true);
+	}
+
+	public void completeTask(int taskID, TaskTier tier, boolean playSound) {
+		if (playSound) {
+			this.client.playSoundEffect(SoundEffectID.UI_BOOP);
+		}
 
 		if (saveDataManager.getSaveData().getProgress().get(tier).contains(taskID)) {
 			saveDataManager.getSaveData().getProgress().get(tier).remove(taskID);
@@ -545,11 +551,11 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 					}
 					if (count >= task.getCount() && !isTaskCompleted(task.getId(), tier)) {
 						// Check passed, task not yet completed, mark as completed
-						completeTask(task.getId(), tier);
+						completeTask(task.getId(), tier, false);
 						log.debug("Task '{}' marked as completed for tier {}", task.getDescription(), tier.displayName);
 					} else if (count < task.getCount() && isTaskCompleted(task.getId(), tier)) {
 						// Check failed, task marked as completed, unmark completion
-						completeTask(task.getId(), tier);
+						completeTask(task.getId(), tier, false);
 						log.debug("Task '{}' un-marked as this is not completed for tier {}", task.getDescription(), tier.displayName);
 					}
 				}
