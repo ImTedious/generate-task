@@ -176,6 +176,12 @@ public class InterfaceManager {
         if (this.taskDashboard != null) {
             taskDashboard.updateBounds();
         }
+        if (this.taskDashboardCheckbox != null) {
+            Widget window = client.getWidget(621, 88);
+            if (window != null) {
+                taskDashboardCheckbox.alignToRightEdge(window, 35, 10);
+            }
+        }
     }
 
     public void handleMouseWheel(MouseWheelEvent event) {
