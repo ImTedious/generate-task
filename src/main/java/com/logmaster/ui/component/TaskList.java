@@ -122,7 +122,7 @@ public class TaskList extends UIPage {
             if (task.getCheck().length <= 24 && task.getCheck().length > 0) {
                 for (int checkID : task.getCheck()) {
                     String itemName = plugin.itemManager.getItemComposition(checkID).getName();
-                    taskBg.addAction((plugin.isCollectionLogItemUnlocked(checkID) ? "<col=2ecc71>" : "<col=e74c3c>") + itemName + "</col>", () -> {});
+                    taskBg.addAction((plugin.clogItemsManager.isCollectionLogItemUnlocked(checkID) ? "<col=2ecc71>" : "<col=e74c3c>") + itemName + "</col>", () -> {});
                 }
             }
 

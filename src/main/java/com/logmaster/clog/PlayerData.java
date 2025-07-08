@@ -1,4 +1,4 @@
-package com.logmaster;
+package com.logmaster.clog;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -259,7 +259,7 @@ public class InterfaceManager {
     }
 
     private void createTaskDashboard(Widget window) {
-        this.taskDashboard = new TaskDashboard(plugin, config, window, taskService, saveDataManager);
+        this.taskDashboard = new TaskDashboard(plugin, config, window, taskService, saveDataManager, plugin.clogItemsManager);
         this.taskDashboard.setVisibility(false);
     }
 

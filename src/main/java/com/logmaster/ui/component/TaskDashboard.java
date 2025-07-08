@@ -2,6 +2,7 @@ package com.logmaster.ui.component;
 
 import com.logmaster.LogMasterConfig;
 import com.logmaster.LogMasterPlugin;
+import com.logmaster.clog.ClogItemsManager;
 import com.logmaster.domain.Task;
 import com.logmaster.persistence.SaveDataManager;
 import com.logmaster.task.TaskService;
@@ -48,8 +49,8 @@ public class TaskDashboard extends UIPage {
     private LogMasterConfig config;
 
     private final TaskService taskService;
-
     private final SaveDataManager saveDataManager;
+    private final ClogItemsManager clogItemsManager;
 
     private UILabel title;
     private UILabel taskLabel;
@@ -63,12 +64,13 @@ public class TaskDashboard extends UIPage {
     private UIButton faqBtn;
     private UIButton syncBtn;
 
-    public TaskDashboard(LogMasterPlugin plugin, LogMasterConfig config, Widget window, TaskService taskService, SaveDataManager saveDataManager) {
+    public TaskDashboard(LogMasterPlugin plugin, LogMasterConfig config, Widget window, TaskService taskService, SaveDataManager saveDataManager, ClogItemsManager clogItemsManager) {
         this.window = window;
         this.plugin = plugin;
         this.config = config;
         this.taskService = taskService;
         this.saveDataManager = saveDataManager;
+        this.clogItemsManager = clogItemsManager;
 
         createTaskDetails();
 
@@ -256,6 +258,6 @@ public class TaskDashboard extends UIPage {
     public void enableSyncButton() {
         this.syncBtn.clearActions();
         this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_SPRITE_ID);
-        this.syncBtn.addAction("Auto sync completed collection log slots", plugin::sync);
+        this.syncBtn.addAction("Auto sync completed collection log slots", clogItemsManager::sync);
     }
 }
