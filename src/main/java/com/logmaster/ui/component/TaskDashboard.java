@@ -39,6 +39,8 @@ public class TaskDashboard extends UIPage {
     private final int FAQ_BUTTON_SPRITE_ID = -20027;
     private final int FAQ_BUTTON_HOVER_SPRITE_ID = -20028;
     private final int SYNC_BUTTON_SPRITE_ID = -20034;
+    private final int SYNC_BUTTON_HOVER_SPRITE_ID = -20035;
+    private final int SYNC_BUTTON_DISABLED_SPRITE_ID = -20036;
 
     @Getter
     private Widget window;
@@ -109,7 +111,7 @@ public class TaskDashboard extends UIPage {
         this.syncBtn = new UIButton(syncWidget);
         this.syncBtn.setSize(SMALL_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
         this.syncBtn.setPosition(getCenterX(window, SMALL_BUTTON_WIDTH) - 190, getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112);
-        this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_SPRITE_ID);
+        this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_DISABLED_SPRITE_ID);
 
         this.add(this.title);
         this.add(this.taskBg);
@@ -255,7 +257,7 @@ public class TaskDashboard extends UIPage {
 
     public void enableSyncButton() {
         this.syncBtn.clearActions();
-        this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_SPRITE_ID);
+        this.syncBtn.setSprites(SYNC_BUTTON_SPRITE_ID, SYNC_BUTTON_HOVER_SPRITE_ID);
         this.syncBtn.addAction("Auto sync completed collection log slots", clogItemsManager::sync);
     }
 }

@@ -138,5 +138,13 @@
    {
       "spriteId":-20034,
       "fileName":"sync-button.png"
+   },
+   {
+      "spriteId":-20035,
+      "fileName":"sync-button-hover.png"
+   },
+   {
+      "spriteId":-20036,
+      "fileName":"sync-button-disabled.png"
    }
 ]
