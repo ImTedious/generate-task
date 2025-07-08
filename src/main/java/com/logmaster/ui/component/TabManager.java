@@ -169,6 +169,7 @@ public class TabManager {
                 tabIndex++;
             }
         }
+        showTabs();
     }
 
     private void activateTaskListForTier(TaskTier tier, int tabIndex) {
@@ -205,7 +206,6 @@ public class TabManager {
         this.taskDashboard.setVisibility(true);
         this.taskListTab.setSprites(TASKLIST_TAB_SPRITE_ID, TASKLIST_TAB_HOVER_SPRITE_ID);
         updateTabs();
-        showTabs();
     }
 
     public void hideTabs() {
@@ -221,6 +221,10 @@ public class TabManager {
     }
 
     public void showTabs() {
+        if (!this.taskList.isVisible() && !this.taskDashboard.isVisible()) {
+            this.hideTabs(); // Hide tabs if neither list is visible
+            return;
+        }
         updateTabPositions(); // Update positions when showing tabs
         
         if (this.taskDashboardTab != null) {

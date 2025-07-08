@@ -81,7 +81,6 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
 
     public void updateAfterConfigChange() {
         if (tabManager != null) {
-            tabManager.hideTabs();
             tabManager.updateTabs();
             tabManager.updateAfterConfigChange();
         }
