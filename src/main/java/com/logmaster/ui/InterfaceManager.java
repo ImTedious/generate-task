@@ -311,6 +311,7 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
                     this.taskDashboard.setVisibility(false);
                     this.taskList.refreshTasks(0);
                     this.taskList.setVisibility(true);
+                    showTabs();
                 });
                 tabIndex++;
             }
@@ -410,8 +411,13 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     }
 
     public void completeTask() {
+        boolean wasDashboardVisible = this.taskDashboard.isVisible();
         this.taskDashboard.updatePercentages();
         taskList.refreshTasks(0);
+        // Restore previous visibility state
+        this.taskDashboard.setVisibility(wasDashboardVisible);
+        this.taskList.setVisibility(!wasDashboardVisible);
+        showTabs();
     }
 
     public void clearCurrentTask() {
