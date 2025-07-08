@@ -28,7 +28,6 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.MouseManager;
-import net.runelite.client.input.MouseWheelListener;
 import net.runelite.client.menus.MenuManager;
 import net.runelite.client.menus.WidgetMenuOption;
 import net.runelite.api.events.ScriptPostFired;
@@ -38,6 +37,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.LinkBrowser;
 
 import javax.inject.Inject;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.util.*;
@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @PluginDescriptor(
 	name = "Collection Log Master"
 )
-public class LogMasterPlugin extends Plugin implements MouseWheelListener {
+public class LogMasterPlugin extends Plugin {
 	private static final String TASK_CHAT_COMMAND = "!tasker";
 
     private static final int COLLECTION_LOG_SETUP_SCRIPT_ID = 7797;
@@ -96,7 +96,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	@Override
 	protected void startUp() throws Exception
 	{
-		mouseManager.registerMouseWheelListener(this);
+		mouseManager.registerMouseWheelListener(interfaceManager);
+		mouseManager.registerMouseListener(interfaceManager);
 		interfaceManager.initialise();
 		this.taskOverlay.setResizable(true);
 		this.overlayManager.add(this.taskOverlay);
@@ -108,7 +109,8 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 
 	@Override
 	protected void shutDown() throws Exception {
-		mouseManager.unregisterMouseWheelListener(this);
+		mouseManager.unregisterMouseWheelListener(interfaceManager);
+		mouseManager.unregisterMouseListener(interfaceManager);
 		this.overlayManager.remove(this.taskOverlay);
 	}
 
@@ -153,12 +155,6 @@ public class LogMasterPlugin extends Plugin implements MouseWheelListener {
 	@Subscribe
 	public void onGameTick(GameTick event) {
 		interfaceManager.updateTaskListBounds();
-	}
-
-	@Override
-	public MouseWheelEvent mouseWheelMoved(MouseWheelEvent event) {
-		interfaceManager.handleMouseWheel(event);
-		return event;
 	}
 
 	public void generateTask() {

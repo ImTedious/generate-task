@@ -23,9 +23,12 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetType;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.game.SpriteManager;
+import net.runelite.client.input.MouseListener;
+import net.runelite.client.input.MouseWheelListener;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +37,7 @@ import java.util.List;
 import static com.logmaster.ui.InterfaceConstants.*;
 
 @Singleton
-public class InterfaceManager {
+public class InterfaceManager implements MouseListener, MouseWheelListener {
     private static final int COLLECTION_LOG_TAB_DROPDOWN_WIDGET_ID = 40697929;
 
     @Inject
@@ -155,8 +158,66 @@ public class InterfaceManager {
         }
     }
 
-    public void disableGenerateTaskButton() {
-        this.taskDashboard.disableGenerateTask();
+    public void handleMousePress(int mouseX, int mouseY) {
+        if(this.taskList != null && this.taskList.isVisible()) {
+            taskList.handleMousePress(mouseX, mouseY);
+        }
+    }
+
+    public void handleMouseDrag(int mouseX, int mouseY) {
+        if(this.taskList != null && this.taskList.isVisible()) {
+            taskList.handleMouseDrag(mouseX, mouseY);
+        }
+    }
+
+    public void handleMouseRelease() {
+        if(this.taskList != null) {
+            taskList.handleMouseRelease();
+        }
+    }
+
+    @Override
+    public MouseWheelEvent mouseWheelMoved(MouseWheelEvent event) {
+        handleMouseWheel(event);
+        return event;
+    }
+
+    @Override
+    public MouseEvent mouseClicked(MouseEvent event) {
+        return event;
+    }
+
+    @Override
+    public MouseEvent mousePressed(MouseEvent event) {
+        handleMousePress(event.getX(), event.getY());
+        return event;
+    }
+
+    @Override
+    public MouseEvent mouseReleased(MouseEvent event) {
+        handleMouseRelease();
+        return event;
+    }
+
+    @Override
+    public MouseEvent mouseDragged(MouseEvent event) {
+        handleMouseDrag(event.getX(), event.getY());
+        return event;
+    }
+
+    @Override
+    public MouseEvent mouseMoved(MouseEvent event) {
+        return event;
+    }
+
+    @Override
+    public MouseEvent mouseEntered(MouseEvent event) {
+        return event;
+    }
+
+    @Override
+    public MouseEvent mouseExited(MouseEvent event) {
+        return event;
     }
 
     private void createTaskDropdownOption() {
@@ -250,18 +311,26 @@ public class InterfaceManager {
     public void rollTask(String description, int itemID, List<Task> tasks) {
         this.taskDashboard.setTask(description, itemID, tasks);
         this.taskDashboard.disableGenerateTask(false);
-        this.taskList.refreshTasks(0);
         this.taskDashboard.updatePercentages();
     }
 
     public void completeTask() {
+        boolean wasDashboardVisible = this.taskDashboard.isVisible();
         this.taskDashboard.updatePercentages();
         taskList.refreshTasks(0);
+        // Restore previous visibility state
+        this.taskDashboard.setVisibility(wasDashboardVisible);
+        this.taskList.setVisibility(!wasDashboardVisible);
+        this.tabManager.showTabs();
     }
 
     public void clearCurrentTask() {
         this.taskDashboard.setTask("No task.", -1, null);
         this.taskDashboard.enableGenerateTask();
         this.taskDashboard.enableFaqButton();
+    }
+
+    public void disableGenerateTaskButton() {
+        this.taskDashboard.disableGenerateTask();
     }
 }
