@@ -239,4 +239,71 @@ public class TaskDashboard extends UIPage {
         this.faqBtn.setSprites(FAQ_BUTTON_SPRITE_ID, FAQ_BUTTON_HOVER_SPRITE_ID);
         this.faqBtn.addAction("FAQ", plugin::visitFaq);
     }
+
+    public void updateBounds() {
+        if (!this.isVisible()) {
+            return;
+        }
+
+        int windowWidth = window.getWidth();
+        int windowHeight = window.getHeight();
+
+        // Update title position - force widget position update
+        int titleX = getCenterX(window, COLLECTION_LOG_WINDOW_WIDTH);
+        this.title.setPosition(titleX, 24);
+        this.title.getWidget().setPos(titleX, 24);
+
+        // Update task details (background, label, image)
+        final int taskPosX = getCenterX(window, DEFAULT_TASK_DETAILS_WIDTH);
+        final int taskPosY = getCenterY(window, DEFAULT_TASK_DETAILS_HEIGHT) - 3;
+        
+        this.taskBg.setPosition(taskPosX, taskPosY);
+        this.taskBg.getWidget().setPos(taskPosX, taskPosY);
+        
+        this.taskLabel.setPosition(taskPosX + 60, taskPosY);
+        this.taskLabel.getWidget().setPos(taskPosX + 60, taskPosY);
+        
+        this.taskImage.setPosition(taskPosX + 12, taskPosY + 21);
+        this.taskImage.getWidget().setPos(taskPosX + 12, taskPosY + 21);
+
+        // Update button positions - force widget position updates
+        int generateBtnX = getCenterX(window, DEFAULT_BUTTON_WIDTH) - (DEFAULT_BUTTON_WIDTH / 2 + 15);
+        int generateBtnY = getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 62;
+        this.generateTaskBtn.setPosition(generateBtnX, generateBtnY);
+        this.generateTaskBtn.getWidget().setPos(generateBtnX, generateBtnY);
+        
+        int completeBtnX = getCenterX(window, DEFAULT_BUTTON_WIDTH) + (DEFAULT_BUTTON_WIDTH / 2 + 15);
+        int completeBtnY = getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 62;
+        this.completeTaskBtn.setPosition(completeBtnX, completeBtnY);
+        this.completeTaskBtn.getWidget().setPos(completeBtnX, completeBtnY);
+        
+        // Update FAQ button position with boundary checking
+        int faqBtnX = getCenterX(window, DEFAULT_BUTTON_WIDTH) + 238;
+        int faqBtnY = getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112;
+        
+        // Check if FAQ button would go outside the window and align with edge if needed
+        int faqBtnWidth = DEFAULT_BUTTON_WIDTH / 2;
+        if (faqBtnX + faqBtnWidth > windowWidth) {
+            faqBtnX = windowWidth - faqBtnWidth - 10; // 10px margin from edge
+        }
+        
+        this.faqBtn.setPosition(faqBtnX, faqBtnY);
+        this.faqBtn.getWidget().setPos(faqBtnX, faqBtnY);
+
+        // Update percentage completion position - force widget position update
+        int percentX = getCenterX(window, COLLECTION_LOG_WINDOW_WIDTH);
+        int percentY = getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112; // Same Y as FAQ button
+        this.percentCompletion.setPosition(percentX, percentY);
+        this.percentCompletion.getWidget().setPos(percentX, percentY);
+        
+        // Force revalidation of all widgets
+        this.title.getWidget().revalidate();
+        this.taskBg.getWidget().revalidate();
+        this.taskLabel.getWidget().revalidate();
+        this.taskImage.getWidget().revalidate();
+        this.generateTaskBtn.getWidget().revalidate();
+        this.completeTaskBtn.getWidget().revalidate();
+        this.faqBtn.getWidget().revalidate();
+        this.percentCompletion.getWidget().revalidate();
+    }
 }

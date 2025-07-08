@@ -173,6 +173,9 @@ public class InterfaceManager {
         if (this.taskList != null) {
             taskList.updateBounds();
         }
+        if (this.taskDashboard != null) {
+            taskDashboard.updateBounds();
+        }
     }
 
     public void handleMouseWheel(MouseWheelEvent event) {
