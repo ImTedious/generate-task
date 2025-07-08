@@ -181,8 +181,9 @@ public class TaskList extends UIPage {
             boolean taskCompleted = plugin.isTaskCompleted(task.getId(), relevantTier);
             taskBg.addAction("Mark as " + (taskCompleted ? "<col=e74c3c>incomplete" : "<col=2ecc71>completed") + "</col>", () -> plugin.completeTask(task.getId(), relevantTier));
             
-            if (task.getCheck().length <= 24 && task.getCheck().length > 0) {
-                for (int checkID : task.getCheck()) {
+            int[] checkArray = task.getCheck();
+            if (checkArray != null && checkArray.length <= 24 && checkArray.length > 0) {
+                for (int checkID : checkArray) {
                     String itemName = plugin.itemManager.getItemComposition(checkID).getName();
                     taskBg.addAction((plugin.clogItemsManager.isCollectionLogItemUnlocked(checkID) ? "<col=2ecc71>" : "<col=e74c3c>") + itemName + "</col>", () -> {});
                 }
