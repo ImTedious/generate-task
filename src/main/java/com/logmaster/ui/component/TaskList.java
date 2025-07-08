@@ -280,7 +280,8 @@ public class TaskList extends UIPage {
 
         event.consume();
 
-        refreshTasks(event.getWheelRotation());
+        // Needs to run on client thread to update scroll wheel position
+        clientThread.invoke(() -> refreshTasks(event.getWheelRotation()));
     }
 
     public void updateBounds()
@@ -429,6 +430,7 @@ public class TaskList extends UIPage {
         int newTopIndex = calculateNewScrollPosition(mouseY, totalTasks);
         if (newTopIndex != topTaskIndex) {
             topTaskIndex = newTopIndex;
+            // Needs to run on client thread to update scroll wheel position
             clientThread.invoke(() -> {refreshTasks(0, true); });
         }
     }
