@@ -240,25 +240,6 @@ public class ClogItemsManager {
 		return (value >> lsb) & mask;
 	}
 
-	private PlayerData getPlayerData()
-	{
-		PlayerData out = new PlayerData();
-		for (int varbitId : manifest.varbits)
-		{
-			out.varb.put(varbitId, getVarbitValue(varbitId));
-		}
-		for (int varpId : manifest.varps)
-		{
-			out.varp.put(varpId, client.getVarpValue(varpId));
-		}
-		for(Skill s : Skill.values())
-		{
-			out.level.put(s.getName(), client.getRealSkillLevel(s));
-		}
-		out.collectionLogSlots = Base64.getEncoder().encodeToString(clogItemsBitSet.toByteArray());
-		return out;
-	}
-
     public void updatePlayersCollectionLogItems(ScriptPreFired preFired) {
         if (collectionLogItemIdToBitsetIndex.isEmpty())
         {
