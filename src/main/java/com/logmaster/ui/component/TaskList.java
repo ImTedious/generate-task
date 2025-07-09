@@ -97,47 +97,50 @@ public class TaskList extends UIPage {
         pageUpButton = new UIButton(pageUpWidget);
         pageUpButton.setSprites(PAGE_UP_ARROW_SPRITE_ID);
         pageUpButton.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
-        pageUpButton.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT + ARROW_Y_OFFSET);
+        // Initial position will be set in updateArrowPositions()
+        pageUpButton.setPosition(-ARROW_SPRITE_WIDTH, 0);
         pageUpButton.addAction("Page up", () -> refreshTasks(-tasksPerPage));
 
         Widget upWidget = window.createChild(-1, WidgetType.GRAPHIC);
         upArrowButton = new UIButton(upWidget);
         upArrowButton.setSprites(UP_ARROW_SPRITE_ID);
         upArrowButton.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
-        upArrowButton.setPosition(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), ARROW_SPRITE_HEIGHT*2 + ARROW_Y_OFFSET);
+        upArrowButton.setPosition(-ARROW_SPRITE_WIDTH, 0);
         upArrowButton.addAction("Scroll up", () -> refreshTasks(-1));
 
         scrollbarTrackWidget = window.createChild(-1, WidgetType.RECTANGLE);
         scrollbarTrackWidget.setFilled(true);
         scrollbarTrackWidget.setTextColor(0x665948);
         scrollbarTrackWidget.setSize(SCROLLBAR_WIDTH, 200);
-        scrollbarTrackWidget.setPos(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 2, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET);
+        scrollbarTrackWidget.setPos(-ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET);
         
         scrollbarThumbTopWidget = window.createChild(-1, WidgetType.GRAPHIC);
         scrollbarThumbTopWidget.setSpriteId(THUMB_TOP_SPRITE_ID);
         scrollbarThumbTopWidget.setSize(SCROLLBAR_WIDTH, 2);
-        scrollbarThumbTopWidget.setPos(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 2, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET);
+        scrollbarThumbTopWidget.setPos(-ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET);
 
         scrollbarThumbMiddleWidget = window.createChild(-1, WidgetType.GRAPHIC);
         scrollbarThumbMiddleWidget.setSpriteId(THUMB_MIDDLE_SPRITE_ID);
         scrollbarThumbMiddleWidget.setSize(SCROLLBAR_WIDTH, SCROLLBAR_THUMB_MIN_HEIGHT - 4);
-        scrollbarThumbMiddleWidget.setPos(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 2, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + 2);
+        scrollbarThumbMiddleWidget.setPos(-ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + 2);
 
         scrollbarThumbBottomWidget = window.createChild(-1, WidgetType.GRAPHIC);
         scrollbarThumbBottomWidget.setSpriteId(THUMB_BOTTOM_SPRITE_ID);
         scrollbarThumbBottomWidget.setSize(SCROLLBAR_WIDTH, 2);
-        scrollbarThumbBottomWidget.setPos(CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 2, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + SCROLLBAR_THUMB_MIN_HEIGHT - 2);
+        scrollbarThumbBottomWidget.setPos(-ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + SCROLLBAR_THUMB_MIN_HEIGHT - 2);
 
         Widget downWidget = window.createChild(-1, WidgetType.GRAPHIC);
         downArrowButton = new UIButton(downWidget);
         downArrowButton.setSprites(DOWN_ARROW_SPRITE_ID);
         downArrowButton.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
+        downArrowButton.setPosition(-ARROW_SPRITE_WIDTH, 0);
         downArrowButton.addAction("Scroll down", () -> refreshTasks(1));
 
         Widget pageDownWidget = window.createChild(-1, WidgetType.GRAPHIC);
         pageDownButton = new UIButton(pageDownWidget);
         pageDownButton.setSprites(PAGE_DOWN_ARROW_SPRITE_ID);
         pageDownButton.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
+        pageDownButton.setPosition(-ARROW_SPRITE_WIDTH, 0);
         pageDownButton.addAction("Page down", () -> refreshTasks(tasksPerPage));
     }
 
@@ -150,37 +153,36 @@ public class TaskList extends UIPage {
         if (relevantTier == null) {
             relevantTier = TaskTier.MASTER;
         }
-        
         if (!forceRefresh) {
             int newIndex = topTaskIndex + dir;
             // Ensure we don't go past the valid range
             topTaskIndex = Math.min(taskService.getTaskList().getForTier(relevantTier).size() - tasksPerPage, Math.max(0, newIndex));
         }
-
-        final int POS_X = CANVAS_WIDTH / 2 - TASK_WIDTH / 2;
-
+        // Center the task list in the window
+        int windowWidth = window.getWidth();
+        int windowHeight = window.getHeight();
+        final int POS_X = (windowWidth - TASK_WIDTH - SCROLLBAR_WIDTH - 10) / 2; // 10px padding from right
+        final int SCROLLBAR_X = windowWidth - SCROLLBAR_WIDTH - 5; // 5px padding from right
+        final int POS_Y = OFFSET_Y;
         int i = 0;
         for(Task task : getTasksToShow(relevantTier, topTaskIndex)) {
-            final int POS_Y = OFFSET_Y+(i*TASK_HEIGHT);
-
+            int taskY = POS_Y + (i * TASK_HEIGHT);
             UIGraphic taskBg;
             if(taskBackgrounds.size() <= i) {
                 taskBg = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
                 taskBackgrounds.add(taskBg);
                 this.add(taskBg);
-            }
-            else {
+            } else {
                 taskBg = taskBackgrounds.get(i);
                 taskBg.getWidget().setHidden(false);
             }
-
             taskBg.clearActions();
             taskBg.setSize(TASK_WIDTH, TASK_HEIGHT);
-            taskBg.setPosition(POS_X, POS_Y);
-            taskBg.getWidget().setPos(POS_X, POS_Y);
+            taskBg.setPosition(POS_X, taskY);
+            taskBg.getWidget().setPos(POS_X, taskY);
+            taskBg.getWidget().revalidate(); // Force refresh
             TaskTier finalRelevantTier = relevantTier;
             taskBg.addAction("Mark", () -> plugin.completeTask(task.getId(), finalRelevantTier));
-
             if (saveDataManager.getSaveData().getProgress().get(relevantTier).contains(task.getId())) {
                 taskBg.setSprite(TASK_COMPLETE_BACKGROUND_SPRITE_ID);
             } else if (saveDataManager.getSaveData().getActiveTaskPointer() != null && saveDataManager.getSaveData().getActiveTaskPointer().getTaskTier() == relevantTier && saveDataManager.getSaveData().getActiveTaskPointer().getTask().getId() == task.getId()) {
@@ -188,7 +190,6 @@ public class TaskList extends UIPage {
             } else {
                 taskBg.setSprite(TASK_LIST_BACKGROUND_SPRITE_ID);
             }
-
             UILabel taskLabel;
             if (taskLabels.size() <= i) {
                 taskLabel = new UILabel(window.createChild(-1, WidgetType.TEXT));
@@ -198,35 +199,31 @@ public class TaskList extends UIPage {
                 taskLabel = taskLabels.get(i);
                 taskLabel.getWidget().setHidden(false);
             }
-
             taskLabel.getWidget().setTextColor(Color.WHITE.getRGB());
             taskLabel.getWidget().setTextShadowed(true);
             taskLabel.getWidget().setName(task.getDescription());
             taskLabel.setFont(496);
-            taskLabel.setPosition(POS_X+60, POS_Y);
+            taskLabel.setPosition(POS_X+60, taskY);
             taskLabel.setSize(TASK_WIDTH-60, TASK_HEIGHT);
             taskLabel.setText(task.getDescription());
-
+            taskLabel.getWidget().revalidate(); // Force refresh
             UIGraphic taskImage;
             if(taskImages.size() <= i) {
                 taskImage = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
                 this.add(taskImage);
                 taskImages.add(taskImage);
-            }
-            else {
+            } else {
                 taskImage = taskImages.get(i);
                 taskImage.getWidget().setHidden(false);
             }
-
-            taskImage.setPosition(POS_X+12, POS_Y+6);
+            taskImage.setPosition(POS_X+12, taskY+6);
             taskImage.getWidget().setBorderType(1);
             taskImage.getWidget().setItemQuantityMode(ItemQuantityMode.NEVER);
             taskImage.setSize(TASK_ITEM_WIDTH, TASK_ITEM_HEIGHT);
             taskImage.setItem(task.getItemID());
-
+            taskImage.getWidget().revalidate(); // Force refresh
             i++;
         }
-        
         // Hide any remaining task UI elements that are no longer visible
         hideUnusedTaskElements(i);
         updateScrollbar();
@@ -276,7 +273,6 @@ public class TaskList extends UIPage {
     public void updateBounds()
     {
         if (!this.isVisible()) {
-            tasksPerPage = 20; // Default value, will be updated based on window size
             return;
         }
 
@@ -299,27 +295,35 @@ public class TaskList extends UIPage {
             }
             int maxTopIndex = Math.max(0, taskService.getTaskList().getForTier(relevantTier).size() - tasksPerPage);
             topTaskIndex = Math.min(topTaskIndex, maxTopIndex);
-            
             // Update arrow positions immediately when page size changes
             updateArrowPositions();
-            
             // Update scrollbar immediately when size changes
             updateScrollbar();
-            
-            // Force refresh the task display
-            refreshTasks(0, true);
+        } else {
+            // Still update arrow positions and scrollbar if window size changes
+            updateArrowPositions();
+            updateScrollbar();
         }
+        // Always force refresh the task display to keep it centered, but defer to after layout
+        clientThread.invokeLater(() -> refreshTasks(0, true));
 
         bounds.setLocation(wrapperX + windowX + OFFSET_X, wrapperY + windowY + OFFSET_Y);
         bounds.setSize(windowWidth - OFFSET_X, windowHeight - OFFSET_Y);
     }
 
     private void updateArrowPositions() {
+        int windowWidth = window.getWidth();
         int scrollbarTrackHeight = (tasksPerPage * TASK_HEIGHT) - (ARROW_SPRITE_HEIGHT * 4);
-        int scrollbarEndY = ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + scrollbarTrackHeight;
-        
-        forceWidgetPositionUpdate(downArrowButton, CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), scrollbarEndY);
-        forceWidgetPositionUpdate(pageDownButton, CANVAS_WIDTH - (ARROW_SPRITE_WIDTH+5), scrollbarEndY + ARROW_SPRITE_HEIGHT);
+        int scrollbarX = windowWidth - ARROW_SPRITE_WIDTH - 5;
+        // Position arrows vertically in order: page up, up, down, page down
+        int pageUpY = ARROW_SPRITE_HEIGHT + ARROW_Y_OFFSET;
+        int upArrowY = ARROW_SPRITE_HEIGHT * 2 + ARROW_Y_OFFSET;
+        int downArrowY = ARROW_SPRITE_HEIGHT * 3 + ARROW_Y_OFFSET + scrollbarTrackHeight;
+        int pageDownY = downArrowY + ARROW_SPRITE_HEIGHT;
+        forceWidgetPositionUpdate(pageUpButton, scrollbarX, pageUpY);
+        forceWidgetPositionUpdate(upArrowButton, scrollbarX, upArrowY);
+        forceWidgetPositionUpdate(downArrowButton, scrollbarX, downArrowY);
+        forceWidgetPositionUpdate(pageDownButton, scrollbarX, pageDownY);
     }
 
     private void forceWidgetPositionUpdate(UIButton button, int x, int y) {
@@ -339,16 +343,18 @@ public class TaskList extends UIPage {
         if (relevantTier == null) relevantTier = TaskTier.MASTER;
         
         int totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
+        int windowWidth = window.getWidth();
         int scrollbarTrackHeight = (tasksPerPage * TASK_HEIGHT) - (ARROW_SPRITE_HEIGHT * 4);
-        
+        int scrollbarX = windowWidth - SCROLLBAR_WIDTH - 9;
         forceWidgetUpdate(scrollbarTrackWidget, SCROLLBAR_WIDTH, scrollbarTrackHeight);
+        scrollbarTrackWidget.setPos(scrollbarX + 2, ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET);
         updateArrowPositions();
         
         if (totalTasks <= tasksPerPage) {
             setScrollbarVisibility(false);
         } else {
             setScrollbarVisibility(true);
-            updateScrollbarThumb(totalTasks, scrollbarTrackHeight);
+            updateScrollbarThumb(totalTasks, scrollbarTrackHeight, scrollbarX);
         }
     }
 
@@ -359,15 +365,14 @@ public class TaskList extends UIPage {
         widget.revalidate();
     }
 
-    private void updateScrollbarThumb(int totalTasks, int scrollbarTrackHeight) {
+    private void updateScrollbarThumb(int totalTasks, int scrollbarTrackHeight, int scrollbarX) {
         topTaskIndex = Math.min(topTaskIndex, Math.max(0, totalTasks - tasksPerPage));
         
         int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)tasksPerPage / totalTasks)));
         int maxScrollPosition = Math.max(1, totalTasks - tasksPerPage);
         int thumbY = maxScrollPosition > 0 ? (int)((scrollbarTrackHeight - thumbHeight) * ((double)topTaskIndex / maxScrollPosition)) : 0;
-        
-        int thumbX = CANVAS_WIDTH - (ARROW_SPRITE_WIDTH + 5) + 2;
         int thumbStartY = ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + thumbY;
+        int thumbX = scrollbarX + 2;
         
         // Update top edge (2px height)
         scrollbarThumbTopWidget.setPos(thumbX, thumbStartY);
