@@ -348,6 +348,7 @@ public class TaskList extends UIPage {
 
         event.consume();
 
+        // Needed otherwise we get laggy updates
         clientThread.invoke(() -> refreshTasks(event.getWheelRotation()));
     }
 
@@ -493,6 +494,7 @@ public class TaskList extends UIPage {
         int newTopIndex = calculateNewScrollPosition(mouseY, totalTasks);
         if (newTopIndex != topTaskIndex) {
             topTaskIndex = newTopIndex;
+            // Needed otherwise we get laggy updates
             clientThread.invoke(() -> refreshTasks(0));
         }
     }
