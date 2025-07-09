@@ -3,6 +3,7 @@ package com.logmaster.ui;
 public class InterfaceConstants {
 
     public static final String DEF_FILE_SPRITES = "SpriteDef.json";
+    public static final int TRANSPARENT_SPRITE_ID = -20099;
 
     public static final int TASK_BACKGROUND_SPRITE_ID = -20006;
     public static final int TASK_LIST_BACKGROUND_SPRITE_ID = -20012;
