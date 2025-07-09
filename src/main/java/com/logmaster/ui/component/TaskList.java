@@ -159,14 +159,13 @@ public class TaskList extends UIPage {
         int minColumns = 1;
         int maxColumns = Math.max(minColumns, (windowWidth - SCROLLBAR_WIDTH - 40) / (TASK_WIDTH + columnSpacing));
         int columns = Math.max(1, maxColumns);
-        int tasksToShowCount = (columns >= 2) ? tasksPerPage * columns : tasksPerPage;
+        int tasksToShowCount = tasksPerPage * columns;
         int totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
         if (!forceRefresh) {
             int newIndex = topTaskIndex + dir * (columns >= 2 ? columns : 1);
             topTaskIndex = Math.min(Math.max(0, totalTasks - tasksToShowCount), Math.max(0, newIndex));
         }
-        int visibleTasks = Math.min(tasksToShowCount, totalTasks - topTaskIndex);
-        int rows = (int)Math.ceil((double)visibleTasks / columns);
+        int rows = tasksPerPage;
         int totalTasksHeight = rows * TASK_HEIGHT;
         int availableHeight = windowHeight - OFFSET_Y;
         int verticalMargin = 0;
@@ -178,17 +177,15 @@ public class TaskList extends UIPage {
         int totalWidth = columns * TASK_WIDTH + (columns - 1) * columnSpacing;
         int startX = (windowWidth - totalWidth - SCROLLBAR_WIDTH - 10) / 2;
         int POS_Y = startY;
-        int widgetsToShow = visibleTasks + 1;
-        hideUnusedTaskElements(widgetsToShow);
-        List<Task> tasksToShow = getTasksToShow(relevantTier, topTaskIndex, visibleTasks);
+        hideUnusedTaskElements(tasksToShowCount);
+        List<Task> tasksToShow = getTasksToShow(relevantTier, topTaskIndex, tasksToShowCount);
         int widgetIndex = 0;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
                 int i = row * columns + col;
-                boolean isExtra = (i == visibleTasks);
-                if (i > visibleTasks) break;
-                int taskY = isExtra ? 0 : POS_Y + (row * (TASK_HEIGHT + verticalMargin));
-                int taskX = isExtra ? -1000 : startX + col * (TASK_WIDTH + columnSpacing);
+                int taskY = POS_Y + (row * (TASK_HEIGHT + verticalMargin));
+                int taskX = startX + col * (TASK_WIDTH + columnSpacing);
+                if (i > tasksToShowCount) break;
                 UIGraphic taskBg;
                 if (taskBackgrounds.size() <= widgetIndex) {
                     taskBg = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
@@ -203,7 +200,7 @@ public class TaskList extends UIPage {
                 taskBg.setPosition(taskX, taskY);
                 taskBg.getWidget().setPos(taskX, taskY);
                 taskBg.getWidget().revalidate();
-                if (!isExtra && i < tasksToShow.size()) {
+                if (i < tasksToShow.size()) {
                     Task task = tasksToShow.get(i);
                     TaskTier finalRelevantTier = relevantTier;
                     taskBg.addAction("Mark", () -> plugin.completeTask(task.getId(), finalRelevantTier));
@@ -228,7 +225,7 @@ public class TaskList extends UIPage {
                 taskLabel.getWidget().setHidden(false);
                 taskLabel.getWidget().setTextColor(Color.WHITE.getRGB());
                 taskLabel.getWidget().setTextShadowed(true);
-                if (!isExtra && i < tasksToShow.size()) {
+                if (i < tasksToShow.size()) {
                     Task task = tasksToShow.get(i);
                     taskLabel.getWidget().setName(task.getDescription());
                     taskLabel.setText(task.getDescription());
@@ -237,7 +234,7 @@ public class TaskList extends UIPage {
                     taskLabel.setText("");
                 }
                 taskLabel.setFont(496);
-                taskLabel.setPosition(isExtra ? -1000 : taskX+60, isExtra ? 0 : taskY);
+                taskLabel.setPosition(taskX + 60, taskY);
                 taskLabel.setSize(TASK_WIDTH-60, TASK_HEIGHT);
                 taskLabel.getWidget().revalidate();
                 UIGraphic taskImage;
@@ -249,11 +246,11 @@ public class TaskList extends UIPage {
                     taskImage = taskImages.get(widgetIndex);
                 }
                 taskImage.getWidget().setHidden(false);
-                taskImage.setPosition(isExtra ? -1000 : taskX+12, isExtra ? 0 : taskY+6);
+                taskImage.setPosition(taskX + 12, taskY + 6);
                 taskImage.getWidget().setBorderType(1);
                 taskImage.getWidget().setItemQuantityMode(ItemQuantityMode.NEVER);
                 taskImage.setSize(TASK_ITEM_WIDTH, TASK_ITEM_HEIGHT);
-                if (!isExtra && i < tasksToShow.size()) {
+                if (i < tasksToShow.size()) {
                     Task task = tasksToShow.get(i);
                     taskImage.setItem(task.getItemID());
                 } else {
@@ -264,7 +261,7 @@ public class TaskList extends UIPage {
             }
         }
         // Render the extra widget offscreen if needed
-        if (widgetIndex == visibleTasks) {
+        if (widgetIndex == tasksToShowCount) {
             UIGraphic taskBg;
             if (taskBackgrounds.size() <= widgetIndex) {
                 taskBg = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
@@ -323,18 +320,21 @@ public class TaskList extends UIPage {
             bg.getWidget().setHidden(true);
             bg.setPosition(-1000, 0);
             bg.getWidget().setPos(-1000, 0);
+            bg.setSprite(TRANSPARENT_SPRITE_ID);
         }
         for (int i = visibleCount; i < taskLabels.size(); i++) {
             UILabel label = taskLabels.get(i);
             label.getWidget().setHidden(true);
             label.setPosition(-1000, 0);
             label.getWidget().setPos(-1000, 0);
+            label.setText("");
         }
         for (int i = visibleCount; i < taskImages.size(); i++) {
             UIGraphic img = taskImages.get(i);
             img.getWidget().setHidden(true);
             img.setPosition(-1000, 0);
             img.getWidget().setPos(-1000, 0);
+            img.setItem(-1);
         }
     }
 

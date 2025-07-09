@@ -134,5 +134,9 @@
    {
       "spriteId":-20033,
       "fileName":"thumb-bottom.png"
+   },
+   {
+      "spriteId":-20099,
+      "fileName":"transparent.png"
    }
 ]
