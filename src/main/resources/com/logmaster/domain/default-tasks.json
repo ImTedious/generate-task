@@ -17,35 +17,35 @@
     {
       "id": 2,
       "itemID": 20708,
-      "description": "Get 1 Unique from Wintertodt",
+      "description": "Get 1 unique from Wintertodt",
       "check": [20716, 20718, 20720, 20704, 20706, 20708, 20710, 20712],
       "count": 1
     },
     {
       "id": 3,
       "itemID": 20708,
-      "description": "Get 1 Unique from Wintertodt",
+      "description": "Get 1 unique from Wintertodt",
       "check": [20716, 20718, 20720, 20704, 20706, 20708, 20710, 20712],
       "count": 2
     },
     {
       "id": 4,
       "itemID": 20708,
-      "description": "Get 1 Unique from Wintertodt",
+      "description": "Get 1 unique from Wintertodt",
       "check": [20716, 20718, 20720, 20704, 20706, 20708, 20710, 20712],
       "count": 3
     },
     {
       "id": 5,
       "itemID": 20708,
-      "description": "Get 1 Unique from Wintertodt",
+      "description": "Get 1 unique from Wintertodt",
       "check": [20716, 20718, 20720, 20704, 20706, 20708, 20710, 20712],
       "count": 4
     },
     {
       "id": 6,
       "itemID": 20708,
-      "description": "Get 1 Unique from Wintertodt",
+      "description": "Get 1 unique from Wintertodt",
       "check": [20716, 20718, 20720, 20704, 20706, 20708, 20710, 20712],
       "count": 5
     },
@@ -1209,35 +1209,35 @@
     {
       "id": 11,
       "itemID": 20708,
-      "description": "Get 1 Unique from Wintertodt",
+      "description": "Get 1 unique from Wintertodt",
       "check": [20716, 20718, 20720, 20704, 20706, 20708, 20710, 20712],
       "count": 6
     },
     {
       "id": 12,
       "itemID": 20708,
-      "description": "Get 1 Unique from Wintertodt",
+      "description": "Get 1 unique from Wintertodt",
       "check": [20716, 20718, 20720, 20704, 20706, 20708, 20710, 20712],
       "count": 7
     },
     {
       "id": 13,
       "itemID": 20708,
-      "description": "Get 1 Unique from Wintertodt",
+      "description": "Get 1 unique from Wintertodt",
       "check": [20716, 20718, 20720, 20704, 20706, 20708, 20710, 20712],
       "count": 8
     },
     {
       "id": 14,
       "itemID": 3999,
-      "description": "Get 1 Unique from Zulrah",
+      "description": "Get 1 unique from Zulrah",
       "check": [12932, 12934, 12938, 12922, 12927, 6571],
       "count": 1
     },
     {
       "id": 15,
       "itemID": 3999,
-      "description": "Get 1 Unique from Zulrah",
+      "description": "Get 1 unique from Zulrah",
       "check": [12932, 12934, 12938, 12922, 12927, 6571],
       "count": 2
     },
@@ -2191,14 +2191,14 @@
     {
       "id": 164,
       "itemID": 28813,
-      "description": "Get 1 Unique from Armoured zombies",
+      "description": "Get 1 unique from Armoured zombies",
       "check": [28813, 30324],
       "count": 1
     },
     {
       "id": 177,
       "itemID": 28813,
-      "description": "Get 1 Unique from Armoured zombies",
+      "description": "Get 1 unique from Armoured zombies",
       "check": [28813, 30324],
       "count": 2
     },
