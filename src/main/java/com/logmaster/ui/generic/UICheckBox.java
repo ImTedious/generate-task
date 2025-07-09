@@ -173,4 +173,20 @@ public class UICheckBox extends UIComponent
 	{
 		this.label.setText(text);
 	}
+
+	// Align checkbox to right hand side of the window near the close button
+	public void alignToRightEdge(Widget window, int marginFromEdge, int y)
+	{
+		int windowWidth = window.getWidth();
+		int checkboxX = windowWidth - LABEL_WIDTH - CHECKBOX_SIZE - marginFromEdge;
+		this.setPosition(checkboxX, y);
+		
+		// Force widget position updates
+		this.getWidget().setPos(checkboxX, y);
+		this.label.getWidget().setPos(checkboxX + CHECKBOX_SIZE + 4, y); // 4px spacing between checkbox and label
+		
+		// Revalidate widgets
+		this.getWidget().revalidate();
+		this.label.getWidget().revalidate();
+	}
 }
