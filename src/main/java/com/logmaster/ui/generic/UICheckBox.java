@@ -174,12 +174,7 @@ public class UICheckBox extends UIComponent
 		this.label.setText(text);
 	}
 
-	/**
-	 * Positions the checkbox aligned to the right edge of the specified window
-	 * @param window the window to align to
-	 * @param marginFromEdge margin in pixels from the right edge
-	 * @param y the Y position
-	 */
+	// Align checkbox to right hand side of the window near the close button
 	public void alignToRightEdge(Widget window, int marginFromEdge, int y)
 	{
 		int windowWidth = window.getWidth();

@@ -28,10 +28,9 @@ import static com.logmaster.ui.InterfaceConstants.*;
 public class TaskList extends UIPage {
     private final int OFFSET_X = 0;
     private final int OFFSET_Y = 22;
-    private final int CANVAS_WIDTH = 480;
-    private final int CANVAS_HEIGHT = 252;
     private final int TASK_WIDTH = 300;
     private final int TASK_HEIGHT = 50;
+    private final int COLUMN_SPACING = 24;
     private final int TASK_ITEM_HEIGHT = 32;
     private final int TASK_ITEM_WIDTH = 36;
     private final int PAGE_UP_ARROW_SPRITE_ID = -20029;
@@ -47,7 +46,6 @@ public class TaskList extends UIPage {
     private final int SCROLLBAR_WIDTH = 35; // Match arrow width
     private final int SCROLLBAR_THUMB_MIN_HEIGHT = 8;
     
-    private int tasksPerPage = 20; // Default value, will be updated based on window size
 
     private final Widget window;
     private final TaskService taskService;
@@ -73,6 +71,17 @@ public class TaskList extends UIPage {
     private int dragStartY = 0;
     private int dragStartTopIndex = 0;
     private int topTaskIndex = 0;
+    private int totalTasks = 0;
+    // default values, will update when bounds change
+    private int windowWidth = 480;
+    private int windowHeight = 252;
+    private int wrapperX = 0;
+    private int wrapperY = 0;
+    private int wrapperHeight = 230;
+    private int windowX = 0;
+    private int windowY = 0;
+    private int tasksPerPage = 20;
+    private int columns = 1;
 
     public TaskList(Widget window, TaskService taskService, LogMasterPlugin plugin, ClientThread clientThread, SaveDataManager saveDataManager) {
         this.window = window;
@@ -82,14 +91,15 @@ public class TaskList extends UIPage {
         this.saveDataManager = saveDataManager;
 
         updateBounds();
-        refreshTasks(0);
 
         createScrollbarComponents();
         this.add(upArrowButton);
         this.add(pageUpButton);
         this.add(downArrowButton);
         this.add(pageDownButton);
-        updateScrollbar();
+
+        // Refresh the tasks list
+        refreshTasks(0);
     }
 
     private void createScrollbarComponents() {
@@ -97,7 +107,6 @@ public class TaskList extends UIPage {
         pageUpButton = new UIButton(pageUpWidget);
         pageUpButton.setSprites(PAGE_UP_ARROW_SPRITE_ID);
         pageUpButton.setSize(ARROW_SPRITE_WIDTH, ARROW_SPRITE_HEIGHT);
-        // Initial position will be set in updateArrowPositions()
         pageUpButton.setPosition(-ARROW_SPRITE_WIDTH, 0);
         pageUpButton.addAction("Page up", () -> refreshTasks(-tasksPerPage));
 
@@ -143,49 +152,35 @@ public class TaskList extends UIPage {
         pageDownButton.setPosition(-ARROW_SPRITE_WIDTH, 0);
         pageDownButton.addAction("Page down", () -> refreshTasks(tasksPerPage));
     }
-
-    public void refreshTasks(int dir) {
-        refreshTasks(dir, false);
-    }
     
-    public void refreshTasks(int dir, boolean forceRefresh) {
+    public void refreshTasks(int dir) {
         TaskTier relevantTier = plugin.getSelectedTier();
         if (relevantTier == null) {
             relevantTier = TaskTier.MASTER;
         }
-        int windowWidth = window.getWidth();
-        int windowHeight = window.getHeight();
-        int columnSpacing = 24; // Space between columns
-        int minColumns = 1;
-        int maxColumns = Math.max(minColumns, (windowWidth - SCROLLBAR_WIDTH - 40) / (TASK_WIDTH + columnSpacing));
-        int columns = Math.max(1, maxColumns);
         int tasksToShowCount = tasksPerPage * columns;
-        int totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
-        if (!forceRefresh) {
-            int newIndex = topTaskIndex + dir * (columns >= 2 ? columns : 1);
+        totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
+        if (dir != 0) {
+            int newIndex = topTaskIndex + (dir * columns);
             topTaskIndex = Math.min(Math.max(0, totalTasks - tasksToShowCount), Math.max(0, newIndex));
         }
         int rows = tasksPerPage;
         int totalTasksHeight = rows * TASK_HEIGHT;
-        int availableHeight = windowHeight - OFFSET_Y;
-        int verticalMargin = 0;
-        if (rows > 1) {
-            verticalMargin = Math.max(0, (availableHeight - totalTasksHeight) / (rows - 1));
-        }
+        int verticalMargin = Math.max(0, (wrapperHeight - totalTasksHeight) / (rows - 1));
         int totalHeightWithMargin = totalTasksHeight + (rows > 1 ? (rows - 1) * verticalMargin : 0);
-        int startY = OFFSET_Y + Math.max(0, (windowHeight - OFFSET_Y - totalHeightWithMargin) / 2);
-        int totalWidth = columns * TASK_WIDTH + (columns - 1) * columnSpacing;
+        int startY = OFFSET_Y + Math.max(0, (wrapperHeight - totalHeightWithMargin) / 2);
+        int totalWidth = columns * TASK_WIDTH + (columns - 1) * COLUMN_SPACING;
         int startX = (windowWidth - totalWidth - SCROLLBAR_WIDTH - 10) / 2;
-        int POS_Y = startY;
         hideUnusedTaskElements(tasksToShowCount);
         List<Task> tasksToShow = getTasksToShow(relevantTier, topTaskIndex, tasksToShowCount);
         int widgetIndex = 0;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
                 int i = row * columns + col;
-                int taskY = POS_Y + (row * (TASK_HEIGHT + verticalMargin));
-                int taskX = startX + col * (TASK_WIDTH + columnSpacing);
+                int taskY = startY + (row * (TASK_HEIGHT + verticalMargin));
+                int taskX = startX + col * (TASK_WIDTH + COLUMN_SPACING);
                 if (i > tasksToShowCount) break;
+                // Create the task background
                 UIGraphic taskBg;
                 if (taskBackgrounds.size() <= widgetIndex) {
                     taskBg = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
@@ -200,6 +195,7 @@ public class TaskList extends UIPage {
                 taskBg.setPosition(taskX, taskY);
                 taskBg.getWidget().setPos(taskX, taskY);
                 taskBg.getWidget().revalidate();
+                // Figure out which background we should be showing
                 if (i < tasksToShow.size()) {
                     Task task = tasksToShow.get(i);
                     TaskTier finalRelevantTier = relevantTier;
@@ -343,16 +339,6 @@ public class TaskList extends UIPage {
         updateScrollbar();
     }
 
-    private List<Task> getTasksToShow(TaskTier relevantTier, int topTaskIndex) {
-        List<Task> tasksToShow = new ArrayList<>();
-        List<Task> taskList = taskService.getTaskList().getForTier(relevantTier);
-        for (int i = 0; i < tasksPerPage; i++) {
-            if (topTaskIndex + i >= taskList.size()) break;
-            tasksToShow.add(taskList.get(topTaskIndex + i));
-        }
-        return tasksToShow;
-    }
-
     public void handleWheel(final MouseWheelEvent event)
     {
         if (!this.isVisible() || !bounds.contains(event.getPoint()))
@@ -372,15 +358,17 @@ public class TaskList extends UIPage {
         }
 
         Widget collectionLogWrapper = window.getParent();
-        int wrapperX = collectionLogWrapper.getRelativeX();
-        int wrapperY = collectionLogWrapper.getRelativeY();
-        int windowWidth = window.getWidth();
-        int windowHeight = window.getHeight();
-        int windowX = window.getRelativeX();
-        int windowY = window.getRelativeY();
+        wrapperX = collectionLogWrapper.getRelativeX();
+        wrapperY = collectionLogWrapper.getRelativeY();
+        wrapperHeight = window.getHeight() - OFFSET_Y;
+        windowX = window.getRelativeX();
+        windowY = window.getRelativeY();
+        windowWidth = window.getWidth();
+        windowHeight = window.getHeight();
 
         // Recalculate how many tasks can be displayed
-        int newTasksPerPage = Math.max(1, (windowHeight - OFFSET_Y) / TASK_HEIGHT);
+        int newTasksPerPage = Math.max(1, wrapperHeight / TASK_HEIGHT);
+        columns = Math.max(1, (windowWidth - SCROLLBAR_WIDTH - 40) / (TASK_WIDTH + COLUMN_SPACING));
         if (newTasksPerPage != tasksPerPage) {
             tasksPerPage = newTasksPerPage;
             // Ensure topTaskIndex is valid for the new page size
@@ -390,42 +378,38 @@ public class TaskList extends UIPage {
             }
             int maxTopIndex = Math.max(0, taskService.getTaskList().getForTier(relevantTier).size() - tasksPerPage);
             topTaskIndex = Math.min(topTaskIndex, maxTopIndex);
-            // Update arrow positions immediately when page size changes
-            updateArrowPositions();
-            // Update scrollbar immediately when size changes
-            updateScrollbar();
-        } else {
-            // Still update arrow positions and scrollbar if window size changes
-            updateArrowPositions();
-            updateScrollbar();
         }
+        // Still update arrow positions and scrollbar if window size changes
+        updateArrowPositions();
+        updateScrollbar();
         // Always force refresh the task display to keep it centered, but defer to after layout
-        clientThread.invokeLater(() -> refreshTasks(0, true));
+        clientThread.invokeLater(() -> refreshTasks(0));
 
         bounds.setLocation(wrapperX + windowX + OFFSET_X, wrapperY + windowY + OFFSET_Y);
-        bounds.setSize(windowWidth - OFFSET_X, windowHeight - OFFSET_Y);
+        bounds.setSize(windowWidth - OFFSET_X, wrapperHeight);
     }
 
     private void updateArrowPositions() {
-        int windowWidth = window.getWidth();
-        int windowHeight = window.getHeight();
         int scrollbarX = windowWidth - ARROW_SPRITE_WIDTH - 5;
         // Position arrows vertically in order: page up, up, down, page down
         int pageUpY = ARROW_SPRITE_HEIGHT + ARROW_Y_OFFSET;
         int upArrowY = ARROW_SPRITE_HEIGHT * 2 + ARROW_Y_OFFSET;
         int downArrowY = windowHeight - ARROW_SPRITE_HEIGHT * 2;
         int pageDownY = windowHeight - ARROW_SPRITE_HEIGHT;
-        forceWidgetPositionUpdate(pageUpButton, scrollbarX, pageUpY);
-        forceWidgetPositionUpdate(upArrowButton, scrollbarX, upArrowY);
-        forceWidgetPositionUpdate(downArrowButton, scrollbarX, downArrowY);
-        forceWidgetPositionUpdate(pageDownButton, scrollbarX, pageDownY);
+        forceWidgetPositionUpdate(pageUpButton.getWidget(), scrollbarX, pageUpY);
+        forceWidgetPositionUpdate(upArrowButton.getWidget(), scrollbarX, upArrowY);
+        forceWidgetPositionUpdate(downArrowButton.getWidget(), scrollbarX, downArrowY);
+        forceWidgetPositionUpdate(pageDownButton.getWidget(), scrollbarX, pageDownY);
     }
 
-    private void forceWidgetPositionUpdate(UIButton button, int x, int y) {
-        button.getWidget().setHidden(true);
-        button.setPosition(x, y);
-        button.getWidget().setHidden(false);
-        button.getWidget().revalidate();
+    private void forceWidgetPositionUpdate(Widget button, int x, int y) {
+        button.setPos(x, y);
+        button.revalidate();
+    }
+
+    private void forceWidgetUpdate(Widget widget, int width, int height) {
+        widget.setSize(width, height);
+        widget.revalidate();
     }
 
     private void updateScrollbar() {
@@ -433,64 +417,50 @@ public class TaskList extends UIPage {
             setScrollbarVisibility(false);
             return;
         }
-        TaskTier relevantTier = plugin.getSelectedTier();
-        if (relevantTier == null) relevantTier = TaskTier.MASTER;
-        int totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
-        int windowWidth = window.getWidth();
-        int windowHeight = window.getHeight();
-        int columnSpacing = 24;
-        int columns = Math.max(1, (windowWidth - SCROLLBAR_WIDTH - 40) / (TASK_WIDTH + columnSpacing));
-        int tasksPerPageActual = (columns > 1) ? tasksPerPage * columns : tasksPerPage;
+
         // The track should fill between the up and down arrows
         int trackY = ARROW_SPRITE_HEIGHT * 3 + ARROW_Y_OFFSET;
         int scrollbarTrackHeight = windowHeight - trackY - ARROW_SPRITE_HEIGHT * 2;
         int scrollbarX = windowWidth - SCROLLBAR_WIDTH - 9;
-        forceWidgetUpdate(scrollbarTrackWidget, SCROLLBAR_WIDTH, scrollbarTrackHeight);
         scrollbarTrackWidget.setPos(scrollbarX + 2, trackY);
+
+        // Update position, arrows and thumbs
+        forceWidgetUpdate(scrollbarTrackWidget, SCROLLBAR_WIDTH, scrollbarTrackHeight);
         updateArrowPositions();
-        if (totalTasks <= tasksPerPageActual) {
-            setScrollbarVisibility(false);
-        } else {
-            setScrollbarVisibility(true);
-            updateScrollbarThumb(totalTasks, tasksPerPageActual, scrollbarTrackHeight, scrollbarX);
-        }
+        setScrollbarVisibility(true);
+        updateScrollbarThumb(scrollbarTrackHeight, scrollbarX);
     }
 
-    private void forceWidgetUpdate(Widget widget, int width, int height) {
-        widget.setHidden(true);
-        widget.setSize(width, height);
-        widget.setHidden(false);
-        widget.revalidate();
-    }
-
-    private void updateScrollbarThumb(int totalTasks, int tasksPerPageActual, int scrollbarTrackHeight, int scrollbarX) {
+    private void updateScrollbarThumb(int scrollbarTrackHeight, int scrollbarX) {
+        int tasksPerPageActual = (columns > 1) ? tasksPerPage * columns : tasksPerPage;
         topTaskIndex = Math.min(topTaskIndex, Math.max(0, totalTasks - tasksPerPageActual));
         int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)tasksPerPageActual / totalTasks)));
         int maxScrollPosition = Math.max(1, totalTasks - tasksPerPageActual);
         int thumbY = maxScrollPosition > 0 ? (int)((scrollbarTrackHeight - thumbHeight) * ((double)topTaskIndex / maxScrollPosition)) : 0;
         int thumbStartY = ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + thumbY;
         int thumbX = scrollbarX + 2;
-        // Update top edge (2px height)
-        scrollbarThumbTopWidget.setPos(thumbX, thumbStartY);
-        scrollbarThumbTopWidget.setSize(SCROLLBAR_WIDTH, 2);
         // Update middle section (variable height)
         int middleHeight = Math.max(0, thumbHeight - 4);
-        scrollbarThumbMiddleWidget.setPos(thumbX, thumbStartY + 2);
         scrollbarThumbMiddleWidget.setSize(SCROLLBAR_WIDTH, middleHeight);
-        // Update bottom edge (2px height)
-        scrollbarThumbBottomWidget.setPos(thumbX, thumbStartY + thumbHeight - 2);
-        scrollbarThumbBottomWidget.setSize(SCROLLBAR_WIDTH, 2);
         // Force redraw all thumb components
-        forceThumbWidgetUpdate(scrollbarThumbTopWidget, SCROLLBAR_WIDTH, 2);
-        forceThumbWidgetUpdate(scrollbarThumbMiddleWidget, SCROLLBAR_WIDTH, middleHeight);
-        forceThumbWidgetUpdate(scrollbarThumbBottomWidget, SCROLLBAR_WIDTH, 2);
+        forceWidgetPositionUpdate(scrollbarThumbTopWidget, thumbX, thumbStartY);
+        forceWidgetPositionUpdate(scrollbarThumbMiddleWidget, thumbX, thumbStartY + 2);
+        forceWidgetPositionUpdate(scrollbarThumbBottomWidget, thumbX, thumbStartY + thumbHeight - 2);
     }
 
-    private void forceThumbWidgetUpdate(Widget widget, int width, int height) {
-        widget.setHidden(true);
-        widget.setSize(width, height);
-        widget.setHidden(false);
-        widget.revalidate();
+    private int calculateNewScrollPosition(int mouseY, int totalTasks) {
+        int tasksPerPageActual = tasksPerPage * columns;
+        int scrollbarTrackHeight = wrapperHeight - (ARROW_SPRITE_HEIGHT * 4) - ARROW_Y_OFFSET;
+        int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)tasksPerPageActual / totalTasks)));
+        int deltaY = mouseY - dragStartY;
+        int maxTopIndex = Math.max(0, totalTasks - tasksPerPageActual);
+        double scrollRatio = (scrollbarTrackHeight - thumbHeight) > 0 ? (double)deltaY / (scrollbarTrackHeight - thumbHeight) : 0;
+        int newTopIndex = dragStartTopIndex + (int)(scrollRatio * (totalTasks - tasksPerPageActual));
+        
+        // Round to nearest column boundary
+        newTopIndex = (newTopIndex / columns) * columns;
+        
+        return Math.max(0, Math.min(maxTopIndex, newTopIndex));
     }
 
     private void setScrollbarVisibility(boolean visible) {
@@ -525,21 +495,19 @@ public class TaskList extends UIPage {
             TaskTier relevantTier = plugin.getSelectedTier();
             if (relevantTier == null) relevantTier = TaskTier.MASTER;
             
-            int totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
             if (totalTasks <= tasksPerPage) return;
             
             int newTopIndex = calculateNewScrollPosition(mouseY, totalTasks);
             if (newTopIndex != topTaskIndex) {
                 topTaskIndex = newTopIndex;
-                refreshTasks(0, true);
+                refreshTasks(0);
             }
         });
     }
 
     private boolean isPointInScrollThumb(int mouseX, int mouseY) {
-        Widget collectionLogWrapper = window.getParent();
-        int baseX = collectionLogWrapper.getRelativeX() + window.getRelativeX();
-        int baseY = collectionLogWrapper.getRelativeY() + window.getRelativeY();
+        int baseX = wrapperX + windowX;
+        int baseY = wrapperY + windowY;
         
         // Check if point is in any of the three thumb components
         int thumbX = baseX + scrollbarThumbTopWidget.getRelativeX();
@@ -549,21 +517,6 @@ public class TaskList extends UIPage {
         
         return mouseX >= thumbX && mouseX <= thumbX + thumbWidth && 
                mouseY >= thumbTopY && mouseY <= thumbBottomY;
-    }
-
-    private int calculateNewScrollPosition(int mouseY, int totalTasks) {
-        int windowWidth = window.getWidth();
-        int windowHeight = window.getHeight();
-        int columnSpacing = 24;
-        int columns = Math.max(1, (windowWidth - SCROLLBAR_WIDTH - 40) / (TASK_WIDTH + columnSpacing));
-        int tasksPerPageActual = (columns > 1) ? tasksPerPage * columns : tasksPerPage;
-        int scrollbarTrackHeight = (tasksPerPageActual / columns) * TASK_HEIGHT - (ARROW_SPRITE_HEIGHT * 4);
-        int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)tasksPerPageActual / totalTasks)));
-        int deltaY = mouseY - dragStartY;
-        int maxTopIndex = Math.max(0, totalTasks - tasksPerPageActual);
-        double scrollRatio = (scrollbarTrackHeight - thumbHeight) > 0 ? (double)deltaY / (scrollbarTrackHeight - thumbHeight) : 0;
-        int newTopIndex = dragStartTopIndex + (int)(scrollRatio * (totalTasks - tasksPerPageActual));
-        return Math.max(0, Math.min(maxTopIndex, newTopIndex));
     }
 
     public void handleMouseRelease() {

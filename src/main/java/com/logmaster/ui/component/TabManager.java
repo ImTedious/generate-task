@@ -173,7 +173,7 @@ public class TabManager {
         updateTabs();
         tabs.get(tabIndex).setSprites(tier.tabSpriteHoverId);
         this.taskDashboard.setVisibility(false);
-        this.taskList.refreshTasks(0, true);
+        this.taskList.refreshTasks(0);
         this.taskList.setVisibility(true);
     }
 

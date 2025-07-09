@@ -246,7 +246,6 @@ public class TaskDashboard extends UIPage {
         }
 
         int windowWidth = window.getWidth();
-        int windowHeight = window.getHeight();
 
         // Update title position - force widget position update
         int titleX = getCenterX(window, COLLECTION_LOG_WINDOW_WIDTH);
