@@ -64,7 +64,6 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     @Inject
     private SaveDataManager saveDataManager;
 
-
     private SpriteDefinition[] spriteDefinitions;
 
     public TaskDashboard taskDashboard;
@@ -227,7 +226,7 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     }
 
     private void createTaskDashboard(Widget window) {
-        this.taskDashboard = new TaskDashboard(plugin, config, window, taskService, saveDataManager);
+        this.taskDashboard = new TaskDashboard(plugin, config, window, taskService, saveDataManager, plugin.clogItemsManager);
         this.taskDashboard.setVisibility(false);
     }
 

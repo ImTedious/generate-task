@@ -304,18 +304,26 @@ public class TaskDashboard extends UIPage {
         this.completeTaskBtn.getWidget().setPos(completeBtnX, completeBtnY);
         
         // Update FAQ button position with boundary checking
-        int faqBtnX = getCenterX(window, DEFAULT_BUTTON_WIDTH) + 238;
+        int faqBtnX = getCenterX(window, SMALL_BUTTON_WIDTH) + 238;
         int faqBtnY = getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112;
         
         // Check if FAQ button would go outside the window and align with edge if needed
-        int faqBtnWidth = DEFAULT_BUTTON_WIDTH / 2;
-        if (faqBtnX + faqBtnWidth > windowWidth) {
+        int faqBtnWidth = SMALL_BUTTON_WIDTH;
+        if (faqBtnX + faqBtnWidth + 10 > windowWidth) {
             faqBtnX = windowWidth - faqBtnWidth - 10; // 10px margin from edge
         }
-        
         this.faqBtn.setPosition(faqBtnX, faqBtnY);
         this.faqBtn.getWidget().setPos(faqBtnX, faqBtnY);
 
+        // Update Sync button position with boundary checking
+        int syncBtnX = getCenterX(window, SMALL_BUTTON_WIDTH) - 238;
+        int syncBtnY = getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112;
+        if (syncBtnX < 10) {
+            syncBtnX = 10; // 10px margin from left edge
+        }
+        this.syncBtn.setPosition(syncBtnX, syncBtnY);
+        this.syncBtn.getWidget().setPos(syncBtnX, syncBtnY);
+        
         // Update percentage completion position - force widget position update
         int percentX = getCenterX(window, COLLECTION_LOG_WINDOW_WIDTH);
         int percentY = getCenterY(window, DEFAULT_BUTTON_HEIGHT) + 112; // Same Y as FAQ button
@@ -330,6 +338,7 @@ public class TaskDashboard extends UIPage {
         this.generateTaskBtn.getWidget().revalidate();
         this.completeTaskBtn.getWidget().revalidate();
         this.faqBtn.getWidget().revalidate();
+        this.syncBtn.getWidget().revalidate();
         this.percentCompletion.getWidget().revalidate();
     }
 }

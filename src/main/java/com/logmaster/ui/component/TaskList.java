@@ -266,45 +266,6 @@ public class TaskList extends UIPage {
                 widgetIndex++;
             }
         }
-        // Render the extra widget offscreen if needed
-        if (widgetIndex == tasksToShowCount) {
-            UIGraphic taskBg;
-            if (taskBackgrounds.size() <= widgetIndex) {
-                taskBg = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
-                taskBackgrounds.add(taskBg);
-                this.add(taskBg);
-            } else {
-                taskBg = taskBackgrounds.get(widgetIndex);
-            }
-            taskBg.getWidget().setHidden(false);
-            taskBg.setPosition(-1000, 0);
-            taskBg.getWidget().setPos(-1000, 0);
-            taskBg.getWidget().revalidate();
-            UILabel taskLabel;
-            if (taskLabels.size() <= widgetIndex) {
-                taskLabel = new UILabel(window.createChild(-1, WidgetType.TEXT));
-                this.add(taskLabel);
-                taskLabels.add(taskLabel);
-            } else {
-                taskLabel = taskLabels.get(widgetIndex);
-            }
-            taskLabel.getWidget().setHidden(false);
-            taskLabel.setPosition(-1000, 0);
-            taskLabel.getWidget().setPos(-1000, 0);
-            taskLabel.getWidget().revalidate();
-            UIGraphic taskImage;
-            if(taskImages.size() <= widgetIndex) {
-                taskImage = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
-                this.add(taskImage);
-                taskImages.add(taskImage);
-            } else {
-                taskImage = taskImages.get(widgetIndex);
-            }
-            taskImage.getWidget().setHidden(false);
-            taskImage.setPosition(-1000, 0);
-            taskImage.getWidget().setPos(-1000, 0);
-            taskImage.getWidget().revalidate();
-        }
         updateScrollbar();
     }
 
