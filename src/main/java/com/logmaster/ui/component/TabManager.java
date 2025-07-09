@@ -101,6 +101,7 @@ public class TabManager {
         int availableWidth = windowWidth - 20; // 10px margin on each side
         int dashboardTabWidth = 95;
         int regularTabWidth = 66;
+        int minSpacing = -30; // Allow up to 30px overlap
         // Count only visible tabs
         int visibleTierTabs = 0;
         for (TaskTier tier : TaskTier.values()) {
@@ -109,16 +110,22 @@ public class TabManager {
             }
         }
         int totalTabsWidth = dashboardTabWidth + (visibleTierTabs * regularTabWidth);
-        int spacing = Math.max(10, (availableWidth - totalTabsWidth) / (visibleTierTabs + 2)); // Minimum 10px spacing
+        int spacing = (availableWidth - totalTabsWidth) / (visibleTierTabs + 2);
+        // Allow negative spacing for overlap, but not less than minSpacing
+        spacing = Math.max(minSpacing, Math.min(10, spacing));
         int dashboardX = 10 + spacing;
+        taskDashboardTab.setSize(dashboardTabWidth, 21);
         taskDashboardTab.setPosition(dashboardX, 0);
+        taskDashboardTab.getWidget().setSize(dashboardTabWidth, 21);
         taskDashboardTab.getWidget().setPos(dashboardX, 0);
         int currentX = dashboardX + dashboardTabWidth + spacing;
         int tabIndex = 0;
         for (TaskTier tier : TaskTier.values()) {
             if (tier.ordinal() >= config.hideBelow().ordinal()) {
                 UIButton tab = tabs.get(tabIndex);
+                tab.setSize(regularTabWidth, 21);
                 tab.setPosition(currentX, 0);
+                tab.getWidget().setSize(regularTabWidth, 21);
                 tab.getWidget().setPos(currentX, 0);
                 currentX += regularTabWidth + spacing;
             }
