@@ -379,11 +379,9 @@ public class TaskList extends UIPage {
             int maxTopIndex = Math.max(0, taskService.getTaskList().getForTier(relevantTier).size() - tasksPerPage);
             topTaskIndex = Math.min(topTaskIndex, maxTopIndex);
         }
-        // Still update arrow positions and scrollbar if window size changes
         updateArrowPositions();
         updateScrollbar();
-        // Always force refresh the task display to keep it centered, but defer to after layout
-        clientThread.invokeLater(() -> refreshTasks(0));
+        refreshTasks(0);
 
         bounds.setLocation(wrapperX + windowX + OFFSET_X, wrapperY + windowY + OFFSET_Y);
         bounds.setSize(windowWidth - OFFSET_X, wrapperHeight);
@@ -470,6 +468,7 @@ public class TaskList extends UIPage {
         if (scrollbarThumbBottomWidget != null) scrollbarThumbBottomWidget.setHidden(!visible);
     }
 
+    @Override
     public void setVisibility(boolean visible) {
         super.setVisibility(visible);
         setScrollbarVisibility(visible && this.isVisible());
@@ -479,30 +478,23 @@ public class TaskList extends UIPage {
     public void handleMousePress(int mouseX, int mouseY) {
         if (!this.isVisible()) return;
         
-        clientThread.invoke(() -> {
-            if (isPointInScrollThumb(mouseX, mouseY)) {
-                isDraggingThumb = true;
-                dragStartY = mouseY;
-                dragStartTopIndex = topTaskIndex;
-            }
-        });
+        if (isPointInScrollThumb(mouseX, mouseY)) {
+            isDraggingThumb = true;
+            dragStartY = mouseY;
+            dragStartTopIndex = topTaskIndex;
+        }
     }
 
     public void handleMouseDrag(int mouseX, int mouseY) {
         if (!isDraggingThumb || !this.isVisible()) return;
         
-        clientThread.invoke(() -> {
-            TaskTier relevantTier = plugin.getSelectedTier();
-            if (relevantTier == null) relevantTier = TaskTier.MASTER;
-            
-            if (totalTasks <= tasksPerPage) return;
-            
-            int newTopIndex = calculateNewScrollPosition(mouseY, totalTasks);
-            if (newTopIndex != topTaskIndex) {
-                topTaskIndex = newTopIndex;
-                refreshTasks(0);
-            }
-        });
+        if (totalTasks <= tasksPerPage) return;
+        
+        int newTopIndex = calculateNewScrollPosition(mouseY, totalTasks);
+        if (newTopIndex != topTaskIndex) {
+            topTaskIndex = newTopIndex;
+            clientThread.invoke(() -> refreshTasks(0));
+        }
     }
 
     private boolean isPointInScrollThumb(int mouseX, int mouseY) {
@@ -515,8 +507,8 @@ public class TaskList extends UIPage {
         int thumbBottomY = baseY + scrollbarThumbBottomWidget.getRelativeY() + scrollbarThumbBottomWidget.getHeight();
         int thumbWidth = scrollbarThumbTopWidget.getWidth();
         
-        return mouseX >= thumbX && mouseX <= thumbX + thumbWidth && 
-               mouseY >= thumbTopY && mouseY <= thumbBottomY;
+        return mouseX >= thumbX && mouseX <= thumbX + thumbWidth &&
+            mouseY >= thumbTopY && mouseY <= thumbBottomY;
     }
 
     public void handleMouseRelease() {
