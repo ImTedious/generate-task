@@ -433,12 +433,14 @@ public class TaskList extends UIPage {
             setScrollbarVisibility(false);
             return;
         }
-
         TaskTier relevantTier = plugin.getSelectedTier();
         if (relevantTier == null) relevantTier = TaskTier.MASTER;
         int totalTasks = taskService.getTaskList().getForTier(relevantTier).size();
         int windowWidth = window.getWidth();
         int windowHeight = window.getHeight();
+        int columnSpacing = 24;
+        int columns = Math.max(1, (windowWidth - SCROLLBAR_WIDTH - 40) / (TASK_WIDTH + columnSpacing));
+        int tasksPerPageActual = (columns > 1) ? tasksPerPage * columns : tasksPerPage;
         // The track should fill between the up and down arrows
         int trackY = ARROW_SPRITE_HEIGHT * 3 + ARROW_Y_OFFSET;
         int scrollbarTrackHeight = windowHeight - trackY - ARROW_SPRITE_HEIGHT * 2;
@@ -446,11 +448,11 @@ public class TaskList extends UIPage {
         forceWidgetUpdate(scrollbarTrackWidget, SCROLLBAR_WIDTH, scrollbarTrackHeight);
         scrollbarTrackWidget.setPos(scrollbarX + 2, trackY);
         updateArrowPositions();
-        if (totalTasks <= tasksPerPage) {
+        if (totalTasks <= tasksPerPageActual) {
             setScrollbarVisibility(false);
         } else {
             setScrollbarVisibility(true);
-            updateScrollbarThumb(totalTasks, scrollbarTrackHeight, scrollbarX);
+            updateScrollbarThumb(totalTasks, tasksPerPageActual, scrollbarTrackHeight, scrollbarX);
         }
     }
 
@@ -461,28 +463,23 @@ public class TaskList extends UIPage {
         widget.revalidate();
     }
 
-    private void updateScrollbarThumb(int totalTasks, int scrollbarTrackHeight, int scrollbarX) {
-        topTaskIndex = Math.min(topTaskIndex, Math.max(0, totalTasks - tasksPerPage));
-        
-        int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)tasksPerPage / totalTasks)));
-        int maxScrollPosition = Math.max(1, totalTasks - tasksPerPage);
+    private void updateScrollbarThumb(int totalTasks, int tasksPerPageActual, int scrollbarTrackHeight, int scrollbarX) {
+        topTaskIndex = Math.min(topTaskIndex, Math.max(0, totalTasks - tasksPerPageActual));
+        int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)tasksPerPageActual / totalTasks)));
+        int maxScrollPosition = Math.max(1, totalTasks - tasksPerPageActual);
         int thumbY = maxScrollPosition > 0 ? (int)((scrollbarTrackHeight - thumbHeight) * ((double)topTaskIndex / maxScrollPosition)) : 0;
         int thumbStartY = ARROW_SPRITE_HEIGHT*3 + ARROW_Y_OFFSET + thumbY;
         int thumbX = scrollbarX + 2;
-        
         // Update top edge (2px height)
         scrollbarThumbTopWidget.setPos(thumbX, thumbStartY);
         scrollbarThumbTopWidget.setSize(SCROLLBAR_WIDTH, 2);
-        
         // Update middle section (variable height)
         int middleHeight = Math.max(0, thumbHeight - 4);
         scrollbarThumbMiddleWidget.setPos(thumbX, thumbStartY + 2);
         scrollbarThumbMiddleWidget.setSize(SCROLLBAR_WIDTH, middleHeight);
-        
         // Update bottom edge (2px height)
         scrollbarThumbBottomWidget.setPos(thumbX, thumbStartY + thumbHeight - 2);
         scrollbarThumbBottomWidget.setSize(SCROLLBAR_WIDTH, 2);
-        
         // Force redraw all thumb components
         forceThumbWidgetUpdate(scrollbarThumbTopWidget, SCROLLBAR_WIDTH, 2);
         forceThumbWidgetUpdate(scrollbarThumbMiddleWidget, SCROLLBAR_WIDTH, middleHeight);
@@ -555,14 +552,18 @@ public class TaskList extends UIPage {
     }
 
     private int calculateNewScrollPosition(int mouseY, int totalTasks) {
-        int scrollbarTrackHeight = (tasksPerPage * TASK_HEIGHT) - (ARROW_SPRITE_HEIGHT * 4);
-        int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)tasksPerPage / totalTasks)));
+        int windowWidth = window.getWidth();
+        int windowHeight = window.getHeight();
+        int columnSpacing = 24;
+        int columns = Math.max(1, (windowWidth - SCROLLBAR_WIDTH - 40) / (TASK_WIDTH + columnSpacing));
+        int tasksPerPageActual = (columns > 1) ? tasksPerPage * columns : tasksPerPage;
+        int scrollbarTrackHeight = (tasksPerPageActual / columns) * TASK_HEIGHT - (ARROW_SPRITE_HEIGHT * 4);
+        int thumbHeight = Math.max(SCROLLBAR_THUMB_MIN_HEIGHT, (int)(scrollbarTrackHeight * ((double)tasksPerPageActual / totalTasks)));
         int deltaY = mouseY - dragStartY;
-        
+        int maxTopIndex = Math.max(0, totalTasks - tasksPerPageActual);
         double scrollRatio = (scrollbarTrackHeight - thumbHeight) > 0 ? (double)deltaY / (scrollbarTrackHeight - thumbHeight) : 0;
-        int newTopIndex = dragStartTopIndex + (int)(scrollRatio * (totalTasks - tasksPerPage));
-        
-        return Math.min(totalTasks - tasksPerPage, Math.max(newTopIndex, 0));
+        int newTopIndex = dragStartTopIndex + (int)(scrollRatio * (totalTasks - tasksPerPageActual));
+        return Math.max(0, Math.min(maxTopIndex, newTopIndex));
     }
 
     public void handleMouseRelease() {
