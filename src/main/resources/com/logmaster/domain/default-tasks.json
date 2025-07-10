@@ -2320,6 +2320,27 @@
       "description": "Get 1 unique from Royal Titans",
       "check": [30626, 30627, 30628, 30631, 30637, 30640],
       "count": 4
+    },
+    {
+      "id": 184,
+      "itemID": 30895,
+      "description": "Get a Steel ring",
+      "check": [30895],
+      "count": 1
+    },
+    {
+      "id": 185,
+      "itemID": 30088,
+      "description": "Get a Huasca seed",
+      "check": [30088],
+      "count": 1
+    },
+    {
+      "id": 186,
+      "itemID": 30044,
+      "description": "Get a Wyrm/Brimhaven graceful recolor",
+      "check": [21061, 21064, 21067, 21070, 21073, 21076, 30045, 30048, 30051, 30054, 30057, 30060],
+      "count": 12
     }
   ],
   "hard": [
@@ -3472,13 +3493,6 @@
       "itemID": 30044,
       "description": "Get a Wyrm/Brimhaven graceful recolor",
       "check": [21061, 21064, 21067, 21070, 21073, 21076, 30045, 30048, 30051, 30054, 30057, 30060],
-      "count": 6
-    },
-    {
-      "id": 201,
-      "itemID": 30044,
-      "description": "Get a Wyrm/Brimhaven graceful recolor",
-      "check": [21061, 21064, 21067, 21070, 21073, 21076, 30045, 30048, 30051, 30054, 30057, 30060],
       "count": 12
     },
     {
@@ -3620,6 +3634,13 @@
       "description": "Get 1 unique from Tombs of Amascut",
       "check": [27277, 25985, 27226, 27229, 27232, 25975, 26219, 27279, 27283, 27285, 27289, 30893, 27293],
       "count": 2
+    },
+    {
+      "id": 209,
+      "itemID": 27279,
+      "description": "Get 1 unique from Tombs of Amascut",
+      "check": [27277, 25985, 27226, 27229, 27232, 25975, 26219, 27279, 27283, 27285, 27289, 30893, 27293],
+      "count": 3
     },
     {
       "id": 181,
@@ -3781,13 +3802,6 @@
       "description": "Get 1 unique from the Hueycoatl",
       "check": [30066, 30068, 30070, 30085, 30088],
       "count": 2
-    },
-    {
-      "id": 206,
-      "itemID": 30070,
-      "description": "Get 1 unique from the Hueycoatl",
-      "check": [30066, 30068, 30070, 30085, 30088],
-      "count": 3
     },
     {
       "id": 207,
@@ -5191,14 +5205,14 @@
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
       "check": [30066, 30068, 30070, 30085, 30088],
-      "count":4
+      "count":3
     },
     {
       "id": 197,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
       "check": [30066, 30068, 30070, 30085, 30088],
-      "count": 5
+      "count": 4
     },
     {
       "id": 198,
