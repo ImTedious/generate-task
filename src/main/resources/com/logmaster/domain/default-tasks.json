@@ -3793,14 +3793,14 @@
       "id": 204,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [30066, 30068, 30070, 30085, 30088],
+      "check": [30066, 30068, 30070, 30085],
       "count": 1
     },
     {
       "id": 205,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [30066, 30068, 30070, 30085, 30088],
+      "check": [30066, 30068, 30070, 30085],
       "count": 2
     },
     {
@@ -5204,14 +5204,14 @@
       "id": 196,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [30066, 30068, 30070, 30085, 30088],
+      "check": [30066, 30068, 30070, 30085],
       "count":3
     },
     {
       "id": 197,
       "itemID": 30070,
       "description": "Get 1 unique from the Hueycoatl",
-      "check": [30066, 30068, 30070, 30085, 30088],
+      "check": [30066, 30068, 30070, 30085],
       "count": 4
     },
     {
