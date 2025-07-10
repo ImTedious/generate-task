@@ -3303,14 +3303,14 @@
       "id": 133,
       "itemID": 25862,
       "description": "Get 1 unique from the Gauntlet",
-      "check": [23956, 4207],
+      "check": [23956, 25859, 4207],
       "count": 1
     },
     {
       "id": 134,
       "itemID": 25862,
       "description": "Get 1 unique from the Gauntlet",
-      "check": [23956, 4207],
+      "check": [23956, 25859, 4207],
       "count": 2
     },
     {
