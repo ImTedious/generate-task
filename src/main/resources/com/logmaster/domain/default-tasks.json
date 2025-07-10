@@ -375,14 +375,14 @@
       "id": 46,
       "itemID": 13643,
       "description": "Get 1 piece of Farmer's equipment",
-      "check": [13640, 13641, 13642, 13643, 13644, 13645, 13646, 13647],
+      "check": [13640, 13642, 13644, 13646],
       "count": 1
     },
     {
       "id": 153,
       "itemID": 13643,
       "description": "Get 1 piece of Farmer's equipment",
-      "check": [13640, 13641, 13642, 13643, 13644, 13645, 13646, 13647],
+      "check": [13640, 13642, 13644, 13646],
       "count": 2
     },
     {
@@ -1518,14 +1518,14 @@
       "id": 62,
       "itemID": 13642,
       "description": "Get 1 piece of Farmer's equipment",
-      "check": [13640, 13641, 13642, 13643, 13644, 13645, 13646, 13647],
+      "check": [13640, 13642, 13644, 13646],
       "count": 2
     },
     {
       "id": 63,
       "itemID": 13642,
       "description": "Get 1 piece of Farmer's equipment",
-      "check": [13640, 13641, 13642, 13643, 13644, 13645, 13646, 13647],
+      "check": [13640, 13642, 13644, 13646],
       "count": 3
     },
     {
