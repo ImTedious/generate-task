@@ -209,10 +209,15 @@ public class LogMasterPlugin extends Plugin {
 		}
 
 		int index = (int) Math.floor(Math.random()*uniqueTasks.size());
-
+		String selectedTaskDescription = uniqueTasks.get(index).getDescription();
+		Task selectedTask = uniqueTasks.stream()
+			.filter(task -> task.getDescription().equals(selectedTaskDescription))
+			.collect(Collectors.toList()).stream()
+			.min(Comparator.comparingInt(Task::getCount))
+			.orElse(uniqueTasks.get(index));
 
 		TaskPointer newTaskPointer = new TaskPointer();
-		newTaskPointer.setTask(uniqueTasks.get(index));
+		newTaskPointer.setTask(selectedTask);
 		newTaskPointer.setTaskTier(getCurrentTier());
 		this.saveDataManager.getSaveData().setActiveTaskPointer(newTaskPointer);
 		this.saveDataManager.save();
