@@ -3920,14 +3920,14 @@
     {
       "id": 14,
       "itemID": 13231,
-      "description": "Get 1 unique crystal/stone from Cerberus",
+      "description": "Get 1 unique from Cerberus",
       "check": [13227, 13229, 13231, 13233, 13249],
       "count": 4
     },
     {
       "id": 15,
       "itemID": 13231,
-      "description": "Get 1 unique crystal/stone from Cerberus",
+      "description": "Get 1 unique from Cerberus",
       "check": [13227, 13229, 13231, 13233, 13249],
       "count": 5
     },
