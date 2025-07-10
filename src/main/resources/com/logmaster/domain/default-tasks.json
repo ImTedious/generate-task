@@ -2340,7 +2340,7 @@
       "itemID": 30044,
       "description": "Get a Wyrm/Brimhaven graceful recolor",
       "check": [21061, 21064, 21067, 21070, 21073, 21076, 30045, 30048, 30051, 30054, 30057, 30060],
-      "count": 12
+      "count": 6
     }
   ],
   "hard": [
