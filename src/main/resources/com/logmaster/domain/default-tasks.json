@@ -235,21 +235,21 @@
       "id": 33,
       "itemID": 6908,
       "description": "Upgrade the MTA wand once",
-      "check": [6908, 6910, 6912],
+      "check": [6908, 6910, 6912, 6914],
       "count": 1
     },
     {
       "id": 39,
       "itemID": 6908,
       "description": "Upgrade the MTA wand once",
-      "check": [6908, 6910, 6912],
+      "check": [6908, 6910, 6912, 6914],
       "count": 2
     },
     {
       "id": 146,
       "itemID": 6908,
       "description": "Upgrade the MTA wand once",
-      "check": [6908, 6910, 6912],
+      "check": [6908, 6910, 6912, 6914],
       "count": 3
     },
     {
@@ -1434,8 +1434,8 @@
       "id": 43,
       "itemID": 6914,
       "description": "Upgrade to a Master wand",
-      "check": [6914],
-      "count": 1
+      "check": [6908, 6910, 6912, 6914],
+      "count": 4
     },
     {
       "id": 46,
