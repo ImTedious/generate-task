@@ -1519,14 +1519,14 @@
       "itemID": 13642,
       "description": "Get 1 piece of Farmer's equipment",
       "check": [13640, 13642, 13644, 13646],
-      "count": 2
+      "count": 3
     },
     {
       "id": 63,
       "itemID": 13642,
       "description": "Get 1 piece of Farmer's equipment",
       "check": [13640, 13642, 13644, 13646],
-      "count": 3
+      "count": 4
     },
     {
       "id": 65,
