@@ -175,7 +175,6 @@ public class LogMasterPlugin extends Plugin {
 				@Override
 				public void run() {
 					clientThread.invokeAtTickEnd(() -> {
-						System.out.println("Refreshing collection log");
 						clogItemsManager.refreshCollectionLog();
 					});
 				}
