@@ -5402,7 +5402,6 @@
       "id": 19,
       "itemID": 24844,
       "description": "1 Minigame log slot",
-      "check": [],
       "check": [26901, 25348, 12703, 4508, 4509, 4510, 4512, 11895, 25174],
       "count": 2
     },
