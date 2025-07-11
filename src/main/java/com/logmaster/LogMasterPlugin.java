@@ -170,6 +170,16 @@ public class LogMasterPlugin extends Plugin {
 	public void onWidgetLoaded(WidgetLoaded e) {
 		if(e.getGroupId() == InterfaceID.COLLECTION) {
 			interfaceManager.handleCollectionLogOpen();
+			// Refresh the collection log after a short delay to ensure it is fully loaded
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					clientThread.invokeAtTickEnd(() -> {
+						System.out.println("Refreshing collection log");
+						clogItemsManager.refreshCollectionLog();
+					});
+				}
+			}, 600);
 		}
 	}
 
