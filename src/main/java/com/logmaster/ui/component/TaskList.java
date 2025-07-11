@@ -191,6 +191,7 @@ public class TaskList extends UIPage {
                 }
                 taskBg.getWidget().setHidden(false);
                 taskBg.clearActions();
+                taskBg.getWidget().clearActions();
                 taskBg.setSize(TASK_WIDTH, TASK_HEIGHT);
                 taskBg.setPosition(taskX, taskY);
                 taskBg.getWidget().setPos(taskX, taskY);
