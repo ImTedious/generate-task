@@ -28,6 +28,7 @@ import net.runelite.client.input.MouseWheelListener;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.swing.Timer;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
@@ -221,7 +222,7 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     }
 
     private void createTabManager(Widget window) {
-        this.tabManager = new TabManager(window, config, saveDataManager);
+        this.tabManager = new TabManager(window, config, saveDataManager, plugin.clogItemsManager);
         this.tabManager.setComponents(taskDashboard, taskList);
     }
 
@@ -261,6 +262,7 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
         }
     }
 
+    private boolean needToRefreshClog = true;
     private void toggleTaskDashboard(UIDropdownOption src) {
         if(this.taskDashboard == null) return;
 
@@ -272,14 +274,37 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
         }
 
         boolean enabled = isTaskDashboardEnabled();
+        
+        
         this.taskDashboardCheckbox.setEnabled(enabled);
         for (Widget c : client.getWidget(InterfaceID.Collection.CONTENT).getStaticChildren()) {
             c.setHidden(enabled);
         }
         client.getWidget(InterfaceID.Collection.SEARCH_TITLE).setHidden(enabled);
 
-        if (isTaskDashboardEnabled()) {
+        if (enabled) {
             this.tabManager.activateTaskDashboard();
+            if (plugin.clogItemsManager != null && needToRefreshClog) {
+                needToRefreshClog = false;
+                System.out.println("Refreshing collection log from InterfaceManager");
+                plugin.clogItemsManager.refreshCollectionLog();
+                
+                // Use timer to set the dropdown option after collection log refresh
+                Timer dropdownTimer = new Timer(500, ae -> {
+                    System.out.println("Setting dropdown to Tasks after collection log refresh");
+                    this.dropdown.setEnabledOption("Tasks");
+                    
+                    // Reset the flag after a short delay to allow for re-runs
+                    Timer resetTimer = new Timer(1000, resetAe -> {
+                        System.out.println("Re-enabling collection log refresh capability");
+                        needToRefreshClog = true;
+                    });
+                    resetTimer.setRepeats(false);
+                    resetTimer.start();
+                });
+                dropdownTimer.setRepeats(false);
+                dropdownTimer.start();
+            }
         } else {
             this.taskDashboard.setVisibility(false);
             this.taskList.setVisibility(false);

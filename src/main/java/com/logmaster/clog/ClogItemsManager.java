@@ -71,6 +71,7 @@ public class ClogItemsManager {
     private final Object syncButtonLock = new Object();
     private java.util.Timer syncButtonTimer = new java.util.Timer("SyncButtonTimer", true);
     private java.util.TimerTask syncButtonTask = null;
+    private boolean userInitiatedSync = false;
 
     public void initialise() {
         // Collection log auto sync config
@@ -180,7 +181,13 @@ public class ClogItemsManager {
                         log.warn("Failed to get manifest: {}", response.code());
                         return;
                     }
-                    InputStream in = response.body().byteStream();
+                    okhttp3.ResponseBody body = response.body();
+                    if (body == null)
+                    {
+                        log.warn("Failed to get manifest: response body is null");
+                        return;
+                    }
+                    InputStream in = body.byteStream();
                     manifest = gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), Manifest.class);
                     populateCollectionLogItemIdToBitsetIndex();
                 }
@@ -252,13 +259,18 @@ public class ClogItemsManager {
         // We should never return -1 under normal circumstances
         if (idx != -1) {
             clogItemsBitSet.set(idx);
-            disableButton("Loading collection log items...");
-            scheduleSync();
+            // Only schedule sync if user has initiated a sync
+            if (userInitiatedSync) {
+                disableButton("Loading collection log items...");
+                scheduleSync();
+            }
         }
     }
 
     public void clearCollectionLog() {
         clogItemsBitSet.clear();
+        // Reset sync flag when clearing collection log
+        userInitiatedSync = false;
     }
 
     public void enableButton() {
@@ -274,11 +286,16 @@ public class ClogItemsManager {
     }
 
     public void sync() {
-        if (clogItemsBitSet.isEmpty()) {
-            disableButton("Loading collection log items...");
+        userInitiatedSync = true;
+        disableButton("Loading collection log items...");
+        refreshCollectionLog();
+    }
+
+    public void refreshCollectionLog() {
+        clientThread.invokeLater(() -> {
             client.menuAction(-1, net.runelite.api.gameval.InterfaceID.Collection.SEARCH_TOGGLE, MenuAction.CC_OP, 1, -1, "Search", null);
             client.runScript(2240);
-        }
+        });
     }
 
     public void syncClogWithProgress() {
@@ -315,7 +332,9 @@ public class ClogItemsManager {
                 }
             }
         }
-        clearCollectionLog();
+        
+        // Reset the flag after sync is complete
+        userInitiatedSync = false;
         enableButton();
     }
 }
