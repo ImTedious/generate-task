@@ -220,11 +220,11 @@ public class TaskList extends UIPage {
                         }
                         lockedItems.sort(String::compareToIgnoreCase);
                         for (String item : lockedItems) {
-                            taskBg.addAction("<col=c0392b>" + item + "</col>", () -> {});
+                            taskBg.addAction("<col=c0392b>-</col> " + item, () -> {});
                         }
                         unlockedItems.sort(String::compareToIgnoreCase);
                         for (String item : unlockedItems) {
-                            taskBg.addAction("<col=27ae60>" + item + "</col>", () -> {});
+                            taskBg.addAction("<col=27ae60>+</col> " + item, () -> {});
                         }
                         taskBg.addAction("     ", () -> {});
                     }
