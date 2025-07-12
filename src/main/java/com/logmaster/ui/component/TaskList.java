@@ -204,11 +204,29 @@ public class TaskList extends UIPage {
                     taskBg.addAction("Mark as " + (taskCompleted ? "<col=c0392b>incomplete" : "<col=27ae60>completed") + "</col>", () -> plugin.completeTask(task.getId(), finalRelevantTier));
                     
                     int[] checkArray = task.getCheck();
-                    if (checkArray != null && checkArray.length <= 24 && checkArray.length > 0) {
+                    if (checkArray != null && checkArray.length > 0) {
+                        taskBg.addAction("==============", () -> {});
+                        List<String> lockedItems = new ArrayList<>();
+                        List<String> unlockedItems = new ArrayList<>();
                         for (int checkID : checkArray) {
                             String itemName = plugin.itemManager.getItemComposition(checkID).getName();
-                            taskBg.addAction((plugin.clogItemsManager.isCollectionLogItemUnlocked(checkID) ? "<col=27ae60>" : "<col=c0392b>") + itemName + "</col>", () -> {});
+                            itemName = itemName.replaceFirst("^Pet\\s+", "");
+                            itemName = itemName.replaceFirst("^(.)", itemName.substring(0, 1).toUpperCase());
+                            if (plugin.clogItemsManager.isCollectionLogItemUnlocked(checkID)) {
+                                unlockedItems.add(itemName);
+                            } else {
+                                lockedItems.add(itemName);
+                            }
                         }
+                        lockedItems.sort(String::compareToIgnoreCase);
+                        for (String item : lockedItems) {
+                            taskBg.addAction("<col=c0392b>" + item + "</col>", () -> {});
+                        }
+                        unlockedItems.sort(String::compareToIgnoreCase);
+                        for (String item : unlockedItems) {
+                            taskBg.addAction("<col=27ae60>" + item + "</col>", () -> {});
+                        }
+                        taskBg.addAction("     ", () -> {});
                     }
 
                     if (taskCompleted) {
