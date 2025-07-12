@@ -323,10 +323,12 @@ public class ClogItemsManager {
                     if (count >= taskCount && !plugin.isTaskCompleted(task.getId(), tier)) {
                         // Check passed, task not yet completed, mark as completed
                         plugin.completeTask(task.getId(), tier, false);
+                        client.addChatMessage(net.runelite.api.ChatMessageType.GAMEMESSAGE, "", tier.displayName + " tier task '" + task.getDescription() + "' marked as <col=27ae60>completed.</col>", null);
                         log.debug("Task '{}' marked as completed for tier {}", task.getDescription(), tier.displayName);
                     } else if (count < taskCount && plugin.isTaskCompleted(task.getId(), tier)) {
                         // Check failed, task marked as completed, unmark completion
                         plugin.completeTask(task.getId(), tier, false);
+                        client.addChatMessage(net.runelite.api.ChatMessageType.GAMEMESSAGE, "", tier.displayName + " tier task '" + task.getDescription() + "' marked as <col=c0392b>incomplete.</col>", null);
                         log.debug("Task '{}' un-marked as this is not completed for tier {}", task.getDescription(), tier.displayName);
                     }
                 }
