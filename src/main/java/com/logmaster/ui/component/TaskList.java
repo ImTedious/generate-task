@@ -218,6 +218,11 @@ public class TaskList extends UIPage {
                                 lockedItems.add(itemName);
                             }
                         }
+                        if (checkArray.length > 1) {
+                            int count = task.getCount();
+                            taskBg.addAction("Items acquired: " + (count <= unlockedItems.size() ? "<col=27ae60>" : "<col=c0392b>") + unlockedItems.size() + "/" + count + "</col>", () -> {});
+                            taskBg.addAction("==============", () -> {});
+                        }
                         lockedItems.sort(String::compareToIgnoreCase);
                         for (String item : lockedItems) {
                             taskBg.addAction("<col=c0392b>-</col> " + item, () -> {});
