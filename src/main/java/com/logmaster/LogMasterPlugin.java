@@ -1,6 +1,9 @@
 package com.logmaster;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.inject.Provides;
+import com.logmaster.clog.ClogItemsManager;
 import com.logmaster.domain.Task;
 import com.logmaster.domain.TaskPointer;
 import com.logmaster.domain.TaskTier;
@@ -12,13 +15,18 @@ import com.logmaster.ui.component.TaskOverlay;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.EnumComposition;
 import net.runelite.api.GameState;
+import net.runelite.api.MenuAction;
+import net.runelite.api.Skill;
 import net.runelite.api.SoundEffectID;
+import net.runelite.api.StructComposition;
+import net.runelite.api.VarbitComposition;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetClosed;
 import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatCommandManager;
@@ -28,18 +36,26 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.input.MouseManager;
-import net.runelite.client.menus.MenuManager;
-import net.runelite.client.menus.WidgetMenuOption;
 import net.runelite.api.events.ScriptPostFired;
+import net.runelite.api.events.ScriptPreFired;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.LinkBrowser;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import javax.inject.Inject;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,7 +66,7 @@ import java.util.stream.Collectors;
 public class LogMasterPlugin extends Plugin {
 	private static final String TASK_CHAT_COMMAND = "!tasker";
 
-    private static final int COLLECTION_LOG_SETUP_SCRIPT_ID = 7797;
+	private static final int COLLECTION_LOG_SETUP_SCRIPT_ID = 7797;
 
 	@Inject
 	private Client client;
@@ -61,9 +77,14 @@ public class LogMasterPlugin extends Plugin {
 	@Inject
 	private LogMasterConfig config;
 
+	@Inject
+	private OkHttpClient okHttpClient;
 
 	@Inject
 	private SpriteManager spriteManager;
+	
+	@Inject
+	private Gson gson;
 
 	@Inject
 	private MouseManager mouseManager;
@@ -87,7 +108,10 @@ public class LogMasterPlugin extends Plugin {
 	private InterfaceManager interfaceManager;
 
 	@Inject
-	private ItemManager itemManager;
+	public ItemManager itemManager;
+
+	@Inject
+	public ClogItemsManager clogItemsManager;
 
 	private Map<Integer, Integer> chatSpriteMap = new HashMap<>();
 
@@ -99,6 +123,7 @@ public class LogMasterPlugin extends Plugin {
 		mouseManager.registerMouseWheelListener(interfaceManager);
 		mouseManager.registerMouseListener(interfaceManager);
 		interfaceManager.initialise();
+		clogItemsManager.initialise();
 		this.taskOverlay.setResizable(true);
 		this.overlayManager.add(this.taskOverlay);
 		this.taskService.getTaskList();
@@ -129,28 +154,47 @@ public class LogMasterPlugin extends Plugin {
 		} else if(gameStateChanged.getGameState().equals(GameState.LOGIN_SCREEN)) {
 			saveDataManager.save();
 		}
+		
+		switch (gameStateChanged.getGameState())
+		{
+			// When hopping, we need to clear any state related to the player
+			case HOPPING:
+			case LOGGING_IN:
+			case CONNECTION_LOST:
+				clogItemsManager.clearCollectionLog();
+				break;
+		}
 	}
 
 	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded e) {
-		if(e.getGroupId() == InterfaceID.COLLECTION_LOG) {
+		if(e.getGroupId() == InterfaceID.COLLECTION) {
 			interfaceManager.handleCollectionLogOpen();
+			// Refresh the collection log after a short delay to ensure it is fully loaded
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					clientThread.invokeAtTickEnd(() -> {
+						clogItemsManager.refreshCollectionLog();
+					});
+				}
+			}, 600);
 		}
 	}
 
 	@Subscribe
 	public void onWidgetClosed(WidgetClosed e) {
-		if(e.getGroupId() == InterfaceID.COLLECTION_LOG) {
+		if(e.getGroupId() == InterfaceID.COLLECTION) {
 			interfaceManager.handleCollectionLogClose();
 		}
 	}
 
-    @Subscribe
-    public void onScriptPostFired(ScriptPostFired scriptPostFired) {
-        if (scriptPostFired.getScriptId() == COLLECTION_LOG_SETUP_SCRIPT_ID) {
-            interfaceManager.handleCollectionLogScriptRan();
-        }
-    }
+	@Subscribe
+	public void onScriptPostFired(ScriptPostFired scriptPostFired) {
+		if (scriptPostFired.getScriptId() == COLLECTION_LOG_SETUP_SCRIPT_ID) {
+			interfaceManager.handleCollectionLogScriptRan();
+		}
+	}
 
 	@Subscribe
 	public void onGameTick(GameTick event) {
@@ -174,10 +218,15 @@ public class LogMasterPlugin extends Plugin {
 		}
 
 		int index = (int) Math.floor(Math.random()*uniqueTasks.size());
-
+		String selectedTaskDescription = uniqueTasks.get(index).getDescription();
+		Task selectedTask = uniqueTasks.stream()
+			.filter(task -> task.getDescription().equals(selectedTaskDescription))
+			.collect(Collectors.toList()).stream()
+			.min(Comparator.comparingInt(Task::getCount))
+			.orElse(uniqueTasks.get(index));
 
 		TaskPointer newTaskPointer = new TaskPointer();
-		newTaskPointer.setTask(uniqueTasks.get(index));
+		newTaskPointer.setTask(selectedTask);
 		newTaskPointer.setTaskTier(getCurrentTier());
 		this.saveDataManager.getSaveData().setActiveTaskPointer(newTaskPointer);
 		this.saveDataManager.save();
@@ -191,8 +240,18 @@ public class LogMasterPlugin extends Plugin {
 		completeTask(saveDataManager.getSaveData().getActiveTaskPointer().getTask().getId(), saveDataManager.getSaveData().getActiveTaskPointer().getTaskTier());
 	}
 
+	public boolean isTaskCompleted(int taskID, TaskTier tier) {
+		return saveDataManager.getSaveData().getProgress().get(tier).contains(taskID);
+	}
+
 	public void completeTask(int taskID, TaskTier tier) {
-		this.client.playSoundEffect(SoundEffectID.UI_BOOP);
+		completeTask(taskID, tier, true);
+	}
+
+	public void completeTask(int taskID, TaskTier tier, boolean playSound) {
+		if (playSound) {
+			this.client.playSoundEffect(SoundEffectID.UI_BOOP);
+		}
 
 		if (saveDataManager.getSaveData().getProgress().get(tier).contains(taskID)) {
 			saveDataManager.getSaveData().getProgress().get(tier).remove(taskID);
@@ -258,7 +317,6 @@ public class LogMasterPlugin extends Plugin {
 		client.playSoundEffect(2277);
 	}
 
-
 	@Provides
 	LogMasterConfig provideConfig(ConfigManager configManager)
 	{
@@ -267,5 +325,13 @@ public class LogMasterPlugin extends Plugin {
 
 	public void visitFaq() {
 		LinkBrowser.browse("https://docs.google.com/document/d/e/2PACX-1vTHfXHzMQFbt_iYAP-O88uRhhz3wigh1KMiiuomU7ftli-rL_c3bRqfGYmUliE1EHcIr3LfMx2UTf2U/pub");
+	}
+
+	@Subscribe
+	public void onScriptPreFired(ScriptPreFired preFired) {
+		// This is fired when the collection log search is opened
+		if (preFired.getScriptId() == 4100){
+			clogItemsManager.updatePlayersCollectionLogItems(preFired);
+		}
 	}
 }

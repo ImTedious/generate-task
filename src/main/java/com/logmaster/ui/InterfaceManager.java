@@ -28,6 +28,7 @@ import net.runelite.client.input.MouseWheelListener;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.swing.Timer;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
@@ -64,10 +65,9 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     @Inject
     private SaveDataManager saveDataManager;
 
-
     private SpriteDefinition[] spriteDefinitions;
 
-    private TaskDashboard taskDashboard;
+    public TaskDashboard taskDashboard;
     private TaskList taskList;
     private TabManager tabManager;
 
@@ -227,7 +227,7 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
     }
 
     private void createTaskDashboard(Widget window) {
-        this.taskDashboard = new TaskDashboard(plugin, config, window, taskService, saveDataManager);
+        this.taskDashboard = new TaskDashboard(plugin, config, window, taskService, saveDataManager, plugin.clogItemsManager);
         this.taskDashboard.setVisibility(false);
     }
 
@@ -250,6 +250,8 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
             taskDashboardCheckbox.setEnabled(false);
             taskDashboardCheckbox.setText("Task Dashboard");
             labelWidget.setPos(375, 10);
+                    
+
             taskDashboardCheckbox.setToggleListener((UICheckBox src) -> {
                 if (taskDashboardCheckbox.isEnabled()) {
                     this.dropdown.setEnabledOption("Tasks");
@@ -271,13 +273,15 @@ public class InterfaceManager implements MouseListener, MouseWheelListener {
         }
 
         boolean enabled = isTaskDashboardEnabled();
+        
+        
         this.taskDashboardCheckbox.setEnabled(enabled);
         for (Widget c : client.getWidget(InterfaceID.Collection.CONTENT).getStaticChildren()) {
             c.setHidden(enabled);
         }
         client.getWidget(InterfaceID.Collection.SEARCH_TITLE).setHidden(enabled);
 
-        if (isTaskDashboardEnabled()) {
+        if (enabled) {
             this.tabManager.activateTaskDashboard();
         } else {
             this.taskDashboard.setVisibility(false);

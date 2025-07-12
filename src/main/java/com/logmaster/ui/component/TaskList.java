@@ -191,6 +191,7 @@ public class TaskList extends UIPage {
                 }
                 taskBg.getWidget().setHidden(false);
                 taskBg.clearActions();
+                taskBg.getWidget().clearActions();
                 taskBg.setSize(TASK_WIDTH, TASK_HEIGHT);
                 taskBg.setPosition(taskX, taskY);
                 taskBg.getWidget().setPos(taskX, taskY);
@@ -199,8 +200,41 @@ public class TaskList extends UIPage {
                 if (i < tasksToShow.size()) {
                     Task task = tasksToShow.get(i);
                     TaskTier finalRelevantTier = relevantTier;
-                    taskBg.addAction("Mark", () -> plugin.completeTask(task.getId(), finalRelevantTier));
-                    if (saveDataManager.getSaveData().getProgress().get(relevantTier).contains(task.getId())) {
+                    boolean taskCompleted = plugin.isTaskCompleted(task.getId(), finalRelevantTier);
+                    taskBg.addAction("Mark as " + (taskCompleted ? "<col=c0392b>incomplete" : "<col=27ae60>completed") + "</col>", () -> plugin.completeTask(task.getId(), finalRelevantTier));
+                    
+                    int[] checkArray = task.getCheck();
+                    if (checkArray != null && checkArray.length > 0) {
+                        taskBg.addAction("==============", () -> {});
+                        List<String> lockedItems = new ArrayList<>();
+                        List<String> unlockedItems = new ArrayList<>();
+                        for (int checkID : checkArray) {
+                            String itemName = plugin.itemManager.getItemComposition(checkID).getName();
+                            itemName = itemName.replaceFirst("^Pet\\s+", "");
+                            itemName = itemName.replaceFirst("^(.)", itemName.substring(0, 1).toUpperCase());
+                            if (plugin.clogItemsManager.isCollectionLogItemUnlocked(checkID)) {
+                                unlockedItems.add(itemName);
+                            } else {
+                                lockedItems.add(itemName);
+                            }
+                        }
+                        if (checkArray.length > 1) {
+                            int count = task.getCount();
+                            taskBg.addAction("Items acquired: " + (count <= unlockedItems.size() ? "<col=27ae60>" : "<col=c0392b>") + unlockedItems.size() + "/" + count + "</col>", () -> {});
+                            taskBg.addAction("==============", () -> {});
+                        }
+                        lockedItems.sort(String::compareToIgnoreCase);
+                        for (String item : lockedItems) {
+                            taskBg.addAction("<col=c0392b>-</col> " + item, () -> {});
+                        }
+                        unlockedItems.sort(String::compareToIgnoreCase);
+                        for (String item : unlockedItems) {
+                            taskBg.addAction("<col=27ae60>+</col> " + item, () -> {});
+                        }
+                        taskBg.addAction("     ", () -> {});
+                    }
+
+                    if (taskCompleted) {
                         taskBg.setSprite(TASK_COMPLETE_BACKGROUND_SPRITE_ID);
                     } else if (saveDataManager.getSaveData().getActiveTaskPointer() != null && saveDataManager.getSaveData().getActiveTaskPointer().getTaskTier() == relevantTier && saveDataManager.getSaveData().getActiveTaskPointer().getTask().getId() == task.getId()) {
                         taskBg.setSprite(TASK_CURRENT_BACKGROUND_SPRITE_ID);
@@ -255,45 +289,6 @@ public class TaskList extends UIPage {
                 taskImage.getWidget().revalidate();
                 widgetIndex++;
             }
-        }
-        // Render the extra widget offscreen if needed
-        if (widgetIndex == tasksToShowCount) {
-            UIGraphic taskBg;
-            if (taskBackgrounds.size() <= widgetIndex) {
-                taskBg = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
-                taskBackgrounds.add(taskBg);
-                this.add(taskBg);
-            } else {
-                taskBg = taskBackgrounds.get(widgetIndex);
-            }
-            taskBg.getWidget().setHidden(false);
-            taskBg.setPosition(-1000, 0);
-            taskBg.getWidget().setPos(-1000, 0);
-            taskBg.getWidget().revalidate();
-            UILabel taskLabel;
-            if (taskLabels.size() <= widgetIndex) {
-                taskLabel = new UILabel(window.createChild(-1, WidgetType.TEXT));
-                this.add(taskLabel);
-                taskLabels.add(taskLabel);
-            } else {
-                taskLabel = taskLabels.get(widgetIndex);
-            }
-            taskLabel.getWidget().setHidden(false);
-            taskLabel.setPosition(-1000, 0);
-            taskLabel.getWidget().setPos(-1000, 0);
-            taskLabel.getWidget().revalidate();
-            UIGraphic taskImage;
-            if(taskImages.size() <= widgetIndex) {
-                taskImage = new UIGraphic(window.createChild(-1, WidgetType.GRAPHIC));
-                this.add(taskImage);
-                taskImages.add(taskImage);
-            } else {
-                taskImage = taskImages.get(widgetIndex);
-            }
-            taskImage.getWidget().setHidden(false);
-            taskImage.setPosition(-1000, 0);
-            taskImage.getWidget().setPos(-1000, 0);
-            taskImage.getWidget().revalidate();
         }
         updateScrollbar();
     }
